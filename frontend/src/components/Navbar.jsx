@@ -49,6 +49,8 @@ const Navbar = () => {
             <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
             <Link to="/menu" className={`nav-link ${location.pathname === '/menu' ? 'active' : ''}`}>Menu</Link>
             <Link to="/orders" className={`nav-link ${location.pathname === '/orders' ? 'active' : ''}`}>Orders</Link>
+            <Link to="/kitchen" className={`nav-link ${location.pathname === '/kitchen' ? 'active' : ''}`}>👨‍🍳 Kitchen</Link>
+            <Link to="/driver" className={`nav-link ${location.pathname === '/driver' ? 'active' : ''}`}>🛵 Rider App</Link>
             <button className="nav-link backend-diag-link" onClick={() => setBackendModalOpen(true)}>
               ⚙️ Backend Status
             </button>
@@ -101,6 +103,8 @@ const Navbar = () => {
           <Link to="/menu" className="mobile-link" onClick={toggleMobileMenu}>🍽️ Menu</Link>
           <Link to="/cart" className="mobile-link" onClick={toggleMobileMenu}>🛒 Cart ({count})</Link>
           <Link to="/orders" className="mobile-link" onClick={toggleMobileMenu}>📋 My Orders</Link>
+          <Link to="/kitchen" className="mobile-link" onClick={toggleMobileMenu}>👨‍🍳 Kitchen Portal</Link>
+          <Link to="/driver" className="mobile-link" onClick={toggleMobileMenu}>🛵 Rider GPS App</Link>
           <button className="mobile-link text-left" onClick={() => { setBackendModalOpen(true); toggleMobileMenu(); }}>⚙️ Backend Status</button>
 
           <div className="mobile-divider"></div>

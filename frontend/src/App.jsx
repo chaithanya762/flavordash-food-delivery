@@ -10,6 +10,8 @@ import Menu from './pages/Menu';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
+import KitchenDashboard from './pages/KitchenDashboard';
+import DriverDashboard from './pages/DriverDashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
@@ -30,6 +32,8 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/kitchen" element={<KitchenDashboard />} />
+          <Route path="/driver" element={<DriverDashboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
