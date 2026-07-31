@@ -8,13 +8,22 @@ const DEFAULT_USER = {
   name: "Alex Johnson",
   email: "alex@example.com",
   phone: "555-0199",
-  address: "742 Evergreen Terrace"
+  address: "742 Evergreen Terrace",
+  role: "CUSTOMER" // CUSTOMER, HOTEL_MANAGER, RIDER
 };
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('user');
     return saved ? JSON.parse(saved) : DEFAULT_USER;
+  });
+
+  const [role, setRole] = useState(() => {
+    return localStorage.getItem('userRole') || 'CUSTOMER';
+  });
+
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'dark';
   });
 
   useEffect(() => {
@@ -25,8 +34,28 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user]);
 
+  useEffect(() => {
+    localStorage.setItem('userRole', role);
+  }, [role]);
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const switchRole = (newRole) => {
+    setRole(newRole);
+    if (user) {
+      setUser({ ...user, role: newRole });
+    }
+  };
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   const login = (userData) => {
-    setUser(userData);
+    setUser({ ...userData, role: role || 'CUSTOMER' });
   };
 
   const logout = () => {
@@ -39,15 +68,24 @@ export const AuthProvider = ({ children }) => {
       login(newUser);
       return newUser;
     } catch (error) {
-      // Fallback local registration if backend fails
-      const fallbackUser = { id: Date.now(), ...formData };
+      const fallbackUser = { id: Date.now(), role, ...formData };
       login(fallbackUser);
       return fallbackUser;
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout, register }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      role, 
+      theme, 
+      switchRole, 
+      toggleTheme, 
+      isAuthenticated: !!user, 
+      login, 
+      logout, 
+      register 
+    }}>
       {children}
     </AuthContext.Provider>
   );
