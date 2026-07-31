@@ -5,39 +5,49 @@ import './Footer.css';
 const Footer = () => {
   return (
     <footer className="footer">
-      <div className="footer-content">
+      <div className="footer-content container">
         <div className="footer-brand">
           <div className="nav-brand">
             <span className="nav-logo-icon">🍔</span>
             <span className="nav-logo-text">FlavorDash</span>
           </div>
           <p className="footer-tagline">
-            Delivering happiness to your doorstep. Experience the best food from top restaurants around you.
+            Delivering authentic Indian & Global culinary happiness straight to your doorstep in 30 minutes guaranteed.
           </p>
         </div>
 
         <div className="footer-section">
-          <h3 className="footer-heading">Quick Links</h3>
+          <h3 className="footer-heading">Quick Navigation</h3>
           <div className="footer-links">
-            <Link to="/" className="footer-link">Home</Link>
-            <Link to="/menu" className="footer-link">Menu</Link>
-            <Link to="/orders" className="footer-link">Orders</Link>
-            <Link to="/cart" className="footer-link">Cart</Link>
+            <Link to="/" className="footer-link">🏠 Home</Link>
+            <Link to="/menu" className="footer-link">🍽️ Menu & AI Filters</Link>
+            <Link to="/orders" className="footer-link">📋 Live Order Tracker</Link>
+            <Link to="/kitchen" className="footer-link">👨‍🍳 Kitchen Portal</Link>
+            <Link to="/driver" className="footer-link">🛵 Rider GPS App</Link>
           </div>
         </div>
 
         <div className="footer-section">
-          <h3 className="footer-heading">Contact Us</h3>
+          <h3 className="footer-heading">Contact & Support</h3>
           <div className="footer-contact">
-            <p><span>📍</span> 123 Flavor Street, Food City</p>
-            <p><span>📞</span> +1 (555) 123-4567</p>
-            <p><span>✉️</span> support@flavordash.com</p>
+            <p><span>📍</span> Connaught Place, New Delhi, India</p>
+            <p><span>📞</span> +91 98765 43210</p>
+            <p><span>✉️</span> support@flavordash.in</p>
           </div>
         </div>
       </div>
 
-      <div className="footer-bottom">
-        <p>© 2024 FlavorDash. All rights reserved.</p>
+      <div className="footer-bottom container">
+        {/* Cute & Beautiful Made with Love Badge */}
+        <div className="made-with-love-pill">
+          <span>Made with</span>
+          <span className="heart-pulsing">❤️</span>
+          <span>by</span>
+          <span className="author-name-gradient">Chaithanya</span>
+        </div>
+
+        <p className="copyright-text">© 2026 FlavorDash Inc. All rights reserved.</p>
+        
         <div className="social-links">
           <span className="social-icon">📱</span>
           <span className="social-icon">💬</span>

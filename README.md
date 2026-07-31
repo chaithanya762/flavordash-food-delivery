@@ -1,12 +1,14 @@
 # 🍔 FlavorDash — Next-Gen Microservices Food Delivery Platform
 
+### 💖 Made with ❤️ by **Chaithanya**
+
 [![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.5-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Spring Cloud](https://img.shields.io/badge/Spring_Cloud-Eureka-orange.svg)](https://spring.io/projects/spring-cloud)
 [![Vite](https://img.shields.io/badge/Vite-5-purple.svg)](https://vitejs.dev/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Author](https://img.shields.io/badge/Crafted_By-Chaithanya-ff6b35.svg)](#)
 
-**FlavorDash** is a enterprise-grade, event-driven food delivery web application built using **Spring Boot 3 microservices** and a **React 18 + Vite** frontend.
+**FlavorDash** is an enterprise-grade, event-driven food delivery web application built using **Spring Boot 3 microservices** and a **React 18 + Vite** frontend.
 
 ---
 
@@ -69,3 +71,7 @@ npm run dev
 ```
 
 Open **[http://localhost:3000](http://localhost:3000)** in your browser!
+
+---
+
+### ✨ Crafted with passion & ❤️ by **Chaithanya** (`@chaithanya762`)
