@@ -1,0 +1,19 @@
+/* Register.css inherits most styles from Login.css via .auth-page and .auth-card */
+.register-card {
+  max-width: 550px;
+}
+
+.register-card .auth-form {
+  gap: 1.2rem;
+}
+
+.register-card textarea.glass-input {
+  min-height: 80px;
+  resize: vertical;
+}
+
+@media (max-width: 600px) {
+  .register-card {
+    padding: 2rem 1.5rem;
+  }
+}

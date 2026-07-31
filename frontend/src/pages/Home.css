@@ -1,0 +1,186 @@
+.home-page {
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+  padding-bottom: 4rem;
+}
+
+.section-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: #fff;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Steps Section */
+.steps-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 0 2rem;
+  flex-wrap: wrap;
+}
+
+.step-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  flex: 1;
+  min-width: 250px;
+  max-width: 350px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(255, 107, 53, 0.15);
+  border-color: rgba(255, 107, 53, 0.3);
+}
+
+.step-emoji {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.step-number {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(255, 107, 53, 0.3);
+}
+
+.step-card h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.step-card p {
+  color: #94a3b8;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+}
+
+/* Popular Dishes */
+.popular-dishes-section {
+  padding: 0 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.section-header .section-title {
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.view-all-link {
+  color: #ff6b35;
+  text-decoration: none;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+
+.view-all-link:hover {
+  color: #f7931e;
+}
+
+.dishes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* Why Choose Us */
+.why-choose-us-section {
+  padding: 4rem 2rem;
+  background: linear-gradient(180deg, transparent, rgba(26, 26, 46, 0.5));
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  padding: 2rem;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.feature-card.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.feature-card p {
+  color: #94a3b8;
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

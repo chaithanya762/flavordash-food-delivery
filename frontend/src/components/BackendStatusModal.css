@@ -1,0 +1,182 @@
+.backend-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  z-index: 2100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.backend-modal-card {
+  width: 100%;
+  max-width: 680px;
+  border-radius: 24px;
+  padding: 28px;
+  position: relative;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(16, 185, 129, 0.2);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #94a3b8;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #10b981;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulse 1.5s infinite;
+}
+
+.backend-modal-card h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.backend-modal-card p {
+  color: #94a3b8;
+  font-size: 0.88rem;
+  margin-bottom: 20px;
+}
+
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.workflow-card {
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.wf-icon {
+  font-size: 1.8rem;
+  margin-bottom: 6px;
+}
+
+.workflow-card h4 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.workflow-card p {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.4;
+  margin-bottom: 0;
+}
+
+.services-status-table {
+  padding: 18px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+}
+
+.services-status-table h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 14px;
+}
+
+.status-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.srv-name-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 150px;
+}
+
+.srv-indicator.online {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.srv-name {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #ffffff;
+  display: block;
+}
+
+.srv-port {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.srv-role {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  flex: 1;
+  padding: 0 12px;
+}
+
+.srv-badge.online {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+}

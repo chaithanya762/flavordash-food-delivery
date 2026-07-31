@@ -1,0 +1,185 @@
+.orders-page {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  min-height: 80vh;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.order-card {
+  padding: 2rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+.order-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.order-id h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+  color: #fff;
+}
+
+.order-date {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.pending {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.status-badge.paid {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-badge.cancelled {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.status-badge.delivered {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Order Content */
+.order-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .order-content {
+    grid-template-columns: 1fr 1.5fr;
+  }
+}
+
+.order-info p {
+  margin-bottom: 0.8rem;
+  color: #fff;
+}
+
+.order-info .label {
+  color: #94a3b8;
+  margin-right: 0.5rem;
+}
+
+.amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.order-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: #ff6b35;
+  color: #ff6b35;
+}
+
+/* Payment Details Expansion */
+.payment-details {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.payment-details h4 {
+  font-family: 'Outfit', sans-serif;
+  color: #94a3b8;
+  margin-bottom: 1rem;
+}
+
+.payment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.payment-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.payment-grid .label {
+  font-size: 0.85rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.payment-status.success { color: #10b981; }
+.payment-status.failed { color: #ef4444; }
+
+/* Skeleton */
+.skeleton-line {
+  height: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+.skeleton-line.title {
+  height: 30px;
+  width: 40%;
+  margin-bottom: 2rem;
+}

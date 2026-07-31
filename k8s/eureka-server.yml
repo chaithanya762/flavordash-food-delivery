@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eureka-server
+  namespace: food-delivery
+  labels:
+    app: eureka-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eureka-server
+  template:
+    metadata:
+      labels:
+        app: eureka-server
+    spec:
+      containers:
+        - name: eureka-server
+          image: food-delivery/eureka-server:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8761
+          env:
+            - name: SPRING_CONFIG_IMPORT
+              value: "optional:configserver:http://config-server:8888"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka-server
+  namespace: food-delivery
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8761
+      targetPort: 8761
+  selector:
+    app: eureka-server

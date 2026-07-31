@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+  namespace: food-delivery
+  labels:
+    app: payment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      containers:
+        - name: payment-service
+          image: food-delivery/payment-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8084
+          env:
+            - name: SPRING_CONFIG_IMPORT
+              value: "optional:configserver:http://config-server:8888"
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: "http://eureka-server:8761/eureka/"
+            - name: SPRING_KAFKA_BOOTSTRAPSERVERS
+              value: "kafka.food-delivery.svc.cluster.local:9092"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+  namespace: food-delivery
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8084
+      targetPort: 8084
+  selector:
+    app: payment-service
