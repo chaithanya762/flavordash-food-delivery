@@ -14,6 +14,24 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const handleQuickLogin = (demoRole, demoName, demoEmail) => {
+    const demoUser = {
+      id: Date.now(),
+      name: demoName,
+      email: demoEmail,
+      role: demoRole
+    };
+    login(demoUser);
+
+    if (demoRole === 'HOTEL_MANAGER') {
+      navigate('/kitchen');
+    } else if (demoRole === 'RIDER') {
+      navigate('/driver');
+    } else {
+      navigate('/');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -58,6 +76,36 @@ export default function Login() {
           <h1 className="gradient-text">Welcome Back</h1>
           <p>Sign in with your role-based account</p>
         </div>
+
+        {/* 1-Click Quick Demo Role Sign In */}
+        <div className="quick-demo-login-box">
+          <span className="quick-demo-label">⚡ 1-Click Instant Demo Login:</span>
+          <div className="quick-demo-btns">
+            <button 
+              type="button" 
+              className="btn-quick-role customer"
+              onClick={() => handleQuickLogin('CUSTOMER', 'Alex Johnson', 'alex@example.com')}
+            >
+              👤 Customer
+            </button>
+            <button 
+              type="button" 
+              className="btn-quick-role hotel"
+              onClick={() => handleQuickLogin('HOTEL_MANAGER', 'Chef Rajat (Punjab Rasoi)', 'chef@rasoi.in')}
+            >
+              👨‍🍳 Hotel Admin
+            </button>
+            <button 
+              type="button" 
+              className="btn-quick-role rider"
+              onClick={() => handleQuickLogin('RIDER', 'Ramesh Kumar (Rider)', 'ramesh@rider.in')}
+            >
+              🛵 Rider Agent
+            </button>
+          </div>
+        </div>
+
+        <div className="auth-divider"><span>OR SIGN IN MANUALLY</span></div>
 
         {error && <div className="auth-error">{error}</div>}
 

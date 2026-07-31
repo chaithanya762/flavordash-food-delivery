@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FlavorDash — Master Project & Interview Preparation Guide (0 to 100)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #1e293b;
+      line-height: 1.6;
+      background: #f8fafc;
+      padding: 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .no-print { display: none; }
+      .page-break { page-break-before: always; }
+    }
+
+    .header-banner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      color: white;
+      padding: 40px;
+      border-radius: 20px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .header-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin: 0 0 10px;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .author-badge {
+      display: inline-block;
+      background: rgba(255,107,53,0.2);
+      color: #ff6b35;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255,107,53,0.4);
+    }
+
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      color: #0f172a;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      margin-top: 35px;
+    }
+
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      color: #2563eb;
+      margin-top: 25px;
+    }
+
+    .card-box {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+      background: #0f172a;
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+    }
+
+    code {
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 16px;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+    }
+
+    .qa-box {
+      background: white;
+      border-left: 4px solid #ff6b35;
+      padding: 18px 24px;
+      margin-bottom: 20px;
+      border-radius: 0 12px 12px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+
+    .qa-question {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .btn-print {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #ff6b35;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(255,107,53,0.4);
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+
+  <button className="btn-print no-print" onclick="window.print()">🖨️ Save as PDF / Print Guide</button>
+
+  <div class="header-banner">
+    <div class="author-badge">STUDY & INTERVIEW KIT FOR CHAITHANYA</div>
+    <h1 class="header-title">FlavorDash — Master Project & Technical Interview Guide</h1>
+    <p>Full-Stack Microservices Food Delivery Platform (Spring Boot 3 + React 18)</p>
+  </div>
+
+  <h2>📚 MODULE 1: PROJECT OVERVIEW & EXECUTIVE SUMMARY</h2>
+  <div class="card-box">
+    <p><strong>FlavorDash</strong> is a modern enterprise food delivery web application built using a <strong>Spring Boot 3 Microservices Architecture</strong> on the backend and a <strong>React 18 + Vite</strong> frontend.</p>
+    <p>It mirrors real-world platforms like <strong>Swiggy</strong>, <strong>Zomato</strong>, and <strong>DoorDash</strong> with key innovations:</p>
+    <ul>
+      <li>🛒 <strong>Swiggy/Zomato-Style Floating Cart Strip</strong>: Bottom bar with instant 1-tap checkout across all pages.</li>
+      <li>👥 <strong>Multi-User Group Ordering & Instant UPI Bill Splitting</strong>: Room code sharing & automatic bill splitting.</li>
+      <li>🧠 <strong>AI Macro-Nutrient & Dietary Engine</strong>: Filter by High Protein 💪, Keto 🥑, Jain 🌿, and Low Calorie ⚡.</li>
+      <li>👨‍🍳 <strong>Merchant Kitchen Dashboard (<code>/kitchen</code>)</strong>: Live order status management for restaurant chefs.</li>
+      <li>🛵 <strong>Rider Telemetry & GPS Tracker (<code>/driver</code>)</strong>: Interactive delivery partner dashboard with route simulation.</li>
+      <li>⚙️ <strong>Live Backend Diagnostics Modal</strong>: Real-time health monitoring of all 7 microservices.</li>
+    </ul>
+  </div>
+
+  <div class="page-break"></div>
+
+  <h2>🛠️ MODULE 2: SYSTEM INSTALLATION & HOW TO RUN</h2>
+  <div class="card-box">
+    <h3>Software Needed on Fresh Computer:</h3>
+    <ol>
+      <li><strong>Node.js (v18+)</strong>: Download from <a href="https://nodejs.org">nodejs.org</a> (runs React frontend).</li>
+      <li><strong>Java JDK 17</strong>: Download OpenJDK 17 or Eclipse Temurin 17 (runs Spring Boot).</li>
+      <li><strong>Git</strong>: Download from <a href="https://git-scm.com">git-scm.com</a>.</li>
+    </ol>
+
+    <h3>2-Step Launch Commands:</h3>
+    <p><strong>Step 1: Start 7 Spring Boot Microservices</strong></p>
+    <pre>cd C:\Users\Student\.gemini\antigravity\scratch\food-delivery-app
+./run-all.ps1</pre>
+
+    <p><strong>Step 2: Start React Frontend</strong></p>
+    <pre>cd frontend
+npm run dev</pre>
+    <p>Open <strong>http://localhost:3000</strong> in your browser!</p>
+  </div>
+
+  <h2>🧠 MODULE 3: CORE CONCEPTS FOR BEGINNERS</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Term</th>
+        <th>Simple Definition</th>
+        <th>Real-World Analogy</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Frontend</strong></td>
+        <td>The visual interface (HTML/CSS/React) users see and click.</td>
+        <td>The dining area in a restaurant.</td>
+      </tr>
+      <tr>
+        <td><strong>Backend</strong></td>
+        <td>Server logic & databases that process requests securely.</td>
+        <td>The kitchen behind closed doors.</td>
+      </tr>
+      <tr>
+        <td><strong>REST API</strong></td>
+        <td>Communication rules exchanging JSON data over HTTP.</td>
+        <td>The waiter taking orders to the kitchen.</td>
+      </tr>
+      <tr>
+        <td><strong>Microservices</strong></td>
+        <td>Splitting app into independent services (User, Order, Payment).</td>
+        <td>Separate kitchen, bakery, cash desk.</td>
+      </tr>
+      <tr>
+        <td><strong>Eureka Server</strong></td>
+        <td>Central registry tracking IP & port numbers of services.</td>
+        <td>Hotel reception directory.</td>
+      </tr>
+      <tr>
+        <td><strong>API Gateway</strong></td>
+        <td>Single entryway (port 8080) routing frontend traffic.</td>
+        <td>Security entrance guard.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-break"></div>
+
+  <h2>🎓 MODULE 4: TOP INTERVIEW QUESTIONS & ANSWERS (0 to 100)</h2>
+
+  <div class="qa-box">
+    <div class="qa-question">Q1: "Walk me through your project in 30 seconds."</div>
+    <p><strong>Answer:</strong> "FlavorDash is a full-stack food delivery platform built with Spring Boot 3 microservices and React 18. It includes 7 microservices—API Gateway, Eureka Registry, User, Product, Order, and Payment services—communicating via REST and Apache Kafka. Frontend highlights include multi-user group bill splitting, AI diet filters, a kitchen portal, and rider GPS tracking."</p>
+  </div>
+
+  <div class="qa-box">
+    <div class="qa-question">Q2: "Why did you use Microservices instead of Monolith?"</div>
+    <p><strong>Answer:</strong> "Different services experience different loads. Product searches happen millions of times a day, whereas Payments occur only at checkout. Microservices allow independent scaling, fault isolation (if payment fails, users can still browse menus), and independent team deployments."</p>
+  </div>
+
+  <div class="qa-box">
+    <div class="qa-question">Q3: "How do your Microservices communicate?"</div>
+    <p><strong>Answer:</strong> "We use both: 1) Synchronous REST with Spring Cloud OpenFeign for immediate queries (e.g. fetching product details), and 2) Asynchronous event-driven messaging with Apache Kafka for order status updates."</p>
+  </div>
+
+  <div class="qa-box">
+    <div class="qa-question">Q4: "How did you implement Role-Based Access Control?"</div>
+    <p><strong>Answer:</strong> "User profiles contain roles (CUSTOMER, HOTEL_MANAGER, RIDER). On React, a <code>&lt;ProtectedRoute&gt;</code> guard inspects the logged-in role and blocks unauthorized access to <code>/kitchen</code> or <code>/driver</code>."</p>
+  </div>
+
+  <div class="qa-box">
+    <div class="qa-question">Q5: "How does Group Bill Splitting work?"</div>
+    <p><strong>Answer:</strong> "Users generate a room code (e.g. FLAVOR-4892), invite friends to a shared cart, and the app dynamically calculates individual shares and generates instant UPI payment QR requests."</p>
+  </div>
+
+  <br/><br/>
+  <div style="text-align: center; color: #64748b; font-weight: 700;">
+    💖 Master Project & Interview Preparation Guide — Specially Created for <strong>Chaithanya</strong>
+  </div>
+
+</body>
+</html>
