@@ -1,7 +1,7 @@
 /* index.css - Global Design System */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap');
 
-:root, [data-theme="dark"] {
+:root {
   /* Core Colors */
   --bg-dark: #0a0a0f;
   --bg-darker: #12121a;
@@ -34,41 +34,6 @@
   /* Glass Effects */
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: 1px solid var(--border-color);
-  --backdrop-blur: blur(20px);
-}
-
-[data-theme="light"] {
-  --bg-dark: #f8fafc;
-  --bg-darker: #f1f5f9;
-  --bg-surface: #ffffff;
-  
-  --primary: #ff6b35;
-  --primary-hover: #e05320;
-  --primary-gradient: linear-gradient(135deg, #ff6b35, #f7931e);
-  --secondary: #6d28d9;
-  
-  /* Status Colors */
-  --success: #059669;
-  --success-bg: rgba(5, 150, 105, 0.1);
-  --error: #dc2626;
-  --error-bg: rgba(220, 38, 38, 0.1);
-  --warning: #d97706;
-  --warning-bg: rgba(217, 119, 6, 0.1);
-  --info: #2563eb;
-  --info-bg: rgba(37, 99, 235, 0.1);
-  
-  /* Text Colors */
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-tertiary: #64748b;
-  
-  /* Borders */
-  --border-color: rgba(15, 23, 42, 0.12);
-  --border-color-hover: rgba(15, 23, 42, 0.25);
-  
-  /* Glass Effects */
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: 1px solid rgba(15, 23, 42, 0.08);
   --backdrop-blur: blur(20px);
 }
 

@@ -47,69 +47,15 @@
 .role-badge-tag.hotel_manager { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
 .role-badge-tag.rider { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
 
-/* Role Switcher Pill */
-.role-switcher-group {
+.user-info-pill {
   display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 3px;
-  border-radius: 12px;
-  gap: 2px;
+  flex-direction: column;
 }
 
-.role-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  font-family: 'Outfit', sans-serif;
+.user-role-sub {
+  font-size: 0.7rem;
+  color: #94a3b8;
   font-weight: 700;
-  font-size: 0.78rem;
-  padding: 5px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.role-btn:hover {
-  color: var(--text-primary);
-}
-
-.role-btn.active {
-  background: rgba(255, 107, 53, 0.2);
-  color: #ff6b35;
-  border: 1px solid rgba(255, 107, 53, 0.4);
-}
-
-.role-btn.hotel.active {
-  background: rgba(16, 185, 129, 0.2);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.4);
-}
-
-.role-btn.rider.active {
-  background: rgba(59, 130, 246, 0.2);
-  color: #3b82f6;
-  border: 1px solid rgba(59, 130, 246, 0.4);
-}
-
-/* Light / Dark Mode Toggle */
-.btn-theme-toggle {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  font-family: 'Outfit', sans-serif;
-  font-weight: 700;
-  font-size: 0.8rem;
-  padding: 6px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-theme-toggle:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
 }
 
 .nav-logo-icon {

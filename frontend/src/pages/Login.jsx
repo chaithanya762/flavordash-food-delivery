@@ -6,7 +6,8 @@ import './Login.css';
 
 export default function Login() {
   const [email, setEmail] = useState('');
-  const [userId, setUserId] = useState('1'); // Mock specific ID for demo
+  const [role, setRole] = useState('CUSTOMER');
+  const [userId, setUserId] = useState('1');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
@@ -19,13 +20,25 @@ export default function Login() {
     setError('');
 
     try {
-      // In a real app, we would send credentials to /auth/login
-      // For this demo with the given backend, we fetch the user by ID and set context
-      const userData = await userAPI.getById(parseInt(userId));
-      login(userData);
-      navigate('/');
+      let userData;
+      try {
+        userData = await userAPI.getById(parseInt(userId));
+      } catch (err) {
+        userData = { id: parseInt(userId), name: email.split('@')[0] || 'User', email };
+      }
+      
+      const loggedUser = { ...userData, role };
+      login(loggedUser);
+
+      if (role === 'HOTEL_MANAGER') {
+        navigate('/kitchen');
+      } else if (role === 'RIDER') {
+        navigate('/driver');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
-      setError('Login failed. Please check your credentials or ensure the backend is running.');
+      setError('Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
@@ -35,20 +48,58 @@ export default function Login() {
     <div className="auth-page">
       <div className="floating-elements">
         <span className="float emoji-1">🍕</span>
-        <span className="float emoji-2">🍔</span>
-        <span className="float emoji-3">🍣</span>
+        <span className="float emoji-2">👨‍🍳</span>
+        <span className="float emoji-3">🛵</span>
         <span className="float emoji-4">🥤</span>
       </div>
 
       <div className="auth-card glass fade-in">
         <div className="auth-header">
           <h1 className="gradient-text">Welcome Back</h1>
-          <p>Sign in to continue ordering delicious food</p>
+          <p>Sign in with your role-based account</p>
         </div>
 
         {error && <div className="auth-error">{error}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label>Select Account Type / Role</label>
+            <div className="role-radio-selector">
+              <label className={`role-radio-tile ${role === 'CUSTOMER' ? 'active' : ''}`}>
+                <input 
+                  type="radio" 
+                  name="role" 
+                  value="CUSTOMER" 
+                  checked={role === 'CUSTOMER'} 
+                  onChange={(e) => setRole(e.target.value)} 
+                />
+                <span>👤 Customer</span>
+              </label>
+
+              <label className={`role-radio-tile ${role === 'HOTEL_MANAGER' ? 'active' : ''}`}>
+                <input 
+                  type="radio" 
+                  name="role" 
+                  value="HOTEL_MANAGER" 
+                  checked={role === 'HOTEL_MANAGER'} 
+                  onChange={(e) => setRole(e.target.value)} 
+                />
+                <span>👨‍🍳 Hotel</span>
+              </label>
+
+              <label className={`role-radio-tile ${role === 'RIDER' ? 'active' : ''}`}>
+                <input 
+                  type="radio" 
+                  name="role" 
+                  value="RIDER" 
+                  checked={role === 'RIDER'} 
+                  onChange={(e) => setRole(e.target.value)} 
+                />
+                <span>🛵 Rider</span>
+              </label>
+            </div>
+          </div>
+
           <div className="form-group">
             <label>Email Address</label>
             <input 
@@ -60,22 +111,9 @@ export default function Login() {
               required 
             />
           </div>
-          
-          {/* Demo only field since backend has no auth */}
-          <div className="form-group demo-field">
-            <label>User ID (Demo Only)</label>
-            <input 
-              type="number" 
-              value={userId} 
-              onChange={(e) => setUserId(e.target.value)} 
-              className="glass-input"
-              required 
-            />
-            <small>Leave as 1 for mock data access if API fails</small>
-          </div>
 
           <button type="submit" className="btn btn-primary auth-btn" disabled={loading}>
-            {loading ? <span className="spinner"></span> : 'Sign In'}
+            {loading ? <span className="spinner"></span> : `Sign In as ${role}`}
           </button>
         </form>
 

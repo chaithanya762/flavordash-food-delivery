@@ -5,6 +5,7 @@ import './App.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import FloatingCartStrip from './components/FloatingCartStrip';
+import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import Cart from './pages/Cart';
@@ -32,8 +33,27 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/orders" element={<Orders />} />
-          <Route path="/kitchen" element={<KitchenDashboard />} />
-          <Route path="/driver" element={<DriverDashboard />} />
+          
+          {/* Protected Hotel Manager Route */}
+          <Route 
+            path="/kitchen" 
+            element={
+              <ProtectedRoute allowedRoles={['HOTEL_MANAGER']}>
+                <KitchenDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
+          {/* Protected Rider Agent Route */}
+          <Route 
+            path="/driver" 
+            element={
+              <ProtectedRoute allowedRoles={['RIDER']}>
+                <DriverDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>

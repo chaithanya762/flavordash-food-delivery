@@ -12,18 +12,12 @@ const Navbar = () => {
   const [backendModalOpen, setBackendModalOpen] = useState(false);
   
   const { cart, totalItems } = useCart() || { cart: [], totalItems: 0 };
-  const { user, role, theme, switchRole, toggleTheme, logout } = useAuth() || { 
-    user: null, 
-    role: 'CUSTOMER', 
-    theme: 'dark', 
-    switchRole: () => {}, 
-    toggleTheme: () => {}, 
-    logout: () => {} 
-  };
+  const { user, logout } = useAuth() || { user: null, logout: () => {} };
   
   const navigate = useNavigate();
   const location = useLocation();
 
+  const userRole = user?.role || 'CUSTOMER';
   const count = totalItems || cart?.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
   useEffect(() => {
@@ -51,10 +45,10 @@ const Navbar = () => {
           <Link to="/" className="nav-brand">
             <span className="nav-logo-icon">🍔</span>
             <span className="nav-logo-text">FlavorDash</span>
-            <span className={`role-badge-tag ${role.toLowerCase()}`}>
-              {role === 'CUSTOMER' && 'CUSTOMER'}
-              {role === 'HOTEL_MANAGER' && 'HOTEL ADMIN'}
-              {role === 'RIDER' && 'RIDER AGENT'}
+            <span className={`role-badge-tag ${userRole.toLowerCase()}`}>
+              {userRole === 'CUSTOMER' && 'CUSTOMER'}
+              {userRole === 'HOTEL_MANAGER' && 'HOTEL ADMIN'}
+              {userRole === 'RIDER' && 'RIDER AGENT'}
             </span>
           </Link>
 
@@ -62,16 +56,16 @@ const Navbar = () => {
             <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
             <Link to="/menu" className={`nav-link ${location.pathname === '/menu' ? 'active' : ''}`}>Menu</Link>
 
-            {/* Role-Restricted Links */}
-            {role === 'CUSTOMER' && (
+            {/* Strictly Logged-In Role Links */}
+            {userRole === 'CUSTOMER' && (
               <Link to="/orders" className={`nav-link ${location.pathname === '/orders' ? 'active' : ''}`}>Orders</Link>
             )}
 
-            {role === 'HOTEL_MANAGER' && (
+            {userRole === 'HOTEL_MANAGER' && (
               <Link to="/kitchen" className={`nav-link ${location.pathname === '/kitchen' ? 'active' : ''}`}>👨‍🍳 Kitchen Desk</Link>
             )}
 
-            {role === 'RIDER' && (
+            {userRole === 'RIDER' && (
               <Link to="/driver" className={`nav-link ${location.pathname === '/driver' ? 'active' : ''}`}>🛵 Rider GPS</Link>
             )}
 
@@ -81,38 +75,8 @@ const Navbar = () => {
           </div>
 
           <div className="nav-actions">
-            {/* Role Switcher Pill */}
-            <div className="role-switcher-group">
-              <button 
-                className={`role-btn ${role === 'CUSTOMER' ? 'active' : ''}`}
-                onClick={() => switchRole('CUSTOMER')}
-                title="Switch to Customer Mode"
-              >
-                👤 Customer
-              </button>
-              <button 
-                className={`role-btn hotel ${role === 'HOTEL_MANAGER' ? 'active' : ''}`}
-                onClick={() => switchRole('HOTEL_MANAGER')}
-                title="Switch to Hotel Kitchen Mode"
-              >
-                👨‍🍳 Hotel
-              </button>
-              <button 
-                className={`role-btn rider ${role === 'RIDER' ? 'active' : ''}`}
-                onClick={() => switchRole('RIDER')}
-                title="Switch to Rider Agent Mode"
-              >
-                🛵 Rider
-              </button>
-            </div>
-
-            {/* Theme Toggle Button */}
-            <button className="btn-theme-toggle" onClick={toggleTheme} title="Toggle Dark/Light Mode">
-              {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
-            </button>
-
-            {/* Cart Button (For Customers) */}
-            {role === 'CUSTOMER' && (
+            {/* Shopping Cart (Customers Only) */}
+            {userRole === 'CUSTOMER' && (
               <button 
                 className={`cart-btn-nav ${bump ? 'bump' : ''}`}
                 onClick={() => navigate('/cart')}
@@ -127,7 +91,11 @@ const Navbar = () => {
             <div className="auth-buttons">
               {user ? (
                 <div className="user-profile">
-                  <span className="user-name">{user.name || 'User'}</span>
+                  <span className="user-avatar">👤</span>
+                  <div className="user-info-pill">
+                    <span className="user-name">{user.name || 'User'}</span>
+                    <span className="user-role-sub">({userRole})</span>
+                  </div>
                   <button onClick={logout} className="btn-logout">Logout</button>
                 </div>
               ) : (
@@ -154,30 +122,21 @@ const Navbar = () => {
         </div>
 
         <div className="mobile-nav-links">
-          <div className="mobile-role-selector">
-            <span className="mobile-role-title">Select Mode:</span>
-            <div className="mobile-role-btns">
-              <button className={role === 'CUSTOMER' ? 'active' : ''} onClick={() => switchRole('CUSTOMER')}>👤 Customer</button>
-              <button className={role === 'HOTEL_MANAGER' ? 'active' : ''} onClick={() => switchRole('HOTEL_MANAGER')}>👨‍🍳 Hotel</button>
-              <button className={role === 'RIDER' ? 'active' : ''} onClick={() => switchRole('RIDER')}>🛵 Rider</button>
-            </div>
-          </div>
-
           <Link to="/" className="mobile-link" onClick={toggleMobileMenu}>🏠 Home</Link>
           <Link to="/menu" className="mobile-link" onClick={toggleMobileMenu}>🍽️ Menu</Link>
 
-          {role === 'CUSTOMER' && (
+          {userRole === 'CUSTOMER' && (
             <>
               <Link to="/cart" className="mobile-link" onClick={toggleMobileMenu}>🛒 Cart ({count})</Link>
               <Link to="/orders" className="mobile-link" onClick={toggleMobileMenu}>📋 My Orders</Link>
             </>
           )}
 
-          {role === 'HOTEL_MANAGER' && (
+          {userRole === 'HOTEL_MANAGER' && (
             <Link to="/kitchen" className="mobile-link" onClick={toggleMobileMenu}>👨‍🍳 Kitchen Desk</Link>
           )}
 
-          {role === 'RIDER' && (
+          {userRole === 'RIDER' && (
             <Link to="/driver" className="mobile-link" onClick={toggleMobileMenu}>🛵 Rider GPS App</Link>
           )}
 
@@ -187,7 +146,7 @@ const Navbar = () => {
 
           {user ? (
             <div className="mobile-user-section">
-              <p className="user-greeting">Signed in as <strong>{user.name}</strong> ({role})</p>
+              <p className="user-greeting">Signed in as <strong>{user.name}</strong> ({userRole})</p>
               <button onClick={() => { logout(); toggleMobileMenu(); }} className="btn btn-secondary w-full">Logout</button>
             </div>
           ) : (
