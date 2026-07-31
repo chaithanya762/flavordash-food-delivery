@@ -3,19 +3,10 @@ import { userAPI } from '../api/api';
 
 const AuthContext = createContext();
 
-const DEFAULT_USER = {
-  id: 1,
-  name: "Alex Johnson",
-  email: "alex@example.com",
-  phone: "555-0199",
-  address: "742 Evergreen Terrace",
-  role: "CUSTOMER" // CUSTOMER, HOTEL_MANAGER, RIDER
-};
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('user');
-    return saved ? JSON.parse(saved) : DEFAULT_USER;
+    return saved ? JSON.parse(saved) : null;
   });
 
   const [role, setRole] = useState(() => {
@@ -55,11 +46,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = (userData) => {
-    setUser({ ...userData, role: role || 'CUSTOMER' });
+    const userRole = userData.role || role || 'CUSTOMER';
+    setRole(userRole);
+    setUser({ ...userData, role: userRole });
   };
 
   const logout = () => {
     setUser(null);
+    setRole('CUSTOMER');
+    localStorage.removeItem('user');
+    localStorage.removeItem('userRole');
   };
 
   const register = async (formData) => {

@@ -1,0 +1,50 @@
+/* ProtectedRoute — Role Access Card */
+.role-access-page {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.role-access-card {
+  max-width: 480px;
+  text-align: center;
+  padding: 3rem 2.5rem;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.role-access-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.role-access-card h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.role-access-desc {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.role-access-desc strong {
+  color: #ff6b35;
+}
+
+.btn-grant-role {
+  padding: 14px 32px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  border-radius: 14px;
+  width: 100%;
+}
