@@ -1,8 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Footer.css';
 
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const handleNavClick = (e, path) => {
+    e.preventDefault();
+    navigate(path);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <footer className="footer">
       <div className="footer-content container">
@@ -19,20 +27,28 @@ const Footer = () => {
         <div className="footer-section">
           <h3 className="footer-heading">Quick Navigation</h3>
           <div className="footer-links">
-            <Link to="/" className="footer-link">🏠 Home</Link>
-            <Link to="/menu" className="footer-link">🍽️ Menu & AI Filters</Link>
-            <Link to="/orders" className="footer-link">📋 Live Order Tracker</Link>
-            <Link to="/kitchen" className="footer-link">👨‍🍳 Kitchen Portal</Link>
-            <Link to="/driver" className="footer-link">🛵 Rider GPS App</Link>
+            <a href="/" className="footer-link" onClick={(e) => handleNavClick(e, '/')}>🏠 Home</a>
+            <a href="/menu" className="footer-link" onClick={(e) => handleNavClick(e, '/menu')}>🍽️ Menu & AI Filters</a>
+            <a href="/cart" className="footer-link" onClick={(e) => handleNavClick(e, '/cart')}>🛒 Cart</a>
+            <a href="/orders" className="footer-link" onClick={(e) => handleNavClick(e, '/orders')}>📋 Live Order Tracker</a>
+            <a href="/kitchen" className="footer-link" onClick={(e) => handleNavClick(e, '/kitchen')}>👨‍🍳 Kitchen Portal</a>
+            <a href="/driver" className="footer-link" onClick={(e) => handleNavClick(e, '/driver')}>🛵 Rider GPS App</a>
+            <a href="/login" className="footer-link" onClick={(e) => handleNavClick(e, '/login')}>🔑 Login / Register</a>
           </div>
         </div>
 
         <div className="footer-section">
           <h3 className="footer-heading">Contact & Support</h3>
           <div className="footer-contact">
-            <p><span>📍</span> Connaught Place, New Delhi, India</p>
-            <p><span>📞</span> +91 98765 43210</p>
-            <p><span>✉️</span> support@flavordash.in</p>
+            <p><span>📍</span> JP Nagar, Mahadevapura, Mysore</p>
+            <p>
+              <span>📞</span>
+              <a href="tel:+919591791336" className="footer-contact-link">+91 95917 91336</a>
+            </p>
+            <p>
+              <span>✉️</span>
+              <a href="mailto:chaithanyagowda762@gmail.com" className="footer-contact-link">chaithanyagowda762@gmail.com</a>
+            </p>
           </div>
         </div>
       </div>
@@ -49,9 +65,8 @@ const Footer = () => {
         <p className="copyright-text">© 2026 FlavorDash Inc. All rights reserved.</p>
         
         <div className="social-links">
-          <span className="social-icon" title="Mobile App">📱</span>
-          <span className="social-icon" title="Chat Support">💬</span>
-          <span className="social-icon" title="Email Support">📧</span>
+          <a href="tel:+919591791336" className="social-icon" title="Call Us">📱</a>
+          <a href="mailto:chaithanyagowda762@gmail.com" className="social-icon" title="Email Us">📧</a>
         </div>
       </div>
     </footer>

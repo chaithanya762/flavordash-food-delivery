@@ -64,6 +64,17 @@
   transform: translateX(4px);
 }
 
+.footer-contact-link {
+  color: #F5E9DA;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-contact-link:hover {
+  color: #FF9933;
+  text-decoration: underline;
+}
+
 .footer-contact p {
   margin-bottom: 0.85rem;
   font-family: var(--font-body, 'Inter', sans-serif);
