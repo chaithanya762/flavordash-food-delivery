@@ -37,12 +37,22 @@ export default function FoodCard3D({ dish, onInspect }) {
     }
   };
 
+  const handleInspectClick = (e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    if (onInspect) {
+      onInspect(dish);
+    }
+  };
+
   return (
     <div 
       className={`food-card-3d-wrapper ${isHovered ? 'hovered' : ''} ${pulse ? 'added-pulse' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => onInspect && onInspect(dish)}
+      onClick={handleInspectClick}
     >
       <div className="food-card-glass-body">
         {/* Glow accent rim */}
@@ -75,6 +85,10 @@ export default function FoodCard3D({ dish, onInspect }) {
             alt={dish.name} 
             className="food-3d-image" 
             loading="lazy"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80';
+            }}
           />
 
           <div className="food-contact-shadow"></div>
@@ -107,8 +121,9 @@ export default function FoodCard3D({ dish, onInspect }) {
 
             <div className="card-actions-group" onClick={(e) => e.stopPropagation()}>
               <button 
+                type="button"
                 className="btn-inspect-3d"
-                onClick={() => onInspect && onInspect(dish)}
+                onClick={handleInspectClick}
                 title="View Chef's Plating & Ingredients"
               >
                 🔍 Details
@@ -117,12 +132,13 @@ export default function FoodCard3D({ dish, onInspect }) {
               {/* MORPHING BUTTON: If item is in cart, morph into Quantity Stepper! */}
               {itemQty > 0 ? (
                 <div className="qty-stepper-morphed">
-                  <button className="stepper-btn" onClick={handleDecrement}>-</button>
+                  <button type="button" className="stepper-btn" onClick={handleDecrement}>-</button>
                   <span className="stepper-count">{itemQty}</span>
-                  <button className="stepper-btn" onClick={handleIncrement}>+</button>
+                  <button type="button" className="stepper-btn" onClick={handleIncrement}>+</button>
                 </div>
               ) : (
                 <button 
+                  type="button"
                   className="btn-add-3d"
                   onClick={handleAddClick}
                 >
