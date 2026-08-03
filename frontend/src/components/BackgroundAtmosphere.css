@@ -1,0 +1,165 @@
+/* BackgroundAtmosphere.css - Global Depth Engine Layers 1 & 2 */
+
+.global-depth-engine {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* =========================================
+   LAYER 1 — Background Atmosphere
+   ========================================= */
+.layer-1-bg-atmosphere {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 30%),
+    #2a1205 0%,
+    #130903 45%,
+    #050308 100%
+  );
+  transition: background 0.15s ease-out;
+}
+
+.volumetric-spotlight {
+  position: absolute;
+  top: -20%;
+  left: var(--mouse-x, 50%);
+  transform: translateX(-50%);
+  width: 800px;
+  height: 900px;
+  background: radial-gradient(
+    ellipse at top,
+    rgba(255, 107, 53, 0.22) 0%,
+    rgba(245, 158, 11, 0.08) 45%,
+    transparent 80%
+  );
+  filter: blur(60px);
+  pointer-events: none;
+  animation: pulseSpotlight 8s ease-in-out infinite alternate;
+}
+
+.saffron-ambient-radial {
+  position: absolute;
+  bottom: -30%;
+  right: -10%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(
+    circle,
+    rgba(247, 147, 30, 0.12) 0%,
+    rgba(239, 68, 68, 0.05) 50%,
+    transparent 75%
+  );
+  filter: blur(80px);
+}
+
+@keyframes pulseSpotlight {
+  0% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1.15); }
+}
+
+/* =========================================
+   LAYER 2 — Ambient Motion (Breathing Haze & Floating Spices)
+   ========================================= */
+.layer-2-ambient-motion {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.breathing-haze-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.4;
+  animation: floatOrb 14s ease-in-out infinite alternate;
+}
+
+.orb-alpha {
+  top: 15%;
+  left: 10%;
+  width: 450px;
+  height: 450px;
+  background: rgba(255, 107, 53, 0.15);
+  animation-duration: 12s;
+}
+
+.orb-beta {
+  bottom: 20%;
+  left: 55%;
+  width: 500px;
+  height: 500px;
+  background: rgba(245, 158, 11, 0.12);
+  animation-duration: 16s;
+  animation-delay: -4s;
+}
+
+.orb-gamma {
+  top: 60%;
+  left: 5%;
+  width: 350px;
+  height: 350px;
+  background: rgba(124, 58, 237, 0.1);
+  animation-duration: 18s;
+  animation-delay: -8s;
+}
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, -30px) scale(1.12); }
+  100% { transform: translate(-30px, 40px) scale(0.95); }
+}
+
+/* Spice Dust Particles */
+.spice-particles-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.spice-particle {
+  position: absolute;
+  font-size: 1.2rem;
+  opacity: 0.35;
+  filter: drop-shadow(0 0 8px rgba(255, 165, 0, 0.6));
+  animation: floatSpice 10s ease-in-out infinite alternate;
+  user-select: none;
+}
+
+.p1 { top: 12%; left: 15%; animation-duration: 8s; font-size: 1rem; }
+.p2 { top: 25%; right: 18%; animation-duration: 11s; animation-delay: -2s; }
+.p3 { top: 65%; left: 8%; animation-duration: 9s; animation-delay: -5s; }
+.p4 { top: 78%; right: 12%; animation-duration: 14s; animation-delay: -1s; }
+.p5 { top: 40%; left: 80%; animation-duration: 10s; animation-delay: -3s; }
+.p6 { top: 85%; left: 45%; animation-duration: 12s; animation-delay: -7s; }
+.p7 { top: 18%; left: 60%; animation-duration: 13s; animation-delay: -4s; }
+.p8 { top: 50%; left: 25%; animation-duration: 7s; animation-delay: -6s; }
+.p9 { top: 32%; left: 35%; animation-duration: 15s; animation-delay: -2.5s; }
+.p10 { top: 90%; right: 30%; animation-duration: 9s; animation-delay: -8s; }
+
+@keyframes floatSpice {
+  0% { transform: translateY(0px) rotate(0deg) scale(0.9); opacity: 0.25; }
+  50% { transform: translateY(-25px) rotate(15deg) scale(1.15); opacity: 0.55; }
+  100% { transform: translateY(-45px) rotate(-10deg) scale(1); opacity: 0.2; }
+}
+
+@media (max-width: 768px) {
+  .volumetric-spotlight {
+    width: 100vw;
+    height: 500px;
+  }
+  .spice-particle:nth-child(n+6) {
+    display: none;
+  }
+}

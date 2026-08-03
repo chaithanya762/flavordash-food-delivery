@@ -1,0 +1,432 @@
+/* FoodInspectorModal.css */
+
+.inspector-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(5, 3, 8, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.inspector-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 950px;
+  background: rgba(22, 14, 28, 0.9);
+  border: 1px solid rgba(255, 107, 53, 0.3);
+  border-radius: 32px;
+  padding: 2.5rem;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 107, 53, 0.2);
+  overflow: hidden;
+}
+
+.inspector-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.2s ease;
+}
+
+.inspector-close-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: #ef4444;
+  transform: rotate(90deg);
+}
+
+.inspector-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+/* 3D STAGE */
+.inspector-3d-stage {
+  position: relative;
+  height: 380px;
+  background: radial-gradient(circle at center, rgba(255, 107, 53, 0.15) 0%, transparent 70%);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem;
+  perspective: 1000px;
+}
+
+.stage-controls-top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.ar-live-pill {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  color: #a78bfa;
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #a78bfa;
+  box-shadow: 0 0 10px #a78bfa;
+  animation: pulse 1.5s infinite;
+}
+
+.btn-steam-toggle {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-steam-toggle.active {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+.inspector-steam-overlay {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.steam-cloud {
+  font-size: 1.8rem;
+  opacity: 0;
+  animation: riseSteam 3s ease-out infinite;
+}
+
+.c1 { animation-delay: 0s; }
+.c2 { animation-delay: 1s; }
+.c3 { animation-delay: 2s; }
+
+.inspector-food-wrapper {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-style: preserve-3d;
+}
+
+.inspector-food-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: 24px;
+  filter: drop-shadow(0 25px 30px rgba(0, 0, 0, 0.8));
+}
+
+/* Floating Ingredient Pins */
+.ingredient-pin {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 107, 53, 0.4);
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffffff;
+  pointer-events: none;
+  animation: floatPin 3s ease-in-out infinite alternate;
+}
+
+.pin-1 { top: 10px; left: -20px; animation-delay: 0s; }
+.pin-2 { bottom: 30px; right: -20px; animation-delay: 1s; }
+.pin-3 { top: 100px; left: -30px; animation-delay: 2s; }
+
+.pin-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff6b35;
+  box-shadow: 0 0 8px #ff6b35;
+}
+
+@keyframes floatPin {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+.inspector-contact-shadow {
+  position: absolute;
+  bottom: 50px;
+  width: 180px;
+  height: 25px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85) 0%, transparent 75%);
+  border-radius: 50%;
+  filter: blur(8px);
+}
+
+.stage-controls-bottom {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 10;
+}
+
+.btn-orbit {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-orbit:hover {
+  background: rgba(255, 107, 53, 0.2);
+  border-color: #ff6b35;
+}
+
+.orbit-angle-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  color: #ff6b35;
+  font-size: 0.9rem;
+}
+
+/* DETAILS STAGE */
+.inspector-details-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.inspector-meta-row {
+  display: flex;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+
+.res-badge {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 4px 12px;
+  border-radius: 99px;
+  color: #cbd5e1;
+}
+
+.rating-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-weight: 700;
+}
+
+.inspector-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.inspector-desc {
+  color: #94a3b8;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.inspector-texture-box {
+  background: rgba(255, 107, 53, 0.1);
+  border: 1px dashed rgba(255, 107, 53, 0.3);
+  padding: 10px 14px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.box-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #ff6b35;
+  letter-spacing: 0.05em;
+}
+
+.box-value {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.spice-meter-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meter-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.flame-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.flame-icon {
+  opacity: 0.2;
+  font-size: 1.1rem;
+}
+
+.flame-icon.active {
+  opacity: 1;
+}
+
+.spice-text {
+  margin-left: 8px;
+  font-size: 0.8rem;
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.nutri-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px;
+  border-radius: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.nutri-val {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+.nutri-key {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.inspector-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inspector-price {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.8rem;
+  color: #ffffff;
+}
+
+.inspector-price .curr {
+  color: #ff6b35;
+  margin-right: 2px;
+}
+
+.quantity-stepper {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.quantity-stepper button {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.quantity-stepper span {
+  padding: 0 12px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.btn-add-inspector {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 800;
+  border-radius: 14px;
+}
+
+@media (max-width: 768px) {
+  .inspector-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .inspector-3d-stage {
+    height: 280px;
+  }
+  .inspector-food-wrapper {
+    width: 170px;
+    height: 170px;
+  }
+}

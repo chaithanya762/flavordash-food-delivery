@@ -23,10 +23,10 @@ export default function Checkout() {
 
   if (cartList.length === 0) {
     return (
-      <div className="checkout-page center-message fade-in container">
-        <div className="glass-card text-center p-8">
+      <div className="checkout-page-3d center-message fade-in container">
+        <div className="glass-god-card text-center p-8">
           <h2>Your cart is empty</h2>
-          <Link to="/menu" className="btn btn-primary mt-4">Browse Menu</Link>
+          <Link to="/menu" className="btn btn-primary mt-4">Browse 3D Menu</Link>
         </div>
       </div>
     );
@@ -67,14 +67,20 @@ export default function Checkout() {
   };
 
   return (
-    <div className="checkout-page container fade-in">
-      <h1 className="page-title gradient-text">Checkout</h1>
+    <div className="checkout-page-3d container fade-in">
+      <div className="checkout-header-3d">
+        <div className="experience-badge-pill">
+          <span className="sparkle">✨</span> CONFIRMATION & EXPRESS DISPATCH
+        </div>
+        <h1 className="page-title-3d gradient-text">Checkout</h1>
+        <p className="page-subtitle-3d">Review your 3D culinary order and delivery location</p>
+      </div>
       
-      <div className="checkout-layout">
-        <div className="checkout-form-container glass-card">
-          <h2>Delivery Address</h2>
-          <form onSubmit={handleSubmit} className="checkout-form">
-            <div className="form-group">
+      <div className="checkout-layout-3d">
+        <div className="checkout-form-card-3d glass-god-card">
+          <h2>📍 Delivery Address</h2>
+          <form onSubmit={handleSubmit} className="checkout-form-3d">
+            <div className="form-group-3d">
               <label>Full Name</label>
               <input 
                 type="text" 
@@ -82,10 +88,10 @@ export default function Checkout() {
                 value={formData.name} 
                 onChange={handleChange} 
                 required 
-                className="glass-input"
+                className="glass-input-3d"
               />
             </div>
-            <div className="form-group">
+            <div className="form-group-3d">
               <label>Phone Number</label>
               <input 
                 type="tel" 
@@ -93,10 +99,10 @@ export default function Checkout() {
                 value={formData.phone} 
                 onChange={handleChange} 
                 required 
-                className="glass-input"
+                className="glass-input-3d"
               />
             </div>
-            <div className="form-group">
+            <div className="form-group-3d">
               <label>Delivery Address</label>
               <textarea 
                 name="address" 
@@ -104,22 +110,22 @@ export default function Checkout() {
                 onChange={handleChange} 
                 required 
                 rows="3"
-                className="glass-input"
+                className="glass-input-3d"
               ></textarea>
             </div>
 
-            <div className="form-group">
+            <div className="form-group-3d">
               <label>Payment Method</label>
-              <div className="payment-options">
-                <label className={`payment-option ${formData.paymentMethod === 'UPI' ? 'active' : ''}`}>
+              <div className="payment-options-3d">
+                <label className={`payment-option-3d ${formData.paymentMethod === 'UPI' ? 'active' : ''}`}>
                   <input type="radio" name="paymentMethod" value="UPI" checked={formData.paymentMethod === 'UPI'} onChange={handleChange} />
-                  <span>📲 UPI / GPay / PhonePe</span>
+                  <span>📲 Instant UPI / GPay / PhonePe</span>
                 </label>
-                <label className={`payment-option ${formData.paymentMethod === 'CARD' ? 'active' : ''}`}>
+                <label className={`payment-option-3d ${formData.paymentMethod === 'CARD' ? 'active' : ''}`}>
                   <input type="radio" name="paymentMethod" value="CARD" checked={formData.paymentMethod === 'CARD'} onChange={handleChange} />
                   <span>💳 Credit / Debit Card</span>
                 </label>
-                <label className={`payment-option ${formData.paymentMethod === 'COD' ? 'active' : ''}`}>
+                <label className={`payment-option-3d ${formData.paymentMethod === 'COD' ? 'active' : ''}`}>
                   <input type="radio" name="paymentMethod" value="COD" checked={formData.paymentMethod === 'COD'} onChange={handleChange} />
                   <span>💵 Cash on Delivery</span>
                 </label>
@@ -128,42 +134,42 @@ export default function Checkout() {
           </form>
         </div>
 
-        <div className="checkout-summary glass-card sticky">
+        <div className="checkout-summary-card-3d glass-god-card sticky">
           <h2>Order Summary</h2>
-          <div className="summary-items">
+          <div className="summary-items-3d">
             {cartList.map(item => (
-              <div key={item.product.id} className="summary-item">
-                <span className="item-qty">{item.quantity}x</span>
-                <span className="item-name">{item.product.name}</span>
-                <span className="item-price">₹{item.product.price * item.quantity}</span>
+              <div key={item.product.id} className="summary-item-3d">
+                <span className="item-qty-3d">{item.quantity}x</span>
+                <span className="item-name-3d">{item.product.name}</span>
+                <span className="item-price-3d">₹{item.product.price * item.quantity}</span>
               </div>
             ))}
           </div>
           
-          <div className="summary-divider"></div>
+          <div className="summary-divider-3d"></div>
           
-          <div className="summary-row">
+          <div className="summary-row-3d">
             <span>Items Subtotal</span>
             <span>₹{totalPrice}</span>
           </div>
-          <div className="summary-row">
+          <div className="summary-row-3d">
             <span>Delivery Fee</span>
             <span>₹{DELIVERY_FEE}</span>
           </div>
-          <div className="summary-row">
+          <div className="summary-row-3d">
             <span>Taxes & Charges</span>
             <span>₹{TAX_SERVICE}</span>
           </div>
           
-          <div className="summary-divider"></div>
+          <div className="summary-divider-3d"></div>
           
-          <div className="summary-row total">
+          <div className="summary-row-3d total">
             <span>Total Payable</span>
-            <span className="gradient-text price-total">₹{FINAL_TOTAL}</span>
+            <span className="gradient-text price-total-3d">₹{FINAL_TOTAL}</span>
           </div>
 
           <button 
-            className="btn btn-primary place-order-btn"
+            className="btn btn-primary place-order-btn-3d"
             onClick={handleSubmit}
             disabled={loading}
           >

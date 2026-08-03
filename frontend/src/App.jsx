@@ -6,6 +6,8 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import FloatingCartStrip from './components/FloatingCartStrip';
 import ProtectedRoute from './components/ProtectedRoute';
+import BackgroundAtmosphere from './components/BackgroundAtmosphere';
+
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import Cart from './pages/Cart';
@@ -19,10 +21,8 @@ import Register from './pages/Register';
 function App() {
   return (
     <div className="app-container">
-      {/* Aurora Ambient Orbs */}
-      <div className="orb orb-1"></div>
-      <div className="orb orb-2"></div>
-      <div className="orb orb-3"></div>
+      {/* GLOBAL 4-LAYER DEPTH ENGINE & VOLUMETRIC ATMOSPHERE */}
+      <BackgroundAtmosphere />
 
       <Navbar />
 

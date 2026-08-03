@@ -1,91 +1,204 @@
-import React, { useState, useEffect } from 'react';
-import HeroSection from '../components/HeroSection';
-import FoodCard from '../components/FoodCard';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ALL_DISHES } from '../data/dishes';
-import { productAPI } from '../api/api';
+import FoodCard3D from '../components/FoodCard3D';
+import FoodInspectorModal from '../components/FoodInspectorModal';
+import { useCart } from '../context/CartContext';
+import { useToast } from '../context/ToastContext';
 import './Home.css';
 
 export default function Home() {
-  const [products, setProducts] = useState(ALL_DISHES.slice(0, 8));
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { addToCart } = useCart() || { addToCart: () => {} };
+  const { showToast } = useToast() || { showToast: () => {} };
+
+  // Filter 3D Hero dishes
+  const heroDishes = ALL_DISHES.slice(0, 6);
+  const [selectedHeroIndex, setSelectedHeroIndex] = useState(0);
+  const [inspectedDish, setInspectedDish] = useState(null);
+  const [activeCategory, setActiveCategory] = useState('All');
+
+  const featuredDish = heroDishes[selectedHeroIndex] || heroDishes[0];
+
+  const categories = ['All', 'Biryani', 'North Indian', 'South Indian', 'Starters', 'Desserts', 'Street Food'];
+
+  const filteredDishes = activeCategory === 'All' 
+    ? ALL_DISHES 
+    : ALL_DISHES.filter(d => d.category === activeCategory);
+
+  const handleOrderHero = () => {
+    addToCart(featuredDish);
+    showToast(`Added ${featuredDish.name} to your cart! 🍽️`, 'success');
+  };
 
   return (
-    <div className="home-page fade-in">
-      <HeroSection />
+    <div className="home-3d-ecosystem fade-in">
+      {/* =========================================
+          HERO STAGE: CONTINUOUS 3D FOOD WORLD
+          ========================================= */}
+      <section className="hero-3d-stage">
+        {/* Volumetric Spotlight Backdrop */}
+        <div className="stage-light-spotlight"></div>
 
-      {/* How it Works Section */}
-      <section className="how-it-works container">
-        <div className="section-header text-center">
-          <span className="section-subtitle">SIMPLE STEPS</span>
-          <h2 className="section-title gradient-text">How FlavorDash Works</h2>
-        </div>
+        <div className="hero-stage-container container">
+          {/* LEFT: MINIMAL TEXT & GLOWING GLASS CTA */}
+          <div className="hero-content-left">
+            <div className="experience-badge-pill">
+              <span className="sparkle">✨</span> 3D CINEMATIC FOOD ECOSYSTEM
+            </div>
 
-        <div className="steps-grid">
-          <div className="step-card glass-card">
-            <div className="step-number">01</div>
-            <div className="step-icon">🍽️</div>
-            <h3>Select Your Dish</h3>
-            <p>Browse 30+ top-rated Indian & Global authentic dishes prepared fresh.</p>
+            <h1 className="hero-headline-3d gradient-text">
+              Taste The Future of Culinary Art
+            </h1>
+
+            <p className="hero-subtext-3d">
+              Step into an immersive, living food world. Explore 3D floating Indian delicacies, steam physics, and instant doorstep delivery.
+            </p>
+
+            {/* Glowing Glass CTA Group */}
+            <div className="hero-cta-group">
+              <button 
+                className="btn btn-primary btn-hero-order-3d"
+                onClick={handleOrderHero}
+              >
+                🍽️ Order {featuredDish.name.split(' ')[0]} — ₹{featuredDish.price}
+              </button>
+
+              <button 
+                className="btn btn-secondary btn-hero-explore-3d"
+                onClick={() => navigate('/menu')}
+              >
+                🚀 Explore Full 3D Menu
+              </button>
+            </div>
+
+            {/* Culinary Specs Pill Bar */}
+            <div className="culinary-specs-bar">
+              <div className="spec-item">
+                <span className="spec-icon">🔥</span>
+                <div>
+                  <span className="spec-val">{featuredDish.calories}</span>
+                  <span className="spec-lbl">Energy</span>
+                </div>
+              </div>
+              <div className="spec-item">
+                <span className="spec-icon">⏱️</span>
+                <div>
+                  <span className="spec-val">{featuredDish.prepTime}</span>
+                  <span className="spec-lbl">Fresh Prep</span>
+                </div>
+              </div>
+              <div className="spec-item">
+                <span className="spec-icon">⭐</span>
+                <div>
+                  <span className="spec-val">{featuredDish.rating} / 5</span>
+                  <span className="spec-lbl">Octane Rating</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="step-card glass-card">
-            <div className="step-number">02</div>
-            <div className="step-icon">⚡</div>
-            <h3>Fast Order & UPI Pay</h3>
-            <p>Place your order instantly with GPay, PhonePe, Cards, or Cash on Delivery.</p>
-          </div>
+          {/* RIGHT: 3D ORBIT STAGE (CENTERPIECE + ORBITING DISHES) */}
+          <div className="hero-3d-centerpiece-stage">
+            {/* Centerpiece Spotlight Glow */}
+            <div className="centerpiece-halo-ring"></div>
 
-          <div className="step-card glass-card">
-            <div className="step-number">03</div>
-            <div className="step-icon">🚀</div>
-            <h3>30-Min Delivery</h3>
-            <p>Track your food live as our delivery hero brings it hot to your doorstep.</p>
+            {/* Central Floating Featured 3D Dish (Layer 3) */}
+            <div 
+              className="central-featured-dish-container"
+              onClick={() => setInspectedDish(featuredDish)}
+              title="Click to Inspect in 3D"
+            >
+              {/* Steam Vapor Wisps */}
+              {featuredDish.steam !== false && (
+                <div className="hero-steam-overlay">
+                  <span className="steam-cloud s1">☁️</span>
+                  <span className="steam-cloud s2">☁️</span>
+                  <span className="steam-cloud s3">☁️</span>
+                </div>
+              )}
+
+              {/* 3D Artwork */}
+              <img 
+                src={featuredDish.imageUrl} 
+                alt={featuredDish.name}
+                className="central-dish-img-3d"
+              />
+
+              {/* Contact Shadow */}
+              <div className="central-dish-shadow"></div>
+
+              {/* Floating Highlight Label */}
+              <div className="central-highlight-badge">
+                <span className="sparkle">✨</span> {featuredDish.highlight || featuredDish.texture}
+              </div>
+            </div>
+
+            {/* ORBITING 3D DISHES SELECTOR RING */}
+            <div className="orbiting-dishes-ring">
+              {heroDishes.map((dish, idx) => (
+                <div 
+                  key={dish.id}
+                  className={`orbit-node ${idx === selectedHeroIndex ? 'active' : ''}`}
+                  onClick={() => setSelectedHeroIndex(idx)}
+                  title={`Switch Spotlight to ${dish.name}`}
+                >
+                  <img src={dish.imageUrl} alt={dish.name} className="orbit-thumb" />
+                  <span className="orbit-name-tooltip">{dish.name.split(' ')[0]}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Popular Dishes Grid */}
-      <section className="popular-dishes container">
-        <div className="section-header">
-          <div>
-            <span className="section-subtitle">TOP RECOMMENDATIONS</span>
-            <h2 className="section-title gradient-text">Trending Dishes Near You</h2>
+      {/* =========================================
+          DISCOVERY SECTION: FLOATING CATEGORIES & 3D GRID
+          ========================================= */}
+      <section className="menu-discovery-section container">
+        <div className="section-header-3d">
+          <h2 className="gradient-text heading-lg">Interactive 3D Menu Grid</h2>
+          <p className="text-secondary">Hover and tilt to explore textures, steam, and ingredient depths</p>
+
+          {/* Floating Category Filter Pills */}
+          <div className="category-pills-bar">
+            {categories.map((cat) => (
+              <button 
+                key={cat}
+                className={`glass-category-pill ${activeCategory === cat ? 'active' : ''}`}
+                onClick={() => setActiveCategory(cat)}
+              >
+                {cat === 'All' && '✨ All Delicacies'}
+                {cat === 'Biryani' && '🍛 Dum Biryani'}
+                {cat === 'North Indian' && '🧈 North Indian'}
+                {cat === 'South Indian' && '🫓 South Indian'}
+                {cat === 'Starters' && '🍢 Tandoori Starters'}
+                {cat === 'Desserts' && 'Gulab Jamun & Sweets'}
+                {cat === 'Street Food' && '🥘 Street Food'}
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className="dishes-grid">
-          {products.map(product => (
-            <FoodCard key={product.id} product={product} />
+        {/* 3D FOOD CARDS GRID */}
+        <div className="grid grid-cols-3 gap-8 mt-8">
+          {filteredDishes.map((dish) => (
+            <FoodCard3D 
+              key={dish.id} 
+              dish={dish} 
+              onInspect={(d) => setInspectedDish(d)}
+            />
           ))}
         </div>
       </section>
 
-      {/* Features Banner */}
-      <section className="features-section container">
-        <div className="features-grid">
-          <div className="feature-item glass-card">
-            <span className="feature-icon">🛵</span>
-            <div>
-              <h4>30-Min Delivery</h4>
-              <p>Hot & fresh food delivered to your door guaranteed on time.</p>
-            </div>
-          </div>
-          <div className="feature-item glass-card">
-            <span className="feature-icon">🛡️</span>
-            <div>
-              <h4>Hygiene Sealed</h4>
-              <p>100% safety sealed packaging and double-checked kitchens.</p>
-            </div>
-          </div>
-          <div className="feature-item glass-card">
-            <span className="feature-icon">💎</span>
-            <div>
-              <h4>Best Price Perks</h4>
-              <p>Exclusive daily discounts, cashback, and free delivery.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 3D INSPECTOR MODAL */}
+      {inspectedDish && (
+        <FoodInspectorModal 
+          dish={inspectedDish} 
+          onClose={() => setInspectedDish(null)} 
+        />
+      )}
     </div>
   );
 }

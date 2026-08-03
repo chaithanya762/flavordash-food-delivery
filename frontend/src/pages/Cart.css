@@ -1,31 +1,50 @@
-.cart-page {
-  padding: 100px 20px 60px;
-  max-width: 1240px;
-  margin: 0 auto;
-  min-height: 85vh;
+/* Cart.css - 3D Ecosystem Cart Page */
+
+.cart-page-3d {
+  padding-top: 2rem;
+  padding-bottom: 6rem;
 }
 
-.cart-page-header {
+.cart-page-header-3d {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 30px;
+  align-items: flex-end;
+  margin-bottom: 2.5rem;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 1rem;
 }
 
-.cart-header-actions {
+.cart-header-actions-3d {
   display: flex;
-  align-items: center;
   gap: 12px;
 }
 
-.btn-group-cart {
-  background: rgba(124, 58, 237, 0.18);
-  border: 1px solid rgba(124, 58, 237, 0.4);
+.btn-group-cart-3d {
+  background: rgba(124, 58, 237, 0.15);
+  border: 1px solid rgba(124, 58, 237, 0.35);
   color: #a78bfa;
-  padding: 8px 16px;
-  border-radius: 10px;
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-group-cart-3d:hover {
+  background: rgba(124, 58, 237, 0.28);
+  border-color: #a78bfa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3);
+}
+
+.btn-clear-all-3d {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  padding: 10px 18px;
+  border-radius: 14px;
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
   font-size: 0.88rem;
@@ -33,244 +52,210 @@
   transition: all 0.2s ease;
 }
 
-.btn-group-cart:hover {
-  background: rgba(124, 58, 237, 0.3);
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
-}
-
-.btn-clear-all {
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #ef4444;
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 0.88rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-clear-all:hover {
+.btn-clear-all-3d:hover {
   background: rgba(239, 68, 68, 0.25);
-  border-color: #ef4444;
   transform: translateY(-2px);
 }
 
-.cart-layout {
+.cart-layout-3d {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 30px;
+  grid-template-columns: 1fr 380px;
+  gap: 2.5rem;
 }
 
-@media (min-width: 992px) {
-  .cart-layout {
-    grid-template-columns: 1.6fr 1fr;
-    align-items: start;
-  }
-}
-
-.cart-items-list {
+.cart-items-list-3d {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.25rem;
 }
 
-.cart-item-card {
+.cart-item-card-3d {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 16px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.3s ease;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  background: rgba(20, 13, 25, 0.7);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
-.cart-item-card:hover {
-  border-color: rgba(255, 107, 53, 0.3);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+.cart-item-card-3d:hover {
+  border-color: rgba(255, 107, 53, 0.4);
+  transform: translateX(4px);
 }
 
-.cart-item-image {
+.cart-item-image-3d {
+  position: relative;
   width: 90px;
   height: 90px;
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
   flex-shrink: 0;
-  background: #181824;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.cart-item-image img {
+.cart-item-image-3d img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.fallback-emoji {
-  font-size: 2.2rem;
+.cart-steam-wisp {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 1rem;
+  animation: riseSteam 3s infinite;
 }
 
-.cart-item-info {
-  flex-grow: 1;
+.cart-item-info-3d {
+  flex: 1;
 }
 
-.cart-item-info h3 {
+.cart-item-info-3d h3 {
   font-family: 'Outfit', sans-serif;
   font-size: 1.15rem;
-  font-weight: 700;
+  font-weight: 800;
   color: #ffffff;
   margin-bottom: 4px;
 }
 
-.restaurant-tag {
-  font-size: 0.82rem;
+.restaurant-tag-3d {
+  font-size: 0.8rem;
   color: #94a3b8;
   display: block;
   margin-bottom: 6px;
 }
 
-.cart-item-price {
-  font-size: 0.95rem;
-  font-weight: 600;
+.cart-item-price-3d {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
   color: #ff6b35;
+  font-size: 1rem;
 }
 
-.cart-item-actions {
+.cart-item-actions-3d {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 1.25rem;
 }
 
-.qty-controls {
+.qty-controls-3d {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 30px;
-  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 2px;
 }
 
-.qty-controls button {
+.qty-controls-3d button {
   background: transparent;
   border: none;
   color: #ffffff;
   width: 28px;
   height: 28px;
-  border-radius: 50%;
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 800;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
 }
 
-.qty-controls button:hover {
-  background: rgba(255, 107, 53, 0.3);
-}
-
-.qty-controls span {
-  width: 28px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 0.95rem;
+.qty-controls-3d span {
+  padding: 0 10px;
+  font-weight: 800;
   color: #ffffff;
 }
 
-.line-total-price {
+.line-total-price-3d {
   font-family: 'Outfit', sans-serif;
   font-weight: 800;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: #ffffff;
   min-width: 70px;
   text-align: right;
 }
 
-.btn-remove {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-  padding: 8px 12px;
-  border-radius: 10px;
+.btn-remove-3d {
+  background: transparent;
+  border: none;
   cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.2s ease;
+  font-size: 1.1rem;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
 }
 
-.btn-remove:hover {
-  background: rgba(239, 68, 68, 0.25);
-  border-color: #ef4444;
-  transform: scale(1.1);
+.btn-remove-3d:hover {
+  opacity: 1;
 }
 
-/* Summary Card */
-.cart-summary-card {
-  padding: 24px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.04);
+/* SUMMARY CARD */
+.cart-summary-card-3d {
+  background: rgba(22, 14, 28, 0.85);
   backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 107, 53, 0.3);
+  border-radius: 24px;
+  padding: 2rem;
+  height: fit-content;
 }
 
-.cart-summary-card.sticky {
-  position: sticky;
-  top: 100px;
-}
-
-.cart-summary-card h3 {
+.cart-summary-card-3d h3 {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.4rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 1.25rem;
+  color: #ffffff;
 }
 
-.summary-row {
+.summary-row-3d {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 12px;
-  color: #94a3b8;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
+  color: #cbd5e1;
+  margin-bottom: 0.75rem;
 }
 
-.summary-divider {
+.summary-divider-3d {
   height: 1px;
-  background: rgba(255, 255, 255, 0.08);
-  margin: 16px 0;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 1rem 0;
 }
 
-.summary-row.total {
-  color: #ffffff;
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.35rem;
+.summary-row-3d.total {
+  font-size: 1.15rem;
   font-weight: 800;
-  margin-bottom: 24px;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
 }
 
-.checkout-btn {
+.price-total-3d {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.checkout-btn-3d {
   width: 100%;
-  padding: 14px;
+  padding: 1rem;
   font-size: 1.05rem;
+  font-weight: 800;
   border-radius: 14px;
 }
 
-@media (max-width: 640px) {
-  .cart-item-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .cart-item-actions {
-    width: 100%;
-    justify-content: space-between;
-    margin-top: 10px;
+.empty-cart-state-3d {
+  text-align: center;
+  padding: 5rem 2rem;
+  max-width: 500px;
+  margin: 3rem auto;
+  border-radius: 28px;
+}
+
+.empty-cart-emoji-3d {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .cart-layout-3d {
+    grid-template-columns: 1fr;
   }
 }

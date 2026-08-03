@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import FoodCard from '../components/FoodCard';
+import FoodCard3D from '../components/FoodCard3D';
+import FoodInspectorModal from '../components/FoodInspectorModal';
 import { ALL_DISHES } from '../data/dishes';
 import './Menu.css';
 
@@ -10,9 +11,7 @@ const CUISINES = [
   'Biryani',
   'Starters',
   'Street Food',
-  'Fast Food',
   'Desserts',
-  'Ice Creams',
   'Beverages'
 ];
 
@@ -23,6 +22,7 @@ export default function Menu() {
   const [selectedCuisine, setSelectedCuisine] = useState('ALL');
   const [vegFilter, setVegFilter] = useState('ALL'); // ALL, VEG, NON_VEG
   const [dietFilter, setDietFilter] = useState('ALL');
+  const [inspectedDish, setInspectedDish] = useState(null);
 
   const filteredProducts = ALL_DISHES.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -43,28 +43,32 @@ export default function Menu() {
   });
 
   return (
-    <div className="menu-page container fade-in">
-      <div className="menu-header">
-        <h1 className="page-title gradient-text">Explore Our Culinary Menu 🍽️</h1>
-        <p className="page-subtitle">Authentic North Indian, South Indian, Biryanis, Sweets & AI Macro Filters</p>
+    <div className="menu-3d-page container fade-in">
+      <div className="menu-header-3d">
+        <div className="experience-badge-pill">
+          <span className="sparkle">✨</span> OCTANE 3D CULINARY LIBRARY
+        </div>
+
+        <h1 className="page-title-3d gradient-text">Explore Floating 3D Delicacies</h1>
+        <p className="page-subtitle-3d">Tilt cards to inspect steam physics, charred embers, syrup reflections, and AI macros</p>
 
         {/* Search Bar & Veg Filters Row */}
         <div className="menu-controls-row">
-          <div className="search-box glass-card">
+          <div className="search-box-3d glass-card">
             <span className="search-icon">🔍</span>
             <input 
               type="text" 
-              placeholder="Search Butter Chicken, Biryani, Dosa, Gulab Jamun..."
+              placeholder="Search Biryani, Butter Chicken, Dosa, Jalebi..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
+              className="search-input-3d"
             />
             {search && (
-              <button className="clear-search" onClick={() => setSearch('')}>✕</button>
+              <button className="clear-search-3d" onClick={() => setSearch('')}>✕</button>
             )}
           </div>
 
-          <div className="veg-toggle-group glass-card">
+          <div className="veg-toggle-group-3d glass-card">
             <button 
               className={`veg-toggle-btn ${vegFilter === 'ALL' ? 'active' : ''}`}
               onClick={() => setVegFilter('ALL')}
@@ -87,12 +91,12 @@ export default function Menu() {
         </div>
 
         {/* AI Diet & Macro Filter Row */}
-        <div className="diet-filter-row">
-          <span className="diet-label">🧠 AI Macro Filters:</span>
+        <div className="diet-filter-row-3d">
+          <span className="diet-label-3d">🧠 AI Macro Filters:</span>
           {DIET_TAGS.map(diet => (
             <button
               key={diet}
-              className={`diet-chip ${dietFilter === diet ? 'active' : ''}`}
+              className={`diet-chip-3d ${dietFilter === diet ? 'active' : ''}`}
               onClick={() => setDietFilter(diet)}
             >
               {diet === 'High Protein' && '💪 '}
@@ -105,12 +109,12 @@ export default function Menu() {
         </div>
 
         {/* Category Pills */}
-        <div className="category-scroll-container">
-          <div className="category-pills">
+        <div className="category-scroll-container-3d">
+          <div className="category-pills-3d">
             {CUISINES.map(cuisine => (
               <button
                 key={cuisine}
-                className={`category-pill ${selectedCuisine === cuisine ? 'active' : ''}`}
+                className={`category-pill-3d ${selectedCuisine === cuisine ? 'active' : ''}`}
                 onClick={() => setSelectedCuisine(cuisine)}
               >
                 {cuisine}
@@ -121,26 +125,38 @@ export default function Menu() {
       </div>
 
       {/* Product Count Indicator */}
-      <div className="results-count">
-        Showing <strong>{filteredProducts.length}</strong> delicious dishes
+      <div className="results-count-3d">
+        Showing <strong>{filteredProducts.length}</strong> interactive 3D dishes
       </div>
 
       {/* Product Grid */}
       {filteredProducts.length === 0 ? (
-        <div className="empty-results glass-card">
+        <div className="empty-results-3d glass-card">
           <span className="empty-icon">🔍</span>
-          <h3>No dishes found matching your criteria</h3>
-          <p>Try clearing your search term or switching cuisine/macro filters.</p>
+          <h3>No 3D delicacies found matching your criteria</h3>
+          <p>Try resetting search or switching cuisine/macro filters.</p>
           <button className="btn btn-primary" onClick={() => { setSearch(''); setSelectedCuisine('ALL'); setVegFilter('ALL'); setDietFilter('ALL'); }}>
             Reset All Filters
           </button>
         </div>
       ) : (
-        <div className="dishes-grid">
+        <div className="dishes-grid-3d grid grid-cols-3 gap-8">
           {filteredProducts.map(product => (
-            <FoodCard key={product.id} product={product} />
+            <FoodCard3D 
+              key={product.id} 
+              dish={product} 
+              onInspect={(d) => setInspectedDish(d)} 
+            />
           ))}
         </div>
+      )}
+
+      {/* 3D INSPECTOR MODAL */}
+      {inspectedDish && (
+        <FoodInspectorModal 
+          dish={inspectedDish} 
+          onClose={() => setInspectedDish(null)} 
+        />
       )}
     </div>
   );
