@@ -1,117 +1,87 @@
-# 🌌 FlavorDash — Sensory Luxury Food Delivery Platform & Microservices Ecosystem
+# FlavorDash — Full-Stack Food Delivery Application
 
-### 💖 Crafted with ❤️ by **Chaithanya** (`@chaithanya762`)
-
-[![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.5-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![Spring Cloud](https://img.shields.io/badge/Spring_Cloud-Eureka-orange.svg)](https://spring.io/projects/spring-cloud)
-[![Vite](https://img.shields.io/badge/Vite-5-purple.svg)](https://vitejs.dev/)
-[![Deployment](https://img.shields.io/badge/Vercel-Deployed-000000.svg)](https://vercel.com/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](#)
-
-**FlavorDash** is an enterprise-grade, sensory luxury food delivery platform engineered with a **Java 17 Spring Boot 3 Microservices Architecture** and a **React 18 + Vite** frontend. It features a real-time, multi-role ecosystem connecting **Customers**, **Hotel Managers (Kitchen Desk)**, and **Rider Agents (GPS Telemetry)**.
+A full-stack food delivery application built with **React 18 + Vite** on the frontend and a **Java 17 Spring Boot 3 Microservices** backend architecture.
 
 ---
 
-## 🎨 Sensory Luxury Design Aesthetics
+## 🛠️ Tech Stack
 
-FlavorDash is designed like a **high-end fine dining experience**:
-- **Curated Sensory Palette**: Deep charcoal base (`#0F0F10`), Saffron primary (`#FF9933`), Rich Gold accents (`#D4AF37`), and Warm Cream typography (`#F5E9DA`).
-- **Sticky Micro-Compressing Header**: Top bar smoothly compresses from `68px` to `60px` on scroll with semi-solid backdrop glass blur (`rgba(15,15,16,0.85)`).
-- **4:3 Food Photography Stage**: Fixed aspect ratio food cards with 16px border radii and high-contrast typography.
-- **Morphing Quantity Stepper**: Card `+ Add` button morphs directly into an interactive quantity stepper (`- QTY +`) upon selection.
-- **27 Regional Delicacies**: 7 authentic categories (Main Dishes, Rice & Biryani, Breads, South Indian, Street Food, Sweets, Drinks).
+- **Frontend**: React 18, Vite, React Router DOM, Context API, CSS3
+- **Backend**: Java 17, Spring Boot 3.2.5, Spring Cloud Gateway, Netflix Eureka Service Discovery, Spring Data JPA
+- **Database**: H2 In-Memory Database (Development) / PostgreSQL Compatible
+- **Deployment**: Vercel (Frontend), Render (Backend Microservices)
 
 ---
 
-## 👥 Real-Time Multi-Role Ecosystem
+## ✨ Features Overview
 
-```mermaid
-graph TD
-    subgraph Customer Portal [/orders]
-        C[Customer Checkout] -->|Places Order| DB[(Global Order Registry)]
-        DB -->|Live 5-Stage Tracking| C
-    end
+### 1. Customer Portal (`/`, `/menu`, `/cart`, `/checkout`, `/orders`)
+- **Menu Browsing**: Filter 27 authentic regional dishes across 7 categories.
+- **Cart & Checkout**: Interactive quantity controls, itemized order summary, express checkout, and payment method selection (UPI, Credit Card, Cash on Delivery).
+- **Live Order Tracking**: Real-time 5-stage order progress tracking (`RECEIVED` ➔ `COOKING` ➔ `READY` ➔ `DISPATCHED` ➔ `DELIVERED`).
+- **Order Receipts**: View payment transaction details and receipts.
 
-    subgraph Hotel Manager Portal [/kitchen]
-        DB -->|Incoming Active Orders| H[Kitchen Desk]
-        H -->|COOKING / READY / DISPATCHED| DB
-    end
+### 2. Hotel Manager Kitchen Desk (`/kitchen`)
+- **Multi-Restaurant Support**: Pre-seeded accounts for 18 menu restaurants (e.g. Punjab Rasoi, Paradise Biryani, MTR 1924, etc.).
+- **Order Pipeline Management**: Update order statuses from `RECEIVED` ➔ `COOKING` ➔ `READY` ➔ `DISPATCHED`.
+- **Inventory Stock Control**: Toggle dish availability (`In Stock` / `Sold Out`) to update menu items in real time.
+- **Queue Cleanup**: Completed (`DELIVERED`) and cancelled orders automatically archive to keep the kitchen desk clutter-free.
 
-    subgraph Rider Agent Portal [/driver]
-        DB -->|Ready / Dispatched Queue| R[GPS Telemetry Dashboard]
-        R -->|DELIVERED / +1 Credit| DB
-    end
+### 3. Rider Agent GPS Portal (`/driver`)
+- **GPS Telemetry Simulation**: Real-time coordinate telemetry stream (`LAT: 28.6139° N | LON: 77.2090° E`) and route navigation.
+- **Dispatch Queue**: Accept ready orders and mark deliveries complete.
+- **Rider Delivery Credits**: Earn **+1 Credit** per completed delivery tracked in the rider profile.
+- **Queue Cleanup**: Delivered tasks automatically archive from the active dispatch queue.
+
+### 4. Order Cancellation & Refund System
+- **Customer Cancellation**: Cancel orders at `RECEIVED` stage (100% full refund) or `COOKING` stage (50% partial refund).
+- **Merchant / Rider Cancellation**: Cancel orders with a specified reason, automatically processing a 100% full refund to the customer.
+
+---
+
+## 🏗️ Microservices Architecture
+
+```
+                       +-------------------------+
+                       |   React 18 Frontend     |
+                       |   (Port 3000 / Vercel)  |
+                       +------------+------------+
+                                    |
+                                    v
+                       +-------------------------+
+                       |    Spring Cloud Gateway |
+                       |       (Port 8080)       |
+                       +------------+------------+
+                                    |
+        +---------------------------+---------------------------+
+        |                           |                           |
+        v                           v                           v
++---------------+           +---------------+           +---------------+
+|  User Service |           |Product Service|           | Order Service |
+|  (Port 8081)  |           |  (Port 8082)  |           |  (Port 8083)  |
++---------------+           +---------------+           +---------------+
 ```
 
-### 1. 👤 Customer Portal (`/`, `/menu`, `/cart`, `/checkout`, `/orders`)
-- **Real-Time 5-Stage Order Tracking**: `RECEIVED` ➔ `COOKING` ➔ `READY` ➔ `DISPATCHED` ➔ `DELIVERED`.
-- **Strict Ownership Filter**: Displays **ONLY** active orders placed by the current customer with zero sample data clutter.
-- **Payment & Receipt Tracking**: Expandable receipt modal detailing transaction IDs and payment status.
-
-### 2. 👨‍🍳 Hotel Manager Kitchen Desk (`/kitchen`)
-- **Accounts for ALL 18 Menu Restaurants**: Pre-seeded manager accounts for every restaurant in the menu (`Punjab Rasoi`, `Paradise Biryani`, `MTR 1924`, `Saravana Bhavan`, etc.).
-- **Preparation Controls**: Change order status from `RECEIVED` ➔ `COOKING` ➔ `READY` ➔ `DISPATCHED`.
-- **Inventory Stock Control**: Toggle dish availability (`🟢 In Stock` / `🔴 Sold Out`) to update frontend menus instantly.
-- **Auto-Archiving**: Finished (`DELIVERED`) and `CANCELLED` orders are automatically removed from active kitchen queues.
-
-### 3. 🛵 Rider Agent GPS Portal (`/driver`)
-- **Live GPS Telemetry Stream**: Interactive canvas showing real-time coordinate streaming (`LAT: 28.6139° N | LON: 77.2090° E`) and route telemetry.
-- **Rider Delivery Credits Counter (+1 per delivery)**: Earn **+1 Credit** on every completed delivery (e.g. `12` ➔ `13 Credits`).
-- **Auto-Archiving**: Completed delivery tasks are automatically removed from dispatch queues.
-
----
-
-## 🚫 Order Cancellation & Refund Engine
-
-| Role | Stage Eligible | Reason Choices | Refund Policy |
+| Microservice | Port | Base Path | Description |
 | :--- | :--- | :--- | :--- |
-| **Customer** | `RECEIVED` | Ordered by mistake / Long ETA / Address error | **100% Full Instant Refund** |
-| **Customer** | `COOKING` | Changed mind / Order error | **50% Partial Refund** (Prep fee applied) |
-| **Hotel Manager** | Any active stage | Out of stock / Kitchen overload / Equipment failure | **100% Full Instant Refund** |
-| **Rider Agent** | Active task | Vehicle breakdown / Heavy rain / Unreachable | **100% Full Instant Refund** |
+| **API Gateway** | `8080` | `/api/*` | Routes client requests to microservices |
+| **User Service** | `8081` | `/api/users` | Handles user registration and profiles |
+| **Product Service** | `8082` | `/api/products` | Manages menu items, categories, and inventory stock |
+| **Order Service** | `8083` | `/api/orders` | Manages order placement, status updates, and tracking |
+| **Eureka Server** | `8761` | `/` | Service discovery registry |
+| **Config Server** | `8888` | `/` | Centralized configuration management |
 
 ---
 
-## 🏗️ Microservices Architecture & API Registry
+## 🔑 Test Accounts & Credentials
 
-```mermaid
-graph TD
-    Client[React 18 Frontend :3000] -->|Port 8080| Gateway[API Gateway]
-    Gateway -->|Discovery| Eureka[Eureka Server :8761]
-    Gateway -->|Config| Config[Config Server :8888]
-    
-    Gateway -->|User API| UserSvc[User Service :8081]
-    Gateway -->|Product API| ProdSvc[Product Service :8082]
-    Gateway -->|Order API| OrderSvc[Order Service :8083]
-    Gateway -->|Payment API| PaySvc[Payment Service :8084]
-
-    OrderSvc -->|Event Stream| Kafka[Apache Kafka Event Bus]
-```
-
-| Service Name | Port | Base Path | Database | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| **API Gateway** | `8080` | `/api/*` | Netty / Reactive Proxy | 🟢 Active |
-| **User Service** | `8081` | `/api/users` | H2 / PostgreSQL | 🟢 Active |
-| **Product Service** | `8082` | `/api/products` | H2 / PostgreSQL | 🟢 Active |
-| **Order Service** | `8083` | `/api/orders` | H2 / PostgreSQL | 🟢 Active |
-| **Payment Service** | `8084` | `/api/payments` | H2 / PostgreSQL | 🟢 Active |
-| **Eureka Server** | `8761` | `/` | In-Memory Registry | 🟢 Active |
-| **Config Server** | `8888` | `/` | Native YAML Store | 🟢 Active |
-
----
-
-## 🔐 Pre-Seeded Hotel & User Credentials
-
-### Hotel Managers (Kitchen Desk - `/kitchen`):
+### Hotel Managers (Kitchen Portal - `/kitchen`):
 - **Punjab Rasoi**: `chef@rasoi.in` | Password: `password123`
 - **Paradise Biryani**: `hotel@flavordash.com` | Password: `password123`
 - **Haveli North Indian**: `haveli@hotel.in` | Password: `password123`
-- **Dhaba 1986**: `dhaba1986@hotel.in` | Password: `password123`
 - **MTR 1924**: `mtr1924@hotel.in` | Password: `password123`
-- **Saravana Bhavan**: `saravana@hotel.in` | Password: `password123`
 
-### Rider Agents (GPS Portal - `/driver`):
+### Rider Agents (Rider Portal - `/driver`):
 - **Ramesh Kumar**: `ramesh@rider.in` | Password: `password123`
 - **Suresh Verma**: `rider@flavordash.com` | Password: `password123`
 
@@ -121,25 +91,30 @@ graph TD
 
 ---
 
-## ⚡ How to Run Locally
+## 🚀 Getting Started
 
-### 1. Run Frontend (React + Vite)
+### Prerequisites
+- Node.js (v18+)
+- Java JDK (v17+)
+- Maven (v3.8+)
+
+### 1. Frontend Setup
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Open **[http://localhost:3000](http://localhost:3000)** in your browser!
+The frontend will run at **http://localhost:3000**.
 
-### 2. Run Java Microservices (Spring Boot)
+### 2. Backend Setup
 ```bash
-# Launch Config Server (Port 8888)
+# Start Config Server
 java -jar config-server/target/config-server-1.0.0.jar
 
-# Launch Eureka Discovery Server (Port 8761)
+# Start Eureka Server
 java -jar eureka-server/target/eureka-server-1.0.0.jar
 
-# Launch Services & API Gateway (Ports 8081, 8082, 8083, 8080)
+# Start Services
 java -jar user-service/target/user-service-1.0.0.jar
 java -jar product-service/target/product-service-1.0.0.jar
 java -jar order-service/target/order-service-1.0.0.jar
@@ -148,14 +123,14 @@ java -jar api-gateway/target/api-gateway-1.0.0.jar
 
 ---
 
-## 🚀 Deployment Guide (Vercel & Render)
+## 🌐 Deployment
 
-### Hosting Frontend on Vercel:
-1. Log in to **[Vercel.com](https://vercel.com)** and import repository `flavordash-food-delivery`.
-2. Vercel automatically detects root `vercel.json` and builds `frontend/dist` in 30 seconds.
-3. Add Environment Variable for hosted backend gateway:
-   `VITE_API_BASE_URL` = `https://your-backend-gateway.onrender.com/api`
+- **Frontend**: Deployed on **Vercel** (`https://flavordash-food-delivery.vercel.app`)
+- **Backend**: Configured for deployment on **Render / Railway**
+- **Repository**: [github.com/chaithanya762/flavordash-food-delivery](https://github.com/chaithanya762/flavordash-food-delivery)
 
 ---
 
-### ✨ Crafted with passion & ❤️ by **Chaithanya** (`@chaithanya762`)
+## 📄 License
+
+This project is licensed under the MIT License.
