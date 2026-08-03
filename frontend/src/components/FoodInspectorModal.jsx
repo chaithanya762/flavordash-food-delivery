@@ -1,45 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import './FoodInspectorModal.css';
 
 export default function FoodInspectorModal({ dish, onClose }) {
   const [activeTab, setActiveTab] = useState('plating'); // 'plating' | 'nutrition' | 'recipe'
-  const [rotation, setRotation] = useState(0);
-  const [isAutoSpinning, setIsAutoSpinning] = useState(false);
   const [steamActive, setSteamActive] = useState(true);
   const [quantity, setQuantity] = useState(1);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   const { addToCart } = useCart() || { addToCart: () => {} };
   const { showToast } = useToast() || { showToast: () => {} };
 
-  // Auto-spin interval effect
-  useEffect(() => {
-    let interval;
-    if (isAutoSpinning) {
-      interval = setInterval(() => {
-        setRotation((prev) => (prev + 5) % 360);
-      }, 50);
-    }
-    return () => clearInterval(interval);
-  }, [isAutoSpinning]);
-
   if (!dish) return null;
-
-  const handleRotateLeft = () => setRotation((prev) => prev - 45);
-  const handleRotateRight = () => setRotation((prev) => prev + 45);
-
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    setTilt({ x: (y / rect.height) * -20, y: (x / rect.width) * 20 });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-  };
 
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
@@ -59,22 +31,22 @@ export default function FoodInspectorModal({ dish, onClose }) {
   const getIngredientPins = () => {
     if (dish.category === 'Rice & Biryani') {
       return [
-        { icon: '✨', label: 'Kashmiri Saffron Threads' },
-        { icon: '🌿', label: 'Fragrant Long-Grain Basmati' },
-        { icon: '🧈', label: 'Desi Ghee Caramelized Shallots' }
+        { icon: '✨', label: 'Kashmiri Saffron' },
+        { icon: '🌿', label: 'Aromatic Basmati' },
+        { icon: '🧈', label: 'Desi Ghee' }
       ];
     }
     if (dish.category === 'Sweets' || dish.category === 'Drinks') {
       return [
-        { icon: '🥛', label: 'Thick Farm-Fresh Cream' },
-        { icon: '🌱', label: 'Crushed Green Cardamom' },
-        { icon: '🌰', label: 'Slivered Pistachios & Almonds' }
+        { icon: '🥛', label: 'Fresh Cream' },
+        { icon: '🌱', label: 'Green Cardamom' },
+        { icon: '🌰', label: 'Slivered Pistachios' }
       ];
     }
     return [
-      { icon: '🌿', label: 'Hand-Ground Garam Masala' },
-      { icon: '✨', label: 'Cashew & Tomato Reduction' },
-      { icon: '🧈', label: 'Churned White Butter Gloss' }
+      { icon: '🌿', label: 'Hand-Ground Spices' },
+      { icon: '✨', label: 'Rich Gravy Base' },
+      { icon: '🧈', label: 'Pure Yellow Butter' }
     ];
   };
 
@@ -92,7 +64,7 @@ export default function FoodInspectorModal({ dish, onClose }) {
             className={`tab-btn ${activeTab === 'plating' ? 'active' : ''}`}
             onClick={() => setActiveTab('plating')}
           >
-            🍽️ Chef's 3D Plating Stage
+            🍽️ Plating & Flavor Profile
           </button>
           <button 
             className={`tab-btn ${activeTab === 'nutrition' ? 'active' : ''}`}
@@ -104,36 +76,24 @@ export default function FoodInspectorModal({ dish, onClose }) {
             className={`tab-btn ${activeTab === 'recipe' ? 'active' : ''}`}
             onClick={() => setActiveTab('recipe')}
           >
-            👨‍🍳 Artisanal Culinary Notes
+            👨‍🍳 Chef's Recipe Notes
           </button>
         </div>
 
         <div className="inspector-grid">
-          {/* LEFT: 3D INTERACTIVE PLATING STAGE */}
-          <div 
-            className="inspector-3d-stage"
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-          >
+          {/* LEFT: CLEAN HIGH-RES ARTWORK DISPLAY */}
+          <div className="inspector-clean-stage">
             <div className="stage-controls-top">
               <span className="ar-live-pill">
-                <span className="live-dot"></span> Interactive 3D View
+                ✨ Signature Presentation
               </span>
 
-              <div className="stage-top-actions">
-                <button 
-                  className={`btn-spin-toggle ${isAutoSpinning ? 'active' : ''}`}
-                  onClick={() => setIsAutoSpinning(!isAutoSpinning)}
-                >
-                  🔄 {isAutoSpinning ? 'Pause Spin' : '360° Auto-Spin'}
-                </button>
-                <button 
-                  className={`btn-steam-toggle ${steamActive ? 'active' : ''}`}
-                  onClick={() => setSteamActive(!steamActive)}
-                >
-                  ☁️ Steam {steamActive ? 'ON' : 'OFF'}
-                </button>
-              </div>
+              <button 
+                className={`btn-steam-toggle ${steamActive ? 'active' : ''}`}
+                onClick={() => setSteamActive(!steamActive)}
+              >
+                ☁️ Steam {steamActive ? 'ON' : 'OFF'}
+              </button>
             </div>
 
             {/* Steam Overlay */}
@@ -145,13 +105,8 @@ export default function FoodInspectorModal({ dish, onClose }) {
               </div>
             )}
 
-            {/* Plated Dish Artwork with Mouse Tilt & Rotation */}
-            <div 
-              className="inspector-food-wrapper"
-              style={{ 
-                transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y + rotation}deg)` 
-              }}
-            >
+            {/* Plated Dish High-Res Image */}
+            <div className="inspector-food-wrapper">
               <img 
                 src={dish.imageUrl} 
                 alt={dish.name} 
@@ -175,15 +130,8 @@ export default function FoodInspectorModal({ dish, onClose }) {
               </div>
             </div>
 
-            {/* Plating Stage Shadow */}
+            {/* Contact Shadow */}
             <div className="inspector-contact-shadow"></div>
-
-            {/* Orbit Rotation Controls */}
-            <div className="stage-controls-bottom">
-              <button className="btn-orbit" onClick={handleRotateLeft}>↺ Rotate Left</button>
-              <span className="orbit-angle-text">{rotation}° Orbit</span>
-              <button className="btn-orbit" onClick={handleRotateRight}>Rotate Right ↻</button>
-            </div>
           </div>
 
           {/* RIGHT: DYNAMIC TAB CONTENT */}
@@ -210,7 +158,7 @@ export default function FoodInspectorModal({ dish, onClose }) {
 
                 {/* Spice Meter */}
                 <div className="spice-meter-box">
-                  <span className="meter-label">SPICE & HEAT RATING</span>
+                  <span className="meter-label">SPICE & HEAT PROFILE</span>
                   <div className="flame-rating">
                     {[1, 2, 3, 4, 5].map((level) => (
                       <span 
@@ -220,7 +168,7 @@ export default function FoodInspectorModal({ dish, onClose }) {
                         🔥
                       </span>
                     ))}
-                    <span className="spice-text">({dish.spiceLevel || 3}/5 Flame Intensity)</span>
+                    <span className="spice-text">({dish.spiceLevel || 3}/5 Flame Rating)</span>
                   </div>
                 </div>
 
@@ -228,11 +176,11 @@ export default function FoodInspectorModal({ dish, onClose }) {
                 <div className="nutrition-grid">
                   <div className="nutri-pill">
                     <span className="nutri-val">⏱️ {dish.prepTime || '20 min'}</span>
-                    <span className="nutri-key">Fresh Preparation</span>
+                    <span className="nutri-key">Fresh Prep</span>
                   </div>
                   <div className="nutri-pill">
                     <span className="nutri-val">💪 {dish.protein || '24g'}</span>
-                    <span className="nutri-key">High Protein</span>
+                    <span className="nutri-key">Protein</span>
                   </div>
                   <div className="nutri-pill">
                     <span className="nutri-val">⚡ {dish.calories || '420 kcal'}</span>
@@ -292,12 +240,12 @@ export default function FoodInspectorModal({ dish, onClose }) {
                   <div className="chef-avatar-row">
                     <span className="chef-emoji">👨‍🍳</span>
                     <div>
-                      <h4 className="chef-title">Master Chef's Culinary Technique</h4>
+                      <h4 className="chef-title">Master Chef's Recipe Notes</h4>
                       <span className="chef-sub">{dish.restaurantName} Heritage Kitchen</span>
                     </div>
                   </div>
                   <p className="chef-quote">
-                    "This delicacy is prepared fresh to order using slow wood-fire simmering and authentic hand-crushed spices to preserve essential aromas and uncompromised flavor."
+                    "Prepared fresh to order using traditional methods and hand-crushed spices to preserve authentic aromas and rich flavor."
                   </p>
                 </div>
               </div>
