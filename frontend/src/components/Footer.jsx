@@ -38,7 +38,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom container">
-        {/* Cute & Beautiful Made with Love Badge */}
+        {/* Prominent Made with Love Badge */}
         <div className="made-with-love-pill">
           <span>Made with</span>
           <span className="heart-pulsing">❤️</span>
@@ -49,9 +49,9 @@ const Footer = () => {
         <p className="copyright-text">© 2026 FlavorDash Inc. All rights reserved.</p>
         
         <div className="social-links">
-          <span className="social-icon">📱</span>
-          <span className="social-icon">💬</span>
-          <span className="social-icon">📧</span>
+          <span className="social-icon" title="Mobile App">📱</span>
+          <span className="social-icon" title="Chat Support">💬</span>
+          <span className="social-icon" title="Email Support">📧</span>
         </div>
       </div>
     </footer>
