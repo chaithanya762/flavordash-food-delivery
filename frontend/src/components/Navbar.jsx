@@ -71,7 +71,6 @@ const Navbar = () => {
             <div className="nav-links">
               <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
               <Link to="/menu" className={`nav-link ${location.pathname === '/menu' ? 'active' : ''}`}>Menu</Link>
-              <button className="nav-link reserve-table-nav-btn" onClick={() => setReservationModalOpen(true)}>🍷 Reserve Table</button>
 
               {userRole === 'CUSTOMER' && user && (
                 <Link to="/orders" className={`nav-link ${location.pathname === '/orders' ? 'active' : ''}`}>Orders</Link>
@@ -144,7 +143,6 @@ const Navbar = () => {
         <div className="mobile-nav-links">
           <Link to="/" className="mobile-link" onClick={toggleMobileMenu}>🏠 Home</Link>
           <Link to="/menu" className="mobile-link" onClick={toggleMobileMenu}>🍽️ Menu</Link>
-          <button className="mobile-link reserve-table-btn" onClick={() => { setReservationModalOpen(true); toggleMobileMenu(); }}>🍷 Reserve Table</button>
 
           {(!user || userRole === 'CUSTOMER') && (
             <>
