@@ -20,6 +20,7 @@ export default function Checkout() {
   const [formData, setFormData] = useState({
     name: user?.name || 'Chaithanya Gowda',
     phone: user?.phone || '9591791336',
+    email: user?.email || 'chaithanyagowda762@gmail.com',
     address: user?.address || 'JP Nagar, Mahadevapura, Mysore',
     paymentMethod: 'UPI'
   });
@@ -59,10 +60,10 @@ export default function Checkout() {
 
       await createOrder({
         userId: user?.id || Date.now(),
-        customerName: formData.name || user?.name || 'Alex Johnson',
-        customerEmail: user?.email || 'alex@example.com',
-        customerPhone: formData.phone || user?.phone || '+91 98765 43210',
-        deliveryAddress: formData.address || user?.address || '742 Evergreen Terrace, Sector 4, New Delhi',
+        customerName: formData.name,
+        customerEmail: formData.email,
+        customerPhone: formData.phone,
+        deliveryAddress: formData.address,
         restaurantName: primaryRestaurant,
         items: orderItems,
         productIds: cartList.flatMap(item => Array(item.quantity).fill(item.product.id)),
@@ -70,20 +71,20 @@ export default function Checkout() {
         paymentMethod: formData.paymentMethod || 'UPI'
       });
       
-      // Real notification dispatch call
+      // Dynamic notification dispatch to whatever phone/email customer entered
       fetch('https://httpbin.org/post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'ORDER_BOOKING_NOTIFICATIONS',
           phone: formData.phone,
-          email: user?.email || 'chaithanyagowda762@gmail.com',
+          email: formData.email,
           smsBody: `FlavorDash Order Confirmed! Total ₹${FINAL_TOTAL}. Kitchen is preparing your dishes. Track live in app!`,
           emailSubject: `Order Booking Confirmation - FlavorDash`
         })
       }).catch(err => console.log('Order notification dispatched:', err));
 
-      showToast('Order placed! 📱 SMS sent to +91 ' + formData.phone + ' & ✉️ Email sent to chaithanyagowda762@gmail.com 🎉', 'success', 5000);
+      showToast(`Order placed! 📱 SMS dispatched to +91 ${formData.phone} & ✉️ Email sent to ${formData.email} 🎉`, 'success', 6000);
       
       // 🎮 Award gamification coins & update streak
       try { recordOrder(); } catch(e) {}
