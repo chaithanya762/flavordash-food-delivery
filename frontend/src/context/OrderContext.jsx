@@ -29,6 +29,10 @@ export const OrderProvider = ({ children }) => {
       totalAmount: orderData.totalAmount || 500,
       status: 'RECEIVED',
       paymentMethod: orderData.paymentMethod || 'UPI',
+      refundStatus: null,
+      refundAmount: 0,
+      cancellationReason: null,
+      cancelledBy: null,
       createdAt: new Date().toISOString()
     };
 
@@ -61,6 +65,47 @@ export const OrderProvider = ({ children }) => {
     }));
   };
 
+  // Cancel Order Function with Reason & Refund Calculation
+  const cancelOrder = (orderId, cancelledByRole, reason) => {
+    setOrders(prev => prev.map(order => {
+      if (order.id === orderId || String(order.id) === String(orderId)) {
+        let refundStatus = 'NOT_ELIGIBLE';
+        let refundAmount = 0;
+
+        // Refund Rules:
+        // 1. Hotel Manager cancels -> 100% Full Refund always
+        // 2. Rider cancels -> 100% Full Refund (or re-route)
+        // 3. Customer cancels at RECEIVED stage -> 100% Full Refund
+        // 4. Customer cancels at COOKING stage -> 50% Partial Refund
+        if (cancelledByRole === 'HOTEL_MANAGER' || cancelledByRole === 'RIDER') {
+          refundStatus = 'FULL_REFUND_PROCESSED';
+          refundAmount = order.totalAmount;
+        } else if (cancelledByRole === 'CUSTOMER') {
+          if (order.status === 'RECEIVED') {
+            refundStatus = 'FULL_REFUND_PROCESSED';
+            refundAmount = order.totalAmount;
+          } else if (order.status === 'COOKING') {
+            refundStatus = 'PARTIAL_REFUND_PROCESSED';
+            refundAmount = Math.round(order.totalAmount * 0.5);
+          } else {
+            refundStatus = 'NOT_ELIGIBLE';
+            refundAmount = 0;
+          }
+        }
+
+        return {
+          ...order,
+          status: 'CANCELLED',
+          cancelledBy: cancelledByRole,
+          cancellationReason: reason || 'No reason provided',
+          refundStatus,
+          refundAmount
+        };
+      }
+      return order;
+    }));
+  };
+
   const clearOrders = () => {
     setOrders([]);
     localStorage.removeItem('global_orders_db');
@@ -71,6 +116,7 @@ export const OrderProvider = ({ children }) => {
       orders,
       createOrder,
       updateOrderStatus,
+      cancelOrder,
       clearOrders
     }}>
       {children}

@@ -1,3 +1,5 @@
+/* Orders.css - Customer Tracking & Cancellation Styling */
+
 .orders-page {
   padding: 2rem;
   max-width: 1000px;
@@ -20,6 +22,11 @@
   transition: all 0.3s ease;
 }
 
+.order-card.cancelled-card {
+  opacity: 0.85;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
 .order-card:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.15);
@@ -35,15 +42,24 @@
 }
 
 .order-id h3 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.5rem;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 1.4rem;
+  font-weight: 700;
   margin-bottom: 0.3rem;
   color: #fff;
 }
 
+.restaurant-badge {
+  font-size: 0.85rem;
+  color: var(--primary, #FF9933);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+
 .order-date {
   color: #94a3b8;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 /* Status Badges */
@@ -51,34 +67,17 @@
   padding: 0.4rem 1rem;
   border-radius: 50px;
   font-size: 0.85rem;
-  font-weight: 600;
-  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-family: var(--font-body, 'Inter', sans-serif);
   letter-spacing: 0.5px;
 }
 
-.status-badge.pending {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fcd34d;
-  border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-.status-badge.paid {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.status-badge.cancelled {
-  background: rgba(239, 68, 68, 0.15);
-  color: #fca5a5;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-}
-
-.status-badge.delivered {
-  background: rgba(59, 130, 246, 0.15);
-  color: #93c5fd;
-  border: 1px solid rgba(59, 130, 246, 0.3);
-}
+.status-badge.received { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+.status-badge.cooking { background: rgba(124, 58, 237, 0.2); color: #a78bfa; border: 1px solid rgba(124, 58, 237, 0.4); }
+.status-badge.ready { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+.status-badge.dispatched { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+.status-badge.delivered { background: rgba(16, 185, 129, 0.25); color: #10B981; border: 1px solid #10B981; }
+.status-badge.cancelled { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
 
 /* Order Content */
 .order-content {
@@ -112,74 +111,137 @@
 .order-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 12px;
 }
 
-.btn-outline {
+.btn-inspect-3d, .btn-outline {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
   padding: 0.6rem 1.2rem;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 700;
+  font-size: 0.88rem;
 }
 
-.btn-outline:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: #ff6b35;
-  color: #ff6b35;
+.btn-inspect-3d:hover, .btn-outline:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--primary, #FF9933);
+  color: var(--primary, #FF9933);
 }
 
-/* Payment Details Expansion */
-.payment-details {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+.btn-cancel-order {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.payment-details h4 {
-  font-family: 'Outfit', sans-serif;
-  color: #94a3b8;
-  margin-bottom: 1rem;
+.btn-cancel-order:hover {
+  background: #ef4444;
+  color: #ffffff;
 }
 
-.payment-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 1.5rem;
-  border-radius: 12px;
+/* CANCELLATION BANNER & REFUND BADGES */
+.cancellation-refund-box {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 14px;
 }
 
-.payment-grid div {
+.refund-header {
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+  gap: 12px;
+  align-items: flex-start;
 }
 
-.payment-grid .label {
+.refund-icon {
+  font-size: 1.5rem;
+}
+
+.reason-text {
   font-size: 0.85rem;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: #94a3b8;
+  margin-top: 2px;
 }
 
-.payment-status.success { color: #10b981; }
-.payment-status.failed { color: #ef4444; }
+.refund-status-pill {
+  display: inline-block;
+}
 
-/* Skeleton */
-.skeleton-line {
-  height: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-  margin-bottom: 1rem;
+.badge-refund {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.badge-refund.full {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #10B981;
+}
+
+.badge-refund.partial {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #F59E0B;
+}
+
+.badge-refund.none {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #EF4444;
+}
+
+/* MODAL SYSTEM */
+.modal-backdrop-3d {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 15, 16, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.modal-card-3d {
   width: 100%;
+  max-width: 520px;
+  background: #1A1A1D;
+  border: 1px solid rgba(255, 153, 51, 0.3);
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
 }
-.skeleton-line.title {
-  height: 30px;
-  width: 40%;
-  margin-bottom: 2rem;
+
+.btn-danger-confirm {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border: none;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.btn-danger-confirm:hover {
+  transform: translateY(-2px);
 }

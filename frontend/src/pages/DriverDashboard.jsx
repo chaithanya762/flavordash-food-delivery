@@ -6,13 +6,16 @@ import './DriverDashboard.css';
 
 export default function DriverDashboard() {
   const { user } = useAuth() || { user: null };
-  const { orders, updateOrderStatus } = useOrders() || { orders: [], updateOrderStatus: () => {} };
+  const { orders, updateOrderStatus, cancelOrder } = useOrders() || { orders: [], updateOrderStatus: () => {}, cancelOrder: () => {} };
   const { showToast } = useToast() || { showToast: () => {} };
 
   const riderName = user?.name || 'Ramesh Kumar (Rider Express)';
   const [driverStatus, setDriverStatus] = useState('ONLINE');
   const [progress, setProgress] = useState(35);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [cancelModalOrder, setCancelModalOrder] = useState(null);
+  const [cancelReason, setCancelReason] = useState('Vehicle Mechanical Failure / Flat Tyre');
+  const [customReason, setCustomReason] = useState('');
 
   // STRICT FILTERING: Only show active ready/dispatched/cooking/delivered orders for riders!
   const activeRiderOrders = orders.filter(o => ['READY', 'DISPATCHED', 'COOKING', 'DELIVERED', 'RECEIVED'].includes(o.status));
@@ -30,6 +33,18 @@ export default function DriverDashboard() {
   const handleStatusChange = (orderId, newStatus) => {
     updateOrderStatus(orderId, newStatus, riderName);
     showToast(`Order #${orderId} status updated to ${newStatus}! 🛵`, 'success');
+  };
+
+  const handleConfirmRiderCancel = () => {
+    if (!cancelModalOrder) return;
+    const finalReason = cancelReason === 'Other' ? customReason : cancelReason;
+
+    cancelOrder(cancelModalOrder.id, 'RIDER', finalReason);
+    showToast(`Task #${cancelModalOrder.id} cancelled. 💰 100% Full Refund issued to customer!`, 'info');
+
+    setCancelModalOrder(null);
+    setCancelReason('Vehicle Mechanical Failure / Flat Tyre');
+    setCustomReason('');
   };
 
   return (
@@ -143,7 +158,7 @@ export default function DriverDashboard() {
               )}
             </div>
 
-            <div className="delivery-actions">
+            <div className="delivery-actions flex-wrap gap-2">
               {['READY', 'COOKING', 'RECEIVED'].includes(targetOrder.status) && (
                 <button className="btn-del-action pickup" onClick={() => handleStatusChange(targetOrder.id, 'DISPATCHED')}>
                   📦 Accept & Start Route
@@ -159,7 +174,25 @@ export default function DriverDashboard() {
                   🎉 Delivery Completed! Earning ₹85 Added to Rider Wallet.
                 </div>
               )}
+
+              {/* RIDER EMERGENCY CANCEL BUTTON */}
+              {targetOrder.status !== 'CANCELLED' && targetOrder.status !== 'DELIVERED' && (
+                <button 
+                  className="btn-rider-cancel"
+                  onClick={() => setCancelModalOrder(targetOrder)}
+                >
+                  🚫 Emergency Cancel / Reject Task
+                </button>
+              )}
             </div>
+
+            {targetOrder.status === 'CANCELLED' && (
+              <div className="rider-cancelled-note mt-3 p-3 bg-red-900-20 rounded border-red">
+                <span className="text-red font-bold">🚫 Cancelled by {targetOrder.cancelledBy}</span>
+                <p className="text-xs text-secondary">Reason: "{targetOrder.cancellationReason}"</p>
+                <p className="text-xs text-emerald mt-1">💰 Full Refund Issued to Customer (₹{targetOrder.refundAmount})</p>
+              </div>
+            )}
           </div>
         </div>
       ) : (
@@ -167,6 +200,55 @@ export default function DriverDashboard() {
           <span style={{ fontSize: '3rem', display: 'block', marginBottom: '12px' }}>🛵</span>
           <h3>No active orders in dispatch queue</h3>
           <p className="text-secondary mt-2">Stay online! Customer orders will appear here as soon as kitchens prepare them.</p>
+        </div>
+      )}
+
+      {/* RIDER CANCELLATION REASON MODAL */}
+      {cancelModalOrder && (
+        <div className="modal-backdrop-3d fade-in">
+          <div className="modal-card-3d glass-god-card p-6">
+            <h3 className="gradient-text mb-2">🚫 Cancel Delivery Task #{cancelModalOrder.id} (Rider Agent)</h3>
+            <p className="text-secondary text-sm mb-4">
+              Cancelling this task will notify the system and process a <strong className="text-emerald">100% Full Refund (₹{cancelModalOrder.totalAmount})</strong> for the customer.
+            </p>
+
+            <div className="form-group mb-4">
+              <label className="block text-sm font-bold mb-2">State Reason for Rider Cancellation:</label>
+              <select 
+                className="glass-input-3d w-full p-3"
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+              >
+                <option value="Vehicle Mechanical Failure / Flat Tyre">Vehicle Mechanical Failure / Flat Tyre</option>
+                <option value="Heavy Rain / Extreme Weather Breakdown">Heavy Rain / Extreme Weather Breakdown</option>
+                <option value="Customer Address Unreachable / Wrong Phone">Customer Address Unreachable / Wrong Phone</option>
+                <option value="Medical Emergency / Safety Hazard">Medical Emergency / Safety Hazard</option>
+                <option value="Other">Other reason...</option>
+              </select>
+            </div>
+
+            {cancelReason === 'Other' && (
+              <div className="form-group mb-4">
+                <input 
+                  type="text" 
+                  className="glass-input-3d w-full p-3"
+                  placeholder="Specify rider reason..."
+                  value={customReason}
+                  onChange={(e) => setCustomReason(e.target.value)}
+                  required
+                />
+              </div>
+            )}
+
+            <div className="modal-actions flex gap-3 justify-end mt-6">
+              <button className="btn-outline" onClick={() => setCancelModalOrder(null)}>
+                Back to Navigation
+              </button>
+              <button className="btn-danger-confirm" onClick={handleConfirmRiderCancel}>
+                Confirm Cancellation & Issue Full Refund
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

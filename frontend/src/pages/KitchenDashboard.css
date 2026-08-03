@@ -224,7 +224,23 @@
 .btn-k-action.ready { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; }
 .btn-k-action.dispatch { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #ffffff; }
 
-.btn-k-action:hover { transform: translateY(-2px); }
+.btn-k-cancel {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-k-cancel:hover {
+  background: #ef4444;
+  color: #ffffff;
+}
 
 .kitchen-stock-section {
   padding: 24px;

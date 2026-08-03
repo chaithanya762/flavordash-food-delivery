@@ -7,12 +7,15 @@ import './KitchenDashboard.css';
 
 export default function KitchenDashboard() {
   const { user } = useAuth() || { user: null };
-  const { orders, updateOrderStatus } = useOrders() || { orders: [], updateOrderStatus: () => {} };
+  const { orders, updateOrderStatus, cancelOrder } = useOrders() || { orders: [], updateOrderStatus: () => {}, cancelOrder: () => {} };
   const { showToast } = useToast() || { showToast: () => {} };
   
   const currentRestaurant = user?.restaurantName || 'Punjab Rasoi';
   const [restaurantFilter, setRestaurantFilter] = useState('ALL');
   const [dishesStock, setDishesStock] = useState(ALL_DISHES.slice(0, 12));
+  const [cancelModalOrder, setCancelModalOrder] = useState(null);
+  const [cancelReason, setCancelReason] = useState('Ingredients Exhausted / Item Out of Stock');
+  const [customReason, setCustomReason] = useState('');
 
   // Filter orders for kitchen desk
   const filteredOrders = orders.filter(o => {
@@ -23,6 +26,18 @@ export default function KitchenDashboard() {
   const handleStatusChange = (orderId, newStatus) => {
     updateOrderStatus(orderId, newStatus);
     showToast(`Order #${orderId} updated to ${newStatus}! 👨‍🍳`, 'success');
+  };
+
+  const handleConfirmKitchenCancel = () => {
+    if (!cancelModalOrder) return;
+    const finalReason = cancelReason === 'Other' ? customReason : cancelReason;
+
+    cancelOrder(cancelModalOrder.id, 'HOTEL_MANAGER', finalReason);
+    showToast(`Order #${cancelModalOrder.id} cancelled. 💰 100% Full Refund issued to customer!`, 'info');
+    
+    setCancelModalOrder(null);
+    setCancelReason('Ingredients Exhausted / Item Out of Stock');
+    setCustomReason('');
   };
 
   const toggleStock = (dishId) => {
@@ -122,7 +137,7 @@ export default function KitchenDashboard() {
                       <span className="k-address">📍 {order.deliveryAddress}</span>
                     </div>
 
-                    <div className="k-action-btns">
+                    <div className="k-action-btns flex-wrap gap-2">
                       {order.status === 'RECEIVED' && (
                         <button className="btn-k-action cook" onClick={() => handleStatusChange(order.id, 'COOKING')}>
                           👨‍🍳 Start Cooking
@@ -144,8 +159,26 @@ export default function KitchenDashboard() {
                       {order.status === 'DELIVERED' && (
                         <span className="delivered-label">✅ Order Delivered</span>
                       )}
+
+                      {/* HOTEL MANAGER REJECT/CANCEL BUTTON */}
+                      {order.status !== 'CANCELLED' && order.status !== 'DELIVERED' && (
+                        <button 
+                          className="btn-k-cancel"
+                          onClick={() => setCancelModalOrder(order)}
+                        >
+                          🚫 Cancel Order
+                        </button>
+                      )}
                     </div>
                   </div>
+
+                  {order.status === 'CANCELLED' && (
+                    <div className="k-cancelled-note mt-3 p-3 bg-red-900-20 rounded border-red">
+                      <span className="text-red font-bold">🚫 Cancelled by {order.cancelledBy}</span>
+                      <p className="text-xs text-secondary">Reason: "{order.cancellationReason}"</p>
+                      <p className="text-xs text-emerald mt-1">💰 Full Refund Issued (₹{order.refundAmount})</p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -175,6 +208,55 @@ export default function KitchenDashboard() {
           </div>
         </div>
       </div>
+
+      {/* HOTEL MANAGER CANCELLATION REASON MODAL */}
+      {cancelModalOrder && (
+        <div className="modal-backdrop-3d fade-in">
+          <div className="modal-card-3d glass-god-card p-6">
+            <h3 className="gradient-text mb-2">🚫 Cancel Order #{cancelModalOrder.id} (Hotel Manager)</h3>
+            <p className="text-secondary text-sm mb-4">
+              Cancelling this order will automatically process a <strong className="text-emerald">100% Full Refund (₹{cancelModalOrder.totalAmount})</strong> for the customer.
+            </p>
+
+            <div className="form-group mb-4">
+              <label className="block text-sm font-bold mb-2">State Reason for Kitchen Cancellation:</label>
+              <select 
+                className="glass-input-3d w-full p-3"
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+              >
+                <option value="Ingredients Exhausted / Item Out of Stock">Ingredients Exhausted / Item Out of Stock</option>
+                <option value="Kitchen Peak Hour Overload / Capacity Full">Kitchen Peak Hour Overload / Capacity Full</option>
+                <option value="Special Culinary Request Cannot Be Met">Special Culinary Request Cannot Be Met</option>
+                <option value="Equipment Failure / Stove Malfunction">Equipment Failure / Stove Malfunction</option>
+                <option value="Other">Other reason...</option>
+              </select>
+            </div>
+
+            {cancelReason === 'Other' && (
+              <div className="form-group mb-4">
+                <input 
+                  type="text" 
+                  className="glass-input-3d w-full p-3"
+                  placeholder="Specify kitchen reason..."
+                  value={customReason}
+                  onChange={(e) => setCustomReason(e.target.value)}
+                  required
+                />
+              </div>
+            )}
+
+            <div className="modal-actions flex gap-3 justify-end mt-6">
+              <button className="btn-outline" onClick={() => setCancelModalOrder(null)}>
+                Back to Kitchen Desk
+              </button>
+              <button className="btn-danger-confirm" onClick={handleConfirmKitchenCancel}>
+                Confirm Cancellation & Issue Full Refund
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
