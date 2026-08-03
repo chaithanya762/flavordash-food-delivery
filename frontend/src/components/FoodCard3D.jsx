@@ -1,70 +1,56 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import './FoodCard3D.css';
 
 export default function FoodCard3D({ dish, onInspect }) {
-  const cardRef = useRef(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
-  const [isAdded, setIsAdded] = useState(false);
-  const { addToCart } = useCart() || { addToCart: () => {} };
+  const [pulse, setPulse] = useState(false);
+  
+  const { cart, addToCart, updateQuantity, removeFromCart } = useCart() || { cart: [], addToCart: () => {}, updateQuantity: () => {}, removeFromCart: () => {} };
   const { showToast } = useToast() || { showToast: () => {} };
 
-  const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+  // Find item in cart to drive button morphing
+  const cartItem = cart?.find((item) => item.product.id === dish.id);
+  const itemQty = cartItem ? cartItem.quantity : 0;
 
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    const rotateX = ((centerY - y) / centerY) * 8; // Gentle tilt
-    const rotateY = ((x - centerX) / centerX) * 8;
-
-    setTilt({ x: rotateX, y: rotateY });
-  };
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    setTilt({ x: 0, y: 0 });
-  };
-
-  const handleAddToCart = (e) => {
+  const handleAddClick = (e) => {
     e.stopPropagation();
     addToCart(dish);
-    setIsAdded(true);
-    showToast(`Added ${dish.name} to your dining order 🍽️`, 'success');
-    setTimeout(() => setIsAdded(false), 800);
+    setPulse(true);
+    setTimeout(() => setPulse(false), 800);
+    showToast(`Added ${dish.name} to order 🍽️`, 'success');
+  };
+
+  const handleIncrement = (e) => {
+    e.stopPropagation();
+    updateQuantity(dish.id, itemQty + 1);
+  };
+
+  const handleDecrement = (e) => {
+    e.stopPropagation();
+    if (itemQty === 1) {
+      removeFromCart(dish.id);
+      showToast(`Removed ${dish.name} from order`, 'info');
+    } else {
+      updateQuantity(dish.id, itemQty - 1);
+    }
   };
 
   return (
     <div 
-      className={`food-card-3d-wrapper ${isHovered ? 'hovered' : ''} ${isAdded ? 'added-pulse' : ''}`}
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className={`food-card-3d-wrapper ${isHovered ? 'hovered' : ''} ${pulse ? 'added-pulse' : ''}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       onClick={() => onInspect && onInspect(dish)}
-      style={{
-        transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale3d(${isHovered ? 1.03 : 1}, ${isHovered ? 1.03 : 1}, 1)`
-      }}
     >
       <div className="food-card-glass-body">
-        {/* Subtle Accent Rim */}
-        <div 
-          className="glow-rim-accent"
-          style={{ background: dish.accentColor || '#FF9933' }}
-        ></div>
+        {/* Glow accent rim */}
+        <div className="glow-rim-accent" style={{ background: dish.accentColor || '#D4AF37' }}></div>
 
-        {/* PLATED DISH STAGE */}
+        {/* 4:3 STAGE DISH ARTWORK */}
         <div className="food-3d-object-stage">
-          {/* Steam Overlay */}
+          {/* Steam Effect */}
           {dish.steam !== false && (
             <div className="steam-vapor-overlay">
               <span className="steam-particle s1">☁️</span>
@@ -73,10 +59,17 @@ export default function FoodCard3D({ dish, onInspect }) {
             </div>
           )}
 
-          {/* Table Contact Shadow */}
-          <div className="food-contact-shadow"></div>
+          {/* Signature Plating Badge */}
+          <span className="ar-badge-pill">
+            <span className="ar-pulse-dot"></span> Signature Plating
+          </span>
 
-          {/* Dish Plating Image */}
+          {/* Veg / Non-Veg Badge */}
+          <span className={`diet-tag-pill ${dish.isVeg ? 'veg' : 'nonveg'}`}>
+            {dish.isVeg ? '🟢 Veg' : '🔴 Non-Veg'}
+          </span>
+
+          {/* High Res Dish Artwork */}
           <img 
             src={dish.imageUrl} 
             alt={dish.name} 
@@ -84,18 +77,10 @@ export default function FoodCard3D({ dish, onInspect }) {
             loading="lazy"
           />
 
-          {/* Signature Plating Badge */}
-          <span className="ar-badge-pill">
-            <span className="ar-pulse-dot"></span> Signature Plating
-          </span>
-
-          {/* Diet Tag */}
-          <span className={`diet-tag-pill ${dish.isVeg ? 'veg' : 'nonveg'}`}>
-            {dish.isVeg ? '🟢 Vegetarian' : '🔴 Non-Veg'}
-          </span>
+          <div className="food-contact-shadow"></div>
         </div>
 
-        {/* CARD INFO */}
+        {/* CONTENT LAYER */}
         <div className="food-card-info-stage">
           <div className="food-restaurant-meta">
             <span className="res-name">🏪 {dish.restaurantName}</span>
@@ -106,39 +91,44 @@ export default function FoodCard3D({ dish, onInspect }) {
           
           <p className="food-desc-3d">{dish.description}</p>
 
-          {/* Culinary Texture */}
-          {dish.texture && (
+          {/* Texture Tag */}
+          {(dish.texture || dish.highlight) && (
             <div className="texture-highlight-tag">
-              <span className="sparkle-icon">✨</span> {dish.texture}
+              ✨ {dish.highlight || dish.texture}
             </div>
           )}
 
-          {/* Price & Actions */}
+          {/* FOOTER: PRICE & MORPHING BUTTON */}
           <div className="food-card-footer-3d">
             <div className="price-tag-3d">
               <span className="currency">₹</span>
-              <span className="amount">{dish.price}</span>
+              <span>{dish.price}</span>
             </div>
 
-            <div className="card-actions-group">
+            <div className="card-actions-group" onClick={(e) => e.stopPropagation()}>
               <button 
                 className="btn-inspect-3d"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onInspect && onInspect(dish);
-                }}
-                title="View Culinary Details"
+                onClick={() => onInspect && onInspect(dish)}
+                title="View Chef's Plating & Ingredients"
               >
                 🔍 Details
               </button>
 
-              <button 
-                className={`btn-add-3d ${isAdded ? 'added' : ''}`}
-                onClick={handleAddToCart}
-                title="Add to Order"
-              >
-                {isAdded ? '✓ Added' : '🛒 Add'}
-              </button>
+              {/* MORPHING BUTTON: If item is in cart, morph into Quantity Stepper! */}
+              {itemQty > 0 ? (
+                <div className="qty-stepper-morphed">
+                  <button className="stepper-btn" onClick={handleDecrement}>-</button>
+                  <span className="stepper-count">{itemQty}</span>
+                  <button className="stepper-btn" onClick={handleIncrement}>+</button>
+                </div>
+              ) : (
+                <button 
+                  className="btn-add-3d"
+                  onClick={handleAddClick}
+                >
+                  + Add
+                </button>
+              )}
             </div>
           </div>
         </div>

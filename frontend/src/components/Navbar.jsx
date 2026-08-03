@@ -42,6 +42,7 @@ const Navbar = () => {
     <>
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="nav-container container">
+          {/* LEFT: BRAND LOGO */}
           <Link to="/" className="nav-brand">
             <span className="nav-logo-icon">🍔</span>
             <span className="nav-logo-text">FlavorDash</span>
@@ -52,30 +53,38 @@ const Navbar = () => {
             </span>
           </Link>
 
-          <div className="nav-links">
-            <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
-            <Link to="/menu" className={`nav-link ${location.pathname === '/menu' ? 'active' : ''}`}>Menu</Link>
-
-            {/* Strictly Logged-In Role Links */}
-            {userRole === 'CUSTOMER' && (
-              <Link to="/orders" className={`nav-link ${location.pathname === '/orders' ? 'active' : ''}`}>Orders</Link>
-            )}
-
-            {userRole === 'HOTEL_MANAGER' && (
-              <Link to="/kitchen" className={`nav-link ${location.pathname === '/kitchen' ? 'active' : ''}`}>👨‍🍳 Kitchen Desk</Link>
-            )}
-
-            {userRole === 'RIDER' && (
-              <Link to="/driver" className={`nav-link ${location.pathname === '/driver' ? 'active' : ''}`}>🛵 Rider GPS</Link>
-            )}
-
-            <button className="nav-link backend-diag-link" onClick={() => setBackendModalOpen(true)}>
-              ⚙️ Backend Status
-            </button>
+          {/* CENTER: LOCATION & DELIVERY STATUS INDICATOR */}
+          <div className="nav-location-pill">
+            <span className="loc-pin">📍</span>
+            <span className="loc-text">New Delhi, Sector 4</span>
+            <span className="loc-dot">•</span>
+            <span className="delivery-eta">⚡ 25 min</span>
           </div>
 
+          {/* RIGHT: NAVIGATION & ACTIONS */}
           <div className="nav-actions">
-            {/* Shopping Cart (Customers Only) */}
+            <div className="nav-links">
+              <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
+              <Link to="/menu" className={`nav-link ${location.pathname === '/menu' ? 'active' : ''}`}>Menu</Link>
+
+              {userRole === 'CUSTOMER' && (
+                <Link to="/orders" className={`nav-link ${location.pathname === '/orders' ? 'active' : ''}`}>Orders</Link>
+              )}
+
+              {userRole === 'HOTEL_MANAGER' && (
+                <Link to="/kitchen" className={`nav-link ${location.pathname === '/kitchen' ? 'active' : ''}`}>👨‍🍳 Kitchen Desk</Link>
+              )}
+
+              {userRole === 'RIDER' && (
+                <Link to="/driver" className={`nav-link ${location.pathname === '/driver' ? 'active' : ''}`}>🛵 Rider GPS</Link>
+              )}
+
+              <button className="nav-link backend-diag-link" onClick={() => setBackendModalOpen(true)}>
+                ⚙️ Status
+              </button>
+            </div>
+
+            {/* Shopping Cart */}
             {userRole === 'CUSTOMER' && (
               <button 
                 className={`cart-btn-nav ${bump ? 'bump' : ''}`}
@@ -83,7 +92,7 @@ const Navbar = () => {
                 title="View Shopping Cart"
               >
                 <span className="cart-nav-icon">🛒</span>
-                <span className="cart-nav-label">Cart</span>
+                <span className="cart-nav-label">Order</span>
                 {count > 0 && <span className="cart-badge-count">{count}</span>}
               </button>
             )}
@@ -91,17 +100,13 @@ const Navbar = () => {
             <div className="auth-buttons">
               {user ? (
                 <div className="user-profile">
-                  <span className="user-avatar">👤</span>
-                  <div className="user-info-pill">
-                    <span className="user-name">{user.name || 'User'}</span>
-                    <span className="user-role-sub">({userRole})</span>
-                  </div>
+                  <span className="user-name">{user.name || 'User'}</span>
                   <button onClick={logout} className="btn-logout">Logout</button>
                 </div>
               ) : (
                 <>
-                  <Link to="/login" className="btn btn-secondary">Login</Link>
-                  <Link to="/register" className="btn btn-primary">Register</Link>
+                  <Link to="/login" className="btn btn-secondary btn-sm">Login</Link>
+                  <Link to="/register" className="btn btn-primary btn-sm">Register</Link>
                 </>
               )}
             </div>
@@ -139,8 +144,6 @@ const Navbar = () => {
           {userRole === 'RIDER' && (
             <Link to="/driver" className="mobile-link" onClick={toggleMobileMenu}>🛵 Rider GPS App</Link>
           )}
-
-          <button className="mobile-link text-left" onClick={() => { setBackendModalOpen(true); toggleMobileMenu(); }}>⚙️ Backend Status</button>
 
           <div className="mobile-divider"></div>
 

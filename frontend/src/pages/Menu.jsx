@@ -6,13 +6,13 @@ import './Menu.css';
 
 const CUISINES = [
   'ALL',
-  'North Indian',
+  'Main Dishes',
+  'Rice & Biryani',
+  'Breads',
   'South Indian',
-  'Biryani',
-  'Starters',
   'Street Food',
-  'Desserts',
-  'Beverages'
+  'Sweets',
+  'Drinks'
 ];
 
 const DIET_TAGS = ['ALL', 'High Protein', 'Keto', 'Jain Friendly', 'Low Calorie'];
@@ -50,7 +50,7 @@ export default function Menu() {
         </div>
 
         <h1 className="page-title-3d gradient-text">Explore Regional Delicacies</h1>
-        <p className="page-subtitle-3d">Hand-crafted Indian specialties, rich slow-cooked curries, crispy dosas, and royal sweets</p>
+        <p className="page-subtitle-3d">Authentic Indian curries, rich dum biryanis, hot tandoori breads, crispy dosas, and royal sweets</p>
 
         {/* Search Bar & Veg Filters Row */}
         <div className="menu-controls-row">
@@ -58,7 +58,7 @@ export default function Menu() {
             <span className="search-icon">🔍</span>
             <input 
               type="text" 
-              placeholder="Search Biryani, Butter Chicken, Dosa, Jalebi..."
+              placeholder="Search Butter Chicken, Dum Biryani, Garlic Naan, Jalebi..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="search-input-3d"
@@ -108,7 +108,7 @@ export default function Menu() {
           ))}
         </div>
 
-        {/* Category Pills */}
+        {/* STICKY CATEGORY SCROLL BAR */}
         <div className="category-scroll-container-3d">
           <div className="category-pills-3d">
             {CUISINES.map(cuisine => (
@@ -117,7 +117,14 @@ export default function Menu() {
                 className={`category-pill-3d ${selectedCuisine === cuisine ? 'active' : ''}`}
                 onClick={() => setSelectedCuisine(cuisine)}
               >
-                {cuisine}
+                {cuisine === 'ALL' && '✨ All Delicacies'}
+                {cuisine === 'Main Dishes' && '🥘 Main Dishes'}
+                {cuisine === 'Rice & Biryani' && '🍛 Rice & Biryani'}
+                {cuisine === 'Breads' && '🫓 Breads'}
+                {cuisine === 'South Indian' && '🥞 South Indian'}
+                {cuisine === 'Street Food' && '🍢 Street Food'}
+                {cuisine === 'Sweets' && '🍬 Sweets'}
+                {cuisine === 'Drinks' && '🥤 Drinks'}
               </button>
             ))}
           </div>
@@ -126,7 +133,7 @@ export default function Menu() {
 
       {/* Product Count Indicator */}
       <div className="results-count-3d">
-        Showing <strong>{filteredProducts.length}</strong> signature dishes
+        Showing <strong>{filteredProducts.length}</strong> signature delicacies
       </div>
 
       {/* Product Grid */}
