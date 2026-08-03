@@ -16,6 +16,7 @@ export default function FoodCard3D({ dish, onInspect }) {
 
   const handleAddClick = (e) => {
     e.stopPropagation();
+    e.preventDefault();
     addToCart(dish);
     setPulse(true);
     setTimeout(() => setPulse(false), 800);
@@ -24,11 +25,13 @@ export default function FoodCard3D({ dish, onInspect }) {
 
   const handleIncrement = (e) => {
     e.stopPropagation();
+    e.preventDefault();
     updateQuantity(dish.id, itemQty + 1);
   };
 
   const handleDecrement = (e) => {
     e.stopPropagation();
+    e.preventDefault();
     if (itemQty === 1) {
       removeFromCart(dish.id);
       showToast(`Removed ${dish.name} from order`, 'info');
@@ -119,7 +122,7 @@ export default function FoodCard3D({ dish, onInspect }) {
               <span>{dish.price}</span>
             </div>
 
-            <div className="card-actions-group" onClick={(e) => e.stopPropagation()}>
+            <div className="card-actions-group">
               <button 
                 type="button"
                 className="btn-inspect-3d"
