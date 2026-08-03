@@ -1,8 +1,8 @@
-/* Menu.css - 3D Ecosystem Menu Page */
+/* Menu.css - Master Consistency Menu Page */
 
 .menu-3d-page {
-  padding-top: 2rem;
-  padding-bottom: 6rem;
+  padding-top: var(--space-32, 32px);
+  padding-bottom: var(--space-48, 48px);
 }
 
 .menu-header-3d {
@@ -10,198 +10,197 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 1rem;
-  margin-bottom: 2.5rem;
+  gap: var(--space-12, 12px);
+  margin-bottom: var(--space-32, 32px);
 }
 
 .page-title-3d {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
   font-size: clamp(2.2rem, 4vw, 3.2rem);
-  font-weight: 800;
+  font-weight: 700;
+  color: var(--text-headline, #FFF9F0);
 }
 
 .page-subtitle-3d {
-  color: #cbd5e1;
+  color: var(--text-secondary, #94A3B8);
   font-size: 1rem;
   max-width: 600px;
 }
 
 .menu-controls-row {
   width: 100%;
-  max-width: 900px;
+  max-width: 880px;
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: var(--space-16, 16px);
+  margin-top: var(--space-16, 16px);
 }
 
 .search-box-3d {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: rgba(20, 13, 25, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  gap: var(--space-12, 12px);
+  background: var(--bg-card, rgba(26, 26, 29, 0.75));
+  backdrop-filter: var(--backdrop-blur, blur(25px));
+  border: 1px solid var(--border-color, rgba(245, 233, 218, 0.08));
   padding: 12px 18px;
-  border-radius: 16px;
+  border-radius: var(--radius-md, 16px);
 }
 
 .search-icon {
-  font-size: 1.2rem;
-  color: #ff6b35;
+  font-size: 1.1rem;
+  color: var(--primary, #FF9933);
 }
 
 .search-input-3d {
   background: transparent;
   border: none;
-  color: #ffffff;
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
+  color: var(--text-primary, #F5E9DA);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.95rem;
   width: 100%;
   outline: none;
 }
 
 .search-input-3d::placeholder {
-  color: #64748b;
+  color: var(--text-tertiary, #64748B);
 }
 
 .clear-search-3d {
   background: transparent;
   border: none;
-  color: #94a3b8;
+  color: var(--text-secondary, #94A3B8);
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .veg-toggle-group-3d {
   display: flex;
   align-items: center;
-  background: rgba(20, 13, 25, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--bg-card, rgba(26, 26, 29, 0.75));
+  backdrop-filter: var(--backdrop-blur, blur(25px));
+  border: 1px solid var(--border-color, rgba(245, 233, 218, 0.08));
   padding: 4px;
-  border-radius: 16px;
+  border-radius: var(--radius-md, 16px);
 }
 
 .veg-toggle-btn {
   background: transparent;
   border: none;
-  color: #cbd5e1;
+  color: var(--text-secondary, #94A3B8);
   padding: 8px 14px;
   border-radius: 12px;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 700;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--anim-fast, 150ms ease-out);
 }
 
 .veg-toggle-btn.active {
-  background: rgba(255, 107, 53, 0.2);
-  color: #ffffff;
-  border: 1px solid rgba(255, 107, 53, 0.4);
+  background: rgba(255, 153, 51, 0.18);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 153, 51, 0.3);
 }
 
 .veg-toggle-btn.veg.active {
-  background: rgba(16, 185, 129, 0.2);
-  color: #10b981;
-  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.18);
+  color: #10B981;
+  border-color: rgba(16, 185, 129, 0.3);
 }
 
 .veg-toggle-btn.non-veg.active {
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.18);
+  color: #EF4444;
+  border-color: rgba(239, 68, 68, 0.3);
 }
 
-/* AI DIET FILTERS */
+/* DIETARY FILTERS */
 .diet-filter-row-3d {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-12, 12px);
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 0.5rem;
+  margin-top: var(--space-8, 8px);
 }
 
 .diet-label-3d {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 800;
-  font-size: 0.82rem;
-  color: #a78bfa;
+  font-family: var(--font-accent, 'Hind', sans-serif);
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--gold-accent, #D4AF37);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .diet-chip-3d {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #cbd5e1;
+  background: rgba(245, 233, 218, 0.04);
+  border: 1px solid var(--border-color, rgba(245, 233, 218, 0.08));
+  color: var(--text-secondary, #94A3B8);
   padding: 6px 14px;
-  border-radius: 99px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body, 'Inter', sans-serif);
   font-size: 0.8rem;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--anim-fast, 150ms ease-out);
 }
 
 .diet-chip-3d:hover, .diet-chip-3d.active {
-  background: rgba(167, 139, 250, 0.18);
-  border-color: #a78bfa;
-  color: #ffffff;
-  box-shadow: 0 4px 15px rgba(167, 139, 250, 0.25);
+  background: rgba(212, 175, 55, 0.18);
+  border-color: var(--gold-accent, #D4AF37);
+  color: #FFFFFF;
 }
 
 /* CATEGORY SCROLL */
 .category-scroll-container-3d {
   width: 100%;
-  margin-top: 0.75rem;
+  margin-top: var(--space-12, 12px);
 }
 
 .category-pills-3d {
   display: flex;
-  gap: 10px;
+  gap: var(--space-12, 12px);
   justify-content: center;
   flex-wrap: wrap;
 }
 
 .category-pill-3d {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #cbd5e1;
+  background: rgba(245, 233, 218, 0.04);
+  border: 1px solid var(--border-color, rgba(245, 233, 218, 0.08));
+  color: var(--text-secondary, #94A3B8);
   padding: 8px 18px;
-  border-radius: 99px;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 700;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 600;
   font-size: 0.88rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--anim-fast, 150ms ease-out);
 }
 
 .category-pill-3d:hover, .category-pill-3d.active {
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  background: var(--primary-gradient);
   border-color: transparent;
-  color: #ffffff;
-  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+  color: #FFFFFF;
+  box-shadow: var(--shadow-primary);
 }
 
 .results-count-3d {
   text-align: center;
   font-size: 0.9rem;
-  color: #94a3b8;
-  margin-bottom: 2rem;
+  color: var(--text-secondary, #94A3B8);
+  margin-bottom: var(--space-32, 32px);
 }
 
 .empty-results-3d {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: var(--space-48, 48px) var(--space-24, 24px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  border-radius: 24px;
-}
-
-.empty-icon {
-  font-size: 3rem;
+  gap: var(--space-16, 16px);
+  border-radius: var(--radius-md, 16px);
 }
 
 @media (max-width: 768px) {
