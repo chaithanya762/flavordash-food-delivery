@@ -3,57 +3,7 @@ import { orderAPI } from '../api/api';
 
 const OrderContext = createContext();
 
-export const INITIAL_ORDERS = [
-  {
-    id: 1001,
-    userId: 1,
-    customerName: 'Alex Johnson',
-    customerPhone: '+91 98765 43210',
-    deliveryAddress: '742 Evergreen Terrace, Sector 4, New Delhi',
-    restaurantName: 'Punjab Rasoi',
-    items: [
-      { name: 'Royal Butter Chicken', quantity: 2, price: 389 },
-      { name: 'Garlic Butter Naan', quantity: 4, price: 79 }
-    ],
-    totalAmount: 1143,
-    status: 'RECEIVED',
-    paymentMethod: 'UPI',
-    createdAt: new Date(Date.now() - 5 * 60000).toISOString()
-  },
-  {
-    id: 1002,
-    userId: 2,
-    customerName: 'Priya Sharma',
-    customerPhone: '+91 91234 56789',
-    deliveryAddress: 'Connaught Place, Block B, New Delhi',
-    restaurantName: 'Paradise Biryani',
-    items: [
-      { name: 'Hyderabadi Chicken Dum Biryani', quantity: 1, price: 349 },
-      { name: 'Punjabi Sweet Malai Lassi', quantity: 2, price: 129 }
-    ],
-    totalAmount: 655,
-    status: 'COOKING',
-    paymentMethod: 'CARD',
-    createdAt: new Date(Date.now() - 15 * 60000).toISOString()
-  },
-  {
-    id: 1003,
-    userId: 1,
-    customerName: 'Alex Johnson',
-    customerPhone: '+91 98765 43210',
-    deliveryAddress: '742 Evergreen Terrace, Sector 4, New Delhi',
-    restaurantName: 'MTR 1924',
-    items: [
-      { name: 'Mysore Crispy Masala Dosa', quantity: 2, price: 199 },
-      { name: 'South Indian Filter Coffee', quantity: 2, price: 89 }
-    ],
-    totalAmount: 624,
-    status: 'DISPATCHED',
-    riderName: 'Ramesh Kumar (Rider Express)',
-    paymentMethod: 'UPI',
-    createdAt: new Date(Date.now() - 25 * 60000).toISOString()
-  }
-];
+export const INITIAL_ORDERS = [];
 
 export const OrderProvider = ({ children }) => {
   const [orders, setOrders] = useState(() => {
@@ -69,8 +19,9 @@ export const OrderProvider = ({ children }) => {
   const createOrder = async (orderData) => {
     const newOrder = {
       id: Math.floor(1000 + Math.random() * 9000),
-      userId: orderData.userId || 1,
-      customerName: orderData.customerName || 'Alex Johnson',
+      userId: orderData.userId || Date.now(),
+      customerName: orderData.customerName || 'Customer',
+      customerEmail: orderData.customerEmail || 'customer@example.com',
       customerPhone: orderData.customerPhone || '+91 98765 43210',
       deliveryAddress: orderData.deliveryAddress || '742 Evergreen Terrace, Sector 4, New Delhi',
       restaurantName: orderData.restaurantName || 'Punjab Rasoi',
@@ -110,11 +61,17 @@ export const OrderProvider = ({ children }) => {
     }));
   };
 
+  const clearOrders = () => {
+    setOrders([]);
+    localStorage.removeItem('global_orders_db');
+  };
+
   return (
     <OrderContext.Provider value={{
       orders,
       createOrder,
-      updateOrderStatus
+      updateOrderStatus,
+      clearOrders
     }}>
       {children}
     </OrderContext.Provider>

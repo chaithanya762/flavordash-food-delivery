@@ -56,8 +56,9 @@ export default function Checkout() {
       const primaryRestaurant = cartList[0]?.product?.restaurantName || 'Punjab Rasoi';
 
       await createOrder({
-        userId: user?.id || 1,
+        userId: user?.id || Date.now(),
         customerName: formData.name || user?.name || 'Alex Johnson',
+        customerEmail: user?.email || 'alex@example.com',
         customerPhone: formData.phone || user?.phone || '+91 98765 43210',
         deliveryAddress: formData.address || user?.address || '742 Evergreen Terrace, Sector 4, New Delhi',
         restaurantName: primaryRestaurant,

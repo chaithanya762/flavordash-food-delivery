@@ -16,15 +16,20 @@ export default function Orders() {
     return (
       <div className="orders-page center-message fade-in container">
         <div className="glass-card text-center p-8">
-          <h2>Please log in to view your active orders</h2>
+          <h2>Please log in to view your orders</h2>
+          <p className="text-secondary mt-2">Log in to track your live food deliveries</p>
           <Link to="/login" className="btn btn-primary mt-4">Log In</Link>
         </div>
       </div>
     );
   }
 
-  // Filter customer orders
-  const userOrders = orders.filter(o => o.userId === user.id || o.customerName === user.name) || orders;
+  // STRICT FILTERING: Only show orders belonging specifically to the logged-in customer!
+  const userOrders = orders.filter(o => 
+    (user.id && String(o.userId) === String(user.id)) ||
+    (user.name && o.customerName?.toLowerCase() === user.name?.toLowerCase()) ||
+    (user.email && o.customerEmail?.toLowerCase() === user.email?.toLowerCase())
+  );
 
   const togglePayment = async (orderId) => {
     if (expandedPayment === orderId) {
@@ -60,9 +65,9 @@ export default function Orders() {
       {userOrders.length === 0 ? (
         <div className="empty-state glass-card text-center p-8">
           <div className="empty-emoji">🧾</div>
-          <h3>No active orders yet</h3>
-          <p>Explore our curated regional delicacies and place your order!</p>
-          <Link to="/menu" className="btn btn-primary mt-4">Browse Menu</Link>
+          <h3>No active orders</h3>
+          <p>You haven't placed any orders yet. Browse our menu to place your first order!</p>
+          <Link to="/menu" className="btn btn-primary mt-4">Browse Menu →</Link>
         </div>
       ) : (
         <div className="orders-list">
@@ -96,10 +101,10 @@ export default function Orders() {
                     )}
                   </div>
                   <p className="order-address">
-                    <span className="label">Delivery to:</span> {order.deliveryAddress}
+                    <span className="label">Delivery Address:</span> {order.deliveryAddress}
                   </p>
                   <p className="order-total">
-                    <span className="label">Total Amount:</span> 
+                    <span className="label">Total Paid:</span> 
                     <span className="gradient-text amount">₹{order.totalAmount}</span>
                   </p>
                   {order.riderName && (
