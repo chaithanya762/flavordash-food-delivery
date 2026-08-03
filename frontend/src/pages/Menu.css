@@ -204,7 +204,56 @@
 }
 
 @media (max-width: 768px) {
+  .page-title-3d {
+    font-size: 2.2rem;
+  }
+  
   .menu-controls-row {
     flex-direction: column;
+    gap: 12px;
+  }
+
+  .veg-toggle-group-3d {
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .veg-toggle-btn {
+    flex: 1;
+    text-align: center;
+    padding: 8px 6px;
+    font-size: 0.8rem;
+  }
+
+  .category-scroll-container-3d {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    width: 100%;
+  }
+
+  .category-pills-3d {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: max-content;
+  }
+
+  .category-pill-3d {
+    padding: 6px 14px;
+    font-size: 0.82rem;
+  }
+
+  .diet-filter-row-3d {
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+    width: 100%;
+    padding-bottom: 4px;
+  }
+
+  .diet-chip-3d {
+    flex-shrink: 0;
   }
 }
+
