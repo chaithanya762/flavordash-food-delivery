@@ -367,7 +367,7 @@ export const ALL_DISHES = [
     category: 'South Indian',
     cuisine: 'South Indian',
     isVeg: true,
-    imageUrl: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=800&q=80',
     available: true,
     rating: 4.8,
     prepTime: '12 min',
@@ -376,7 +376,7 @@ export const ALL_DISHES = [
     dietTag: 'Jain Friendly',
     steam: true,
     texture: 'Crunchy Exterior & Soft Core',
-    highlight: 'Freshly Fried Lentil Donuts',
+    highlight: 'Crispy Urad Dal Donuts & Coconut Chutney',
     spiceLevel: 2,
     accentColor: '#f59e0b'
   },
