@@ -1,4 +1,4 @@
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const safeFetch = async (url, options = {}) => {
   try {
@@ -6,7 +6,7 @@ const safeFetch = async (url, options = {}) => {
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     return await res.json();
   } catch (err) {
-    console.warn(`API fetch failed for ${url}, using mock fallback:`, err.message);
+    console.warn(`API fetch failed for ${url}, using local database fallback:`, err.message);
     return null;
   }
 };
