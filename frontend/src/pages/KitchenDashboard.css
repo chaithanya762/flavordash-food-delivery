@@ -1,16 +1,17 @@
+/* KitchenDashboard.css - Chef Portal Styling */
+
 .kitchen-page {
-  padding: 100px 20px 60px;
-  max-width: 1240px;
-  margin: 0 auto;
+  padding-top: var(--space-32, 32px);
+  padding-bottom: var(--space-48, 48px);
 }
 
 .kitchen-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: var(--space-24, 24px);
   flex-wrap: wrap;
-  gap: 20px;
+  gap: var(--space-20, 20px);
 }
 
 .status-live-badge {
@@ -20,11 +21,11 @@
   background: rgba(124, 58, 237, 0.15);
   border: 1px solid rgba(124, 58, 237, 0.3);
   color: #a78bfa;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 800;
+  font-family: var(--font-accent, 'Hind', sans-serif);
+  font-weight: 700;
   font-size: 0.78rem;
   padding: 4px 12px;
-  border-radius: 20px;
+  border-radius: var(--radius-full);
   margin-bottom: 8px;
 }
 
@@ -32,7 +33,7 @@
   display: flex;
   gap: 24px;
   padding: 16px 24px;
-  border-radius: 16px;
+  border-radius: var(--radius-md, 16px);
 }
 
 .analytic-stat {
@@ -42,21 +43,60 @@
 
 .stat-label {
   font-size: 0.72rem;
-  color: #94a3b8;
+  color: var(--text-secondary, #94a3b8);
   font-weight: 700;
   letter-spacing: 0.5px;
 }
 
 .stat-val {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 900;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.restaurant-filter-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12, 12px);
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+.filter-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gold-accent, #D4AF37);
+  white-space: nowrap;
+}
+
+.restaurant-chips-scroll {
+  display: flex;
+  gap: 8px;
+}
+
+.res-chip-btn {
+  background: rgba(245, 233, 218, 0.04);
+  border: 1px solid var(--border-color, rgba(245, 233, 218, 0.08));
+  color: var(--text-secondary, #94a3b8);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all var(--anim-fast, 150ms ease-out);
+}
+
+.res-chip-btn.active, .res-chip-btn:hover {
+  background: rgba(255, 153, 51, 0.18);
+  border-color: var(--primary, #FF9933);
+  color: #FFFFFF;
 }
 
 .kitchen-layout {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 24px;
+  gap: var(--space-24, 24px);
 }
 
 @media (min-width: 992px) {
@@ -66,10 +106,10 @@
 }
 
 .kitchen-orders-section h2, .kitchen-stock-section h2 {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
   font-size: 1.3rem;
-  font-weight: 800;
-  color: #ffffff;
+  font-weight: 700;
+  color: var(--text-headline, #ffffff);
   margin-bottom: 16px;
 }
 
@@ -81,36 +121,44 @@
 
 .kitchen-order-card {
   padding: 20px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.25s ease;
+  border-radius: var(--radius-md, 16px);
+  background: var(--bg-card, rgba(26, 26, 29, 0.75));
+  border: 1px solid var(--border-color, rgba(245, 233, 218, 0.08));
+  transition: all var(--anim-fast, 150ms ease-out);
 }
 
 .k-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 12px;
 }
 
 .k-order-id {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 800;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 700;
   font-size: 1.1rem;
   color: #ffffff;
   margin-right: 10px;
+  display: block;
 }
 
 .k-customer-name {
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: var(--text-primary, #F5E9DA);
+  display: block;
+}
+
+.k-res-name {
+  font-size: 0.78rem;
+  color: var(--primary, #FF9933);
+  display: block;
 }
 
 .k-status-badge {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-body, 'Inter', sans-serif);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 700;
   padding: 4px 12px;
   border-radius: 10px;
 }
@@ -119,17 +167,20 @@
 .k-status-badge.cooking { background: rgba(124, 58, 237, 0.2); color: #a78bfa; border: 1px solid rgba(124, 58, 237, 0.4); }
 .k-status-badge.ready { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
 .k-status-badge.dispatched { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+.k-status-badge.delivered { background: rgba(16, 185, 129, 0.25); color: #10B981; border: 1px solid #10B981; }
 
 .k-items-list {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(15, 15, 16, 0.4);
   padding: 12px;
   border-radius: 12px;
   margin-bottom: 14px;
 }
 
 .k-item-row {
+  display: flex;
+  justify-content: space-between;
   font-size: 0.88rem;
-  color: #cbd5e1;
+  color: var(--text-primary, #cbd5e1);
   margin-bottom: 4px;
 }
 
@@ -137,21 +188,33 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.k-footer-meta {
+  display: flex;
+  flex-direction: column;
 }
 
 .k-total-price {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 900;
-  font-size: 1.3rem;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 700;
+  font-size: 1.25rem;
   color: #ffffff;
+}
+
+.k-address {
+  font-size: 0.78rem;
+  color: var(--text-secondary, #94a3b8);
 }
 
 .btn-k-action {
   border: none;
   padding: 8px 18px;
   border-radius: 10px;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 800;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 700;
   font-size: 0.88rem;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -161,7 +224,7 @@
 .btn-k-action.ready { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; }
 .btn-k-action.dispatch { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #ffffff; }
 
-.btn-k-action:hover { transform: scale(1.05); }
+.btn-k-action:hover { transform: translateY(-2px); }
 
 .kitchen-stock-section {
   padding: 24px;
@@ -170,7 +233,7 @@
 
 .stock-subtitle {
   font-size: 0.84rem;
-  color: #94a3b8;
+  color: var(--text-secondary, #94a3b8);
   margin-bottom: 20px;
 }
 
@@ -186,7 +249,7 @@
   align-items: center;
   padding: 10px 14px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(245, 233, 218, 0.03);
 }
 
 .stock-dish-name {
@@ -198,15 +261,15 @@
 
 .stock-dish-price {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: var(--text-secondary, #94a3b8);
 }
 
 .btn-stock-toggle {
   border: none;
   padding: 6px 14px;
   border-radius: 8px;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 800;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 700;
   font-size: 0.8rem;
   cursor: pointer;
 }

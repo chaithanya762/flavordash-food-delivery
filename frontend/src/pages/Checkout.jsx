@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { useOrders } from '../context/OrderContext';
 import { useToast } from '../context/ToastContext';
-import { orderAPI } from '../api/api';
 import './Checkout.css';
 
 export default function Checkout() {
   const { user } = useAuth();
   const { cart, totalPrice, clearCart } = useCart() || { cart: [], totalPrice: 0 };
+  const { createOrder } = useOrders() || { createOrder: () => {} };
   const { showToast } = useToast() || { showToast: () => {} };
   const navigate = useNavigate();
 
@@ -26,7 +27,7 @@ export default function Checkout() {
       <div className="checkout-page-3d center-message fade-in container">
         <div className="glass-god-card text-center p-8">
           <h2>Your cart is empty</h2>
-          <Link to="/menu" className="btn btn-primary mt-4">Browse 3D Menu</Link>
+          <Link to="/menu" className="btn btn-primary mt-4">Browse Menu</Link>
         </div>
       </div>
     );
@@ -45,16 +46,28 @@ export default function Checkout() {
     setLoading(true);
 
     try {
-      const productIds = cartList.flatMap(item => Array(item.quantity).fill(item.product.id));
-      
-      await orderAPI.create({
+      const orderItems = cartList.map(item => ({
+        name: item.product.name,
+        quantity: item.quantity,
+        price: item.product.price,
+        restaurantName: item.product.restaurantName || 'Punjab Rasoi'
+      }));
+
+      const primaryRestaurant = cartList[0]?.product?.restaurantName || 'Punjab Rasoi';
+
+      await createOrder({
         userId: user?.id || 1,
-        productIds: productIds,
-        deliveryAddress: formData.address,
-        totalAmount: FINAL_TOTAL
+        customerName: formData.name || user?.name || 'Alex Johnson',
+        customerPhone: formData.phone || user?.phone || '+91 98765 43210',
+        deliveryAddress: formData.address || user?.address || '742 Evergreen Terrace, Sector 4, New Delhi',
+        restaurantName: primaryRestaurant,
+        items: orderItems,
+        productIds: cartList.flatMap(item => Array(item.quantity).fill(item.product.id)),
+        totalAmount: FINAL_TOTAL,
+        paymentMethod: formData.paymentMethod || 'UPI'
       });
       
-      showToast('Order placed successfully! 🎉 Delivery in 30 mins', 'success');
+      showToast('Order placed successfully! 🎉 Sent to Kitchen & Rider Dispatch', 'success');
       clearCart();
       navigate('/orders');
     } catch (error) {
@@ -73,7 +86,7 @@ export default function Checkout() {
           <span className="sparkle">✨</span> CONFIRMATION & EXPRESS DISPATCH
         </div>
         <h1 className="page-title-3d gradient-text">Checkout</h1>
-        <p className="page-subtitle-3d">Review your 3D culinary order and delivery location</p>
+        <p className="page-subtitle-3d">Review your culinary order and delivery location</p>
       </div>
       
       <div className="checkout-layout-3d">
