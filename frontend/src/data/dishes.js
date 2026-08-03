@@ -549,7 +549,7 @@ export const ALL_DISHES = [
     category: 'Drinks',
     cuisine: 'Beverages',
     isVeg: true,
-    imageUrl: 'https://images.unsplash.com/photo-1571006682880-994f31c26f04?auto=format&fit=crop&w=800&q=80',
+    imageUrl: '/images/lassi.jpg',
     available: true,
     rating: 4.9,
     prepTime: '5 min',
