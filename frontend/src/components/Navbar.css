@@ -6,17 +6,17 @@
   height: 76px;
   z-index: 1000;
   transition: all 0.3s ease;
-  background: rgba(10, 10, 15, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(7, 5, 9, 0.7);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
 }
 
 .navbar.scrolled {
-  background: rgba(10, 10, 15, 0.92);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background: rgba(7, 5, 9, 0.94);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
   border-bottom-color: rgba(255, 107, 53, 0.2);
 }
 
@@ -35,9 +35,9 @@
 }
 
 .role-badge-tag {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-body, 'Inter', sans-serif);
   font-size: 0.68rem;
-  font-weight: 800;
+  font-weight: 700;
   padding: 3px 8px;
   border-radius: 6px;
   letter-spacing: 0.5px;
@@ -55,7 +55,7 @@
 .user-role-sub {
   font-size: 0.7rem;
   color: #94a3b8;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .nav-logo-icon {
@@ -64,13 +64,13 @@
 }
 
 .nav-logo-text {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 900;
-  font-size: 1.6rem;
-  background: linear-gradient(135deg, #ffffff 0%, #ff6b35 100%);
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
+  font-weight: 700;
+  font-size: 1.75rem;
+  background: var(--gold-gradient, linear-gradient(135deg, #fff9f0 0%, #f59e0b 100%));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: -0.5px;
+  letter-spacing: 0.01em;
 }
 
 .nav-links {
@@ -80,17 +80,17 @@
 }
 
 .nav-link {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 600;
-  font-size: 1rem;
-  color: #94a3b8;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #cbd5e1;
   text-decoration: none;
   transition: all 0.2s ease;
   position: relative;
 }
 
 .nav-link:hover, .nav-link.active {
-  color: var(--primary);
+  color: var(--primary, #ff6b35);
 }
 
 .nav-link.backend-diag-link {
@@ -100,8 +100,8 @@
   padding: 5px 12px;
   border-radius: 8px;
   cursor: pointer;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 700;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 600;
   font-size: 0.85rem;
   transition: all 0.2s ease;
 }
@@ -138,9 +138,9 @@
   color: #ffffff;
   padding: 8px 16px;
   border-radius: 12px;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 700;
-  font-size: 0.95rem;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 600;
+  font-size: 0.92rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -166,7 +166,7 @@
   background: #ff6b35;
   color: #ffffff;
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: 700;
   padding: 2px 7px;
   border-radius: 10px;
 }
@@ -179,14 +179,14 @@
 
 .user-name {
   font-size: 0.9rem;
-  color: #e2e8f0;
+  color: #f8fafc;
   font-weight: 600;
 }
 
 .btn-logout {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #94a3b8;
+  color: #cbd5e1;
   padding: 6px 12px;
   border-radius: 8px;
   font-size: 0.8rem;
@@ -212,7 +212,7 @@
 .mobile-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(5px);
   z-index: 1050;
   opacity: 0;
@@ -231,7 +231,7 @@
   right: -300px;
   width: 280px;
   height: 100vh;
-  background: #12121a;
+  background: #0d0812;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 1100;
   padding: 24px;
@@ -266,11 +266,11 @@
 }
 
 .mobile-link {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-body, 'Inter', sans-serif);
   font-size: 1.1rem;
-  color: #e2e8f0;
+  color: #f8fafc;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .mobile-divider {
