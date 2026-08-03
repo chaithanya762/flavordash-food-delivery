@@ -117,7 +117,6 @@ cd flavordash-food-delivery/frontend
 npm install
 npm run dev
 ```
-Access the application at **[http://localhost:3000](http://localhost:3000)**.
 
 ### 2. Run Microservices
 ```bash
@@ -140,7 +139,6 @@ java -jar api-gateway/target/api-gateway-1.0.0.jar
 
 - **Frontend Deployment**: Hosted on **Vercel** (`https://flavordash-food-delivery.vercel.app`)
 - **Backend Deployment**: Configured for **Render / Railway**
-- **Repository**: [https://github.com/chaithanya762/flavordash-food-delivery](https://github.com/chaithanya762/flavordash-food-delivery)
 
 ---
 
