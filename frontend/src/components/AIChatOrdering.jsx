@@ -20,7 +20,7 @@ export const AIChatOrdering = () => {
       id: 1,
       sender: 'bot',
       type: 'text',
-      content: 'Namaste! 🙏 I\'m Chef Gemini, your FlavorDash AI Culinary Assistant 👨‍🍳. What are you in the mood for today? Try: "spicy paneer under ₹350" or "protein rich dinner"!'
+      content: 'Namaste! 🙏 I\'m Chef AI, your FlavorDash Culinary Assistant 👨‍🍳. What are you in the mood for today? Try: "spicy paneer under ₹350" or "protein rich dinner"!'
     }
   ]);
   const [inputValue, setInputValue] = useState('');
@@ -212,7 +212,7 @@ export const AIChatOrdering = () => {
   return (
     <div className="ai-chat-container">
       {!isOpen && (
-        <button className="ai-chat-bubble" onClick={toggleChat} aria-label="Open Chef Gemini AI">
+        <button className="ai-chat-bubble" onClick={toggleChat} aria-label="Open Chef AI Assistant">
           <span className="bot-avatar-emoji">👨‍🍳</span>
           <span className="ai-badge-indicator">AI</span>
         </button>
@@ -225,7 +225,7 @@ export const AIChatOrdering = () => {
             <div className="header-bot-info">
               <div className="bot-avatar-glow">👨‍🍳</div>
               <div>
-                <h3>Chef Gemini AI ✨</h3>
+                <h3>Chef AI ✨</h3>
                 <span className="online-status">🟢 Active • Smart Assistant</span>
               </div>
             </div>
@@ -320,7 +320,7 @@ export const AIChatOrdering = () => {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                placeholder={isListening ? "Listening..." : "Ask Chef Gemini (e.g. spicy paneer under ₹300)..."}
+                placeholder={isListening ? "Listening..." : "Ask Chef AI (e.g. spicy paneer under ₹300)..."}
               />
 
               <button className="send-btn" onClick={() => handleSend()}>
