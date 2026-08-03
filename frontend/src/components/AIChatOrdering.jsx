@@ -4,12 +4,13 @@ import { ALL_DISHES } from '../data/dishes';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 
-const QUICK_PROMPTS = [
-  'Something spicy 🌶️',
-  'Under ₹150',
-  'High protein 💪',
-  'Sweet cravings 🍬',
-  'Quick bite ⚡'
+const DYNAMIC_PROMPTS = [
+  '🌶️ Spicy starters under ₹250',
+  '💪 High protein gym meals',
+  '🍛 Dum Biryani & Raita pairings',
+  '🥑 Low Calorie & Keto options',
+  '🍬 Royal Sweet Cravings',
+  '⚡ Express 15-min delivery'
 ];
 
 export const AIChatOrdering = () => {
@@ -19,15 +20,17 @@ export const AIChatOrdering = () => {
       id: 1,
       sender: 'bot',
       type: 'text',
-      content: 'Hey! 👋 I\'m your FlavorDash AI. Tell me what you\'re craving and I\'ll find the perfect dish! Try: "something spicy under ₹300"'
+      content: 'Namaste! 🙏 I\'m Chef Gemini, your FlavorDash AI Culinary Assistant 👨‍🍳. What are you in the mood for today? Try: "spicy paneer under ₹350" or "protein rich dinner"!'
     }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [contextFilter, setContextFilter] = useState({});
   const messagesEndRef = useRef(null);
 
-  const { addToCart } = useCart();
-  const { addToast } = useToast();
+  const { addToCart } = useCart() || { addToCart: () => {} };
+  const { showToast } = useToast() || { showToast: () => {} };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -39,167 +42,197 @@ export const AIChatOrdering = () => {
 
   const toggleChat = () => setIsOpen(prev => !prev);
 
+  // Advanced AI Parsing Engine with Context Memory
   const parseMessage = (text) => {
     const lowerText = text.toLowerCase();
-    let filtered = [...ALL_DISHES];
-    let matched = false;
+    let newContext = { ...contextFilter };
 
-    // Price parsing
-    const priceRegex = /(?:under|below|cheaper than|less than) (?:₹|rs\.? ?)?(\d+)/;
-    const priceMatch = lowerText.match(priceRegex);
+    // 1. Budget extraction
+    const priceMatch = lowerText.match(/(?:under|below|less than|within|budget of|rs\.?|₹) ?(\d+)/i);
     if (priceMatch) {
-      const maxPrice = parseInt(priceMatch[1], 10);
-      filtered = filtered.filter(d => d.price <= maxPrice);
-      matched = true;
-    } else if (lowerText.includes('cheap') || lowerText.includes('budget')) {
-      filtered = filtered.filter(d => d.price <= 200);
-      matched = true;
+      newContext.maxPrice = parseInt(priceMatch[1], 10);
+    } else if (lowerText.includes('cheap') || lowerText.includes('budget') || lowerText.includes('pocket friendly')) {
+      newContext.maxPrice = 250;
     }
 
-    // Spice
-    if (lowerText.includes('spicy') || lowerText.includes('hot')) {
-      filtered = filtered.filter(d => d.spiceLevel === 'High' || d.spiceLevel === 'Medium');
-      matched = true;
-    } else if (lowerText.includes('mild')) {
-      filtered = filtered.filter(d => d.spiceLevel === 'Low' || !d.spiceLevel);
-      matched = true;
+    // 2. Spice Level
+    if (lowerText.includes('spicy') || lowerText.includes('hot') || lowerText.includes('fiery') || lowerText.includes('chilli')) {
+      newContext.spice = 'high';
+    } else if (lowerText.includes('mild') || lowerText.includes('soothing') || lowerText.includes('not spicy')) {
+      newContext.spice = 'mild';
     }
 
-    // Diet
-    if (lowerText.includes('non-veg') || lowerText.includes('chicken') || lowerText.includes('meat')) {
-      filtered = filtered.filter(d => !d.isVeg);
-      matched = true;
-    } else if (lowerText.includes('veg ') || lowerText.includes('vegetarian')) {
-      filtered = filtered.filter(d => d.isVeg);
-      matched = true;
-    }
-    if (lowerText.includes('protein') || lowerText.includes('healthy') || lowerText.includes('low calorie')) {
-       // Assuming dietTag exists, otherwise fallback to generic filter
-      filtered = filtered.filter(d => d.dietTag === 'High Protein' || d.dietTag === 'Healthy' || (d.isVeg && d.price < 300));
-      matched = true;
+    // 3. Dietary preferences
+    if (lowerText.includes('non-veg') || lowerText.includes('chicken') || lowerText.includes('mutton') || lowerText.includes('fish')) {
+      newContext.isVeg = false;
+    } else if (lowerText.includes('pure veg') || lowerText.includes('vegetarian') || lowerText.includes('veg ') || lowerText.includes('paneer')) {
+      newContext.isVeg = true;
     }
 
-    // Cuisine/Category
-    if (lowerText.includes('biryani')) {
-      filtered = filtered.filter(d => d.category === 'Biryani' || d.name.toLowerCase().includes('biryani'));
-      matched = true;
-    } else if (lowerText.includes('south indian')) {
-      filtered = filtered.filter(d => d.category === 'South Indian' || d.name.toLowerCase().includes('dosa') || d.name.toLowerCase().includes('idli'));
-      matched = true;
-    } else if (lowerText.includes('sweet') || lowerText.includes('dessert') || lowerText.includes('cravings 🍬')) {
-      filtered = filtered.filter(d => d.category === 'Desserts' || d.category === 'Sweets');
-      matched = true;
-    } else if (lowerText.includes('drink') || lowerText.includes('beverage')) {
-      filtered = filtered.filter(d => d.category === 'Beverages');
-      matched = true;
-    } else if (lowerText.includes('bread') || lowerText.includes('roti') || lowerText.includes('naan')) {
-      filtered = filtered.filter(d => d.category === 'Breads' || d.name.toLowerCase().includes('naan'));
-      matched = true;
+    if (lowerText.includes('protein') || lowerText.includes('gym') || lowerText.includes('muscle')) {
+      newContext.diet = 'High Protein';
+    } else if (lowerText.includes('keto') || lowerText.includes('low carb')) {
+      newContext.diet = 'Keto';
+    } else if (lowerText.includes('low calorie') || lowerText.includes('diet') || lowerText.includes('light')) {
+      newContext.diet = 'Low Calorie';
     }
 
-    // Mood
-    if (lowerText.includes('quick') || lowerText.includes('fast')) {
-      filtered = filtered.filter(d => d.prepTime <= 20); // if prepTime exists
-      matched = true;
+    // 4. Categories & Keywords
+    if (lowerText.includes('biryani') || lowerText.includes('rice') || lowerText.includes('pulao')) {
+      newContext.category = 'Rice & Biryani';
+    } else if (lowerText.includes('curry') || lowerText.includes('gravy') || lowerText.includes('paneer') || lowerText.includes('butter chicken')) {
+      newContext.category = 'Main Dishes';
+    } else if (lowerText.includes('dosa') || lowerText.includes('idli') || lowerText.includes('south')) {
+      newContext.category = 'South Indian';
+    } else if (lowerText.includes('sweet') || lowerText.includes('dessert') || lowerText.includes('gulab') || lowerText.includes('jalebi')) {
+      newContext.category = 'Sweets';
+    } else if (lowerText.includes('bread') || lowerText.includes('naan') || lowerText.includes('roti') || lowerText.includes('paratha')) {
+      newContext.category = 'Breads';
+    } else if (lowerText.includes('starter') || lowerText.includes('tikka') || lowerText.includes('kabab') || lowerText.includes('street')) {
+      newContext.category = 'Street Food';
     }
 
-    if (!matched && lowerText.length > 3) {
-      // Basic text search if no specific tags matched
-      filtered = filtered.filter(d => d.name.toLowerCase().includes(lowerText) || (d.description && d.description.toLowerCase().includes(lowerText)));
+    setContextFilter(newContext);
+
+    // Filter dishes against updated context
+    let results = ALL_DISHES.filter(d => {
+      if (newContext.maxPrice && d.price > newContext.maxPrice) return false;
+      if (newContext.isVeg !== undefined && d.isVeg !== newContext.isVeg) return false;
+      if (newContext.diet && d.dietTag !== newContext.diet && !d.dietTag?.includes(newContext.diet)) return false;
+      if (newContext.spice === 'high' && (d.spiceLevel < 3)) return false;
+      if (newContext.spice === 'mild' && (d.spiceLevel > 2)) return false;
+      if (newContext.category && d.category !== newContext.category && d.cuisine !== newContext.category) return false;
+      
+      return true;
+    });
+
+    // Fallback search if strict filter returns few items
+    if (results.length === 0) {
+      results = ALL_DISHES.filter(d => 
+        d.name.toLowerCase().includes(lowerText) || 
+        d.description.toLowerCase().includes(lowerText) ||
+        (newContext.maxPrice && d.price <= newContext.maxPrice)
+      );
     }
 
-    if (filtered.length === 0 || (!matched && filtered.length === ALL_DISHES.length)) {
-       // Return top 3 rated dishes if no match
-       return {
-         found: false,
-         dishes: [...ALL_DISHES].sort((a, b) => b.rating - a.rating).slice(0, 3)
-       };
+    if (results.length === 0) {
+      // Top 3 rated dishes as smart fallback
+      return {
+        found: false,
+        reasoning: "I couldn't find an exact match for that specific combination, but here are our 3 highest-rated crowd favorites you'll love:",
+        dishes: [...ALL_DISHES].sort((a, b) => b.rating - a.rating).slice(0, 3)
+      };
+    }
+
+    // Build intelligent AI reasoning message based on context
+    let reasoning = 'Here are my top culinary recommendations for you:';
+    if (newContext.diet === 'High Protein') {
+      reasoning = '💪 High-protein powerhouses loaded with nutrition & flavor:';
+    } else if (newContext.maxPrice) {
+      reasoning = `💰 Best budget-friendly delicacies under ₹${newContext.maxPrice}:`;
+    } else if (newContext.spice === 'high') {
+      reasoning = '🌶️ Fiery & spiced specialties to satisfy your craving:';
+    } else if (newContext.isVeg) {
+      reasoning = '🟢 Pure vegetarian masterworks prepared with fresh cottage cheese & veggies:';
     }
 
     return {
       found: true,
-      dishes: filtered.slice(0, 3) // Return top 3 matches
+      reasoning,
+      dishes: results.slice(0, 3)
     };
   };
 
-  const handleSend = (text) => {
-    const userText = text || inputValue;
-    if (!userText.trim()) return;
+  const handleSend = (textToSend) => {
+    const query = textToSend || inputValue;
+    if (!query.trim()) return;
 
-    const newUserMsg = { id: Date.now(), sender: 'user', type: 'text', content: userText };
-    setMessages(prev => [...prev, newUserMsg]);
+    const userMsg = { id: Date.now(), sender: 'user', type: 'text', content: query };
+    setMessages(prev => [...prev, userMsg]);
     setInputValue('');
     setIsTyping(true);
 
     setTimeout(() => {
       setIsTyping(false);
-      const searchResult = parseMessage(userText);
+      const aiResult = parseMessage(query);
       
-      const botResponses = [];
-      if (searchResult.found) {
-        botResponses.push({
-          id: Date.now() + 1,
-          sender: 'bot',
-          type: 'text',
-          content: 'Here are some great options for you:'
-        });
-      } else {
-        botResponses.push({
-          id: Date.now() + 1,
-          sender: 'bot',
-          type: 'text',
-          content: 'Hmm, couldn\'t find an exact match. Here are some popular picks:'
-        });
-      }
+      const botResponseMsg = {
+        id: Date.now() + 1,
+        sender: 'bot',
+        type: 'text',
+        content: aiResult.reasoning
+      };
 
-      botResponses.push({
+      const botResultsMsg = {
         id: Date.now() + 2,
         sender: 'bot',
         type: 'results',
-        dishes: searchResult.dishes
-      });
+        dishes: aiResult.dishes
+      };
 
-      setMessages(prev => [...prev, ...botResponses]);
-    }, 800);
+      setMessages(prev => [...prev, botResponseMsg, botResultsMsg]);
+    }, 700);
   };
 
-  const handleQuickPrompt = (prompt) => {
-    handleSend(prompt);
+  // Simulate Voice Dictation
+  const handleVoiceInput = () => {
+    setIsListening(true);
+    setTimeout(() => {
+      setIsListening(false);
+      const voiceSample = "Show me high protein chicken under 400";
+      setInputValue(voiceSample);
+    }, 1500);
   };
 
   const handleAddToCart = (dish) => {
     addToCart(dish);
-    addToast(`Added ${dish.name} to cart`);
+    showToast(`Added ${dish.name} to cart 🍽️`, 'success');
     
-    // Add bot message
+    // AI Smart Pairing Suggestion
     setTimeout(() => {
+      let pairingMessage = `Added ${dish.name}! 😋`;
+      if (dish.category === 'Rice & Biryani') {
+        pairingMessage += ` 💡 *Chef tip:* Would you like to add Garlic Naan or Gulab Jamun to complete your feast?`;
+      } else if (dish.category === 'Main Dishes') {
+        pairingMessage += ` 💡 *Chef tip:* Pairs perfectly with hot Butter Naan or Jeera Rice!`;
+      }
+
       setMessages(prev => [
         ...prev,
         {
           id: Date.now(),
           sender: 'bot',
           type: 'text',
-          content: `Added ${dish.name}! Anything else? 😋`
+          content: pairingMessage
         }
       ]);
-    }, 500);
+    }, 400);
   };
 
   return (
     <div className="ai-chat-container">
       {!isOpen && (
-        <button className="ai-chat-bubble" onClick={toggleChat} aria-label="Open AI Assistant">
-          🤖
+        <button className="ai-chat-bubble" onClick={toggleChat} aria-label="Open Chef Gemini AI">
+          <span className="bot-avatar-emoji">👨‍🍳</span>
+          <span className="ai-badge-indicator">AI</span>
         </button>
       )}
 
       {isOpen && (
-        <div className="ai-chat-panel">
+        <div className="ai-chat-panel fade-in">
+          {/* HEADER */}
           <div className="ai-chat-header">
-            <h3>FlavorDash AI Assistant 🤖</h3>
-            <button className="close-btn" onClick={toggleChat} aria-label="Close Chat">×</button>
+            <div className="header-bot-info">
+              <div className="bot-avatar-glow">👨‍🍳</div>
+              <div>
+                <h3>Chef Gemini AI ✨</h3>
+                <span className="online-status">🟢 Active • Smart Assistant</span>
+              </div>
+            </div>
+            <button className="close-btn" onClick={toggleChat} aria-label="Close Chat">✕</button>
           </div>
 
+          {/* MESSAGES BODY */}
           <div className="ai-chat-messages">
             {messages.map((msg) => (
               <div key={msg.id} className={`message-wrapper ${msg.sender}`}>
@@ -211,22 +244,36 @@ export const AIChatOrdering = () => {
                 {msg.type === 'results' && (
                   <div className="message-results">
                     {msg.dishes.map(dish => (
-                      <div key={dish.id} className="chat-dish-card">
+                      <div key={dish.id} className="chat-dish-card glass-card">
                         <div className="chat-dish-img-wrapper">
-                          <img src={dish.image || 'https://via.placeholder.com/80?text=Dish'} alt={dish.name} className="chat-dish-img" />
+                          <img 
+                            src={dish.imageUrl || dish.imageUrl || '/images/butter-chicken.jpg'} 
+                            alt={dish.name} 
+                            className="chat-dish-img" 
+                          />
                           <div className={`chat-veg-indicator ${dish.isVeg ? 'veg' : 'non-veg'}`}>
                             <div className="circle"></div>
                           </div>
                         </div>
+
                         <div className="chat-dish-info">
-                          <h4>{dish.name}</h4>
-                          <div className="chat-dish-meta">
-                            <span className="price">₹{dish.price}</span>
-                            <span className="rating">★ {dish.rating}</span>
+                          <div className="chat-dish-title-row">
+                            <h4>{dish.name}</h4>
+                            <span className="chat-dish-rating">⭐ {dish.rating || 4.8}</span>
                           </div>
-                          <button className="chat-add-btn" onClick={() => handleAddToCart(dish)}>
-                            Add 🛒
-                          </button>
+
+                          <div className="chat-dish-badges">
+                            <span className="badge-spec">{dish.calories || '450 kcal'}</span>
+                            {dish.protein && <span className="badge-spec protein">{dish.protein}</span>}
+                            {dish.prepTime && <span className="badge-spec time">⏱️ {dish.prepTime}</span>}
+                          </div>
+
+                          <div className="chat-dish-action-row">
+                            <span className="chat-price">₹{dish.price}</span>
+                            <button className="chat-add-btn" onClick={() => handleAddToCart(dish)}>
+                              + Add to Cart 🛒
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -245,22 +292,37 @@ export const AIChatOrdering = () => {
             <div ref={messagesEndRef} />
           </div>
 
+          {/* QUICK CHIPS & INPUT ROW */}
           <div className="ai-chat-input-area">
             <div className="quick-prompts">
-              {QUICK_PROMPTS.map((prompt, idx) => (
-                <button key={idx} className="prompt-chip" onClick={() => handleQuickPrompt(prompt)}>
+              {DYNAMIC_PROMPTS.map((prompt, idx) => (
+                <button 
+                  key={idx} 
+                  className="prompt-chip" 
+                  onClick={() => handleSend(prompt)}
+                >
                   {prompt}
                 </button>
               ))}
             </div>
+
             <div className="input-row">
+              <button 
+                className={`mic-btn ${isListening ? 'listening' : ''}`}
+                onClick={handleVoiceInput}
+                title="Voice Search"
+              >
+                {isListening ? '🎙️...' : '🎙️'}
+              </button>
+
               <input 
                 type="text" 
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                placeholder="Ask me anything..."
+                placeholder={isListening ? "Listening..." : "Ask Chef Gemini (e.g. spicy paneer under ₹300)..."}
               />
+
               <button className="send-btn" onClick={() => handleSend()}>
                 ➤
               </button>
