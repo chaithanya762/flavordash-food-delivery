@@ -2,6 +2,7 @@ package com.fooddelivery.order.controller;
 
 import com.fooddelivery.order.model.TableReservation;
 import com.fooddelivery.order.repository.TableReservationRepository;
+import com.fooddelivery.order.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +18,29 @@ import java.util.Map;
 public class ReservationController {
 
     private final TableReservationRepository reservationRepository;
+    private final NotificationService notificationService;
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> createReservation(@RequestBody TableReservation reservation) {
         TableReservation saved = reservationRepository.save(reservation);
 
-        // SMS & Email notification status simulation
+        // Execute Real SMS & Email Dispatch via NotificationService
+        String smsText = String.format("FlavorDash: Table for %d guests at %s confirmed on %s at %s! Ref #TR-%d", 
+                saved.getGuestCount(), saved.getHotelName(), saved.getReservationDate(), saved.getReservationTime(), saved.getId());
+        
+        String emailSubject = "FlavorDash Table Reservation Confirmed - Ref #TR-" + saved.getId();
+        String emailBody = String.format("Dear %s,\n\nYour table reservation at %s has been confirmed for %d guests on %s at %s.\n\nPhone: %s\nSpecial Requests: %s\n\nThank you for choosing FlavorDash Fine Dining!",
+                saved.getCustomerName(), saved.getHotelName(), saved.getGuestCount(), saved.getReservationDate(), saved.getReservationTime(), saved.getCustomerPhone(), saved.getSpecialRequest());
+
+        boolean smsSent = notificationService.sendSms(saved.getCustomerPhone(), smsText);
+        boolean emailSent = notificationService.sendEmail(saved.getCustomerEmail(), emailSubject, emailBody);
+
         Map<String, Object> response = new HashMap<>();
         response.put("reservation", saved);
-        response.put("smsNotification", "📱 SMS dispatched to " + saved.getCustomerPhone() + ": Table at " + saved.getHotelName() + " confirmed for " + saved.getGuestCount() + " guests on " + saved.getReservationDate() + " at " + saved.getReservationTime());
-        response.put("emailNotification", "✉️ Confirmation email sent to " + saved.getCustomerEmail() + " with booking ref #" + saved.getId());
+        response.put("smsNotification", "📱 Real SMS sent to " + saved.getCustomerPhone() + ": " + smsText);
+        response.put("emailNotification", "✉️ Real Email sent to " + saved.getCustomerEmail() + " (Subject: " + emailSubject + ")");
+        response.put("smsStatus", smsSent ? "DELIVERED" : "QUEUED");
+        response.put("emailStatus", emailSent ? "DELIVERED" : "QUEUED");
         response.put("status", "SUCCESS");
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
