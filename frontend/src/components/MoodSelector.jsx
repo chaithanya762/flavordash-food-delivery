@@ -6,58 +6,58 @@ const MOODS = [
     id: 'Sad',
     emoji: '😔',
     name: 'Sad',
-    tagline: 'Comfort',
+    tagline: 'Warm Comfort',
     config: {
       mood: 'Sad',
       categories: ['Main Dishes', 'Sweets'],
       maxSpice: 2,
-      message: 'Feeling low? Warm comfort food to lift your spirits'
+      message: '🍲 Feeling low? Slow-cooked curries & warm desserts crafted to lift your spirits.'
     }
   },
   {
     id: 'Happy',
     emoji: '😄',
     name: 'Happy',
-    tagline: 'Treat',
+    tagline: 'Joyful Feast',
     config: {
       mood: 'Happy',
       categories: [],
-      message: 'Celebrate your good vibes with something special'
+      message: '✨ Celebrate your good vibes with rich dum biryanis and festive gravies!'
     }
   },
   {
     id: 'Lazy',
     emoji: '😴',
     name: 'Lazy',
-    tagline: 'Easy',
+    tagline: 'Effortless',
     config: {
       mood: 'Lazy',
       categories: ['Street Food', 'Breads'],
-      message: 'Low effort, max flavor — perfect for lazy days'
+      message: '⚡ Low effort, maximum flavor — hot street treats and freshly baked naan.'
     }
   },
   {
     id: 'Gym Mode',
     emoji: '💪',
     name: 'Gym Mode',
-    tagline: 'Protein',
+    tagline: 'Pure Protein',
     config: {
       mood: 'Gym Mode',
       categories: [],
       dietTag: 'High Protein',
-      message: 'Fuel your gains with protein-packed meals'
+      message: '🏋️ Fuel your gains with lean tandoori grills, paneer, and protein-rich lentils.'
     }
   },
   {
     id: 'Celebrating',
     emoji: '🥳',
     name: 'Celebrating',
-    tagline: 'Premium',
+    tagline: 'Royal Luxe',
     config: {
       mood: 'Celebrating',
       categories: [],
       minPrice: 300,
-      message: 'Go big! Treat yourself to the finest dishes'
+      message: '👑 Go grand! Indulge in artisanal royal specialties and luxury platters.'
     }
   },
   {
@@ -69,7 +69,7 @@ const MOODS = [
       mood: 'Stressed',
       categories: ['Main Dishes', 'Drinks', 'Sweets'],
       maxSpice: 2,
-      message: 'Warm soup-like comfort to melt your stress away'
+      message: '🍵 Smooth velvet Dal Makhani & soothing drinks to melt your stress away.'
     }
   }
 ];
@@ -83,13 +83,28 @@ const MoodSelector = ({ onMoodSelect, activeMood }) => {
     }
   };
 
+  const handleReset = () => {
+    onMoodSelect(null);
+  };
+
   const activeMoodObj = MOODS.find(m => m.id === activeMood);
 
   return (
-    <div className="mood-selector-container">
-      <div className="mood-header">
-        <h2>🧠 How are you feeling today?</h2>
-        <p>Let us recommend the perfect meal for your mood</p>
+    <div className="mood-selector-container glass-luxury-card">
+      <div className="mood-header-row">
+        <div className="mood-header">
+          <div className="section-eyebrow">
+            <span className="sparkle">✨</span> AI MOOD GASTRONOMY
+          </div>
+          <h2>How are you feeling today?</h2>
+          <p>Select your mood to discover curated culinary recommendations tailored to your state of mind</p>
+        </div>
+
+        {activeMood && (
+          <button className="mood-refresh-btn" onClick={handleReset} title="Reset mood filter">
+            <span className="refresh-icon">🔄</span> Reset Mood Filter
+          </button>
+        )}
       </div>
       
       <div className="mood-scroll-wrapper">
@@ -110,8 +125,9 @@ const MoodSelector = ({ onMoodSelect, activeMood }) => {
       </div>
 
       {activeMoodObj && (
-        <div className="mood-banner">
+        <div className="mood-banner slide-down">
           <p>{activeMoodObj.config.message}</p>
+          <button className="banner-clear-link" onClick={handleReset}>Clear Filter ✕</button>
         </div>
       )}
     </div>

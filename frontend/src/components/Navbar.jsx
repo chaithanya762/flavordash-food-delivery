@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import BackendStatusModal from './BackendStatusModal';
 import RewardsPanel from './RewardsPanel';
+import TableReservationModal from './TableReservationModal';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -11,6 +12,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [bump, setBump] = useState(false);
   const [backendModalOpen, setBackendModalOpen] = useState(false);
+  const [reservationModalOpen, setReservationModalOpen] = useState(false);
   
   const { cart, totalItems } = useCart() || { cart: [], totalItems: 0 };
   const { user, logout } = useAuth() || { user: null, logout: () => {} };
@@ -69,6 +71,7 @@ const Navbar = () => {
             <div className="nav-links">
               <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
               <Link to="/menu" className={`nav-link ${location.pathname === '/menu' ? 'active' : ''}`}>Menu</Link>
+              <button className="nav-link reserve-table-nav-btn" onClick={() => setReservationModalOpen(true)}>🍷 Reserve Table</button>
 
               {userRole === 'CUSTOMER' && user && (
                 <Link to="/orders" className={`nav-link ${location.pathname === '/orders' ? 'active' : ''}`}>Orders</Link>
@@ -141,6 +144,7 @@ const Navbar = () => {
         <div className="mobile-nav-links">
           <Link to="/" className="mobile-link" onClick={toggleMobileMenu}>🏠 Home</Link>
           <Link to="/menu" className="mobile-link" onClick={toggleMobileMenu}>🍽️ Menu</Link>
+          <button className="mobile-link reserve-table-btn" onClick={() => { setReservationModalOpen(true); toggleMobileMenu(); }}>🍷 Reserve Table</button>
 
           {(!user || userRole === 'CUSTOMER') && (
             <>
@@ -176,6 +180,11 @@ const Navbar = () => {
       <BackendStatusModal 
         isOpen={backendModalOpen} 
         onClose={() => setBackendModalOpen(false)} 
+      />
+
+      <TableReservationModal 
+        isOpen={reservationModalOpen}
+        onClose={() => setReservationModalOpen(false)}
       />
     </>
   );
