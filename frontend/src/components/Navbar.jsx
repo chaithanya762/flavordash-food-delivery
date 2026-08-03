@@ -46,11 +46,13 @@ const Navbar = () => {
           <Link to="/" className="nav-brand">
             <span className="nav-logo-icon">🍔</span>
             <span className="nav-logo-text">FlavorDash</span>
-            <span className={`role-badge-tag ${userRole.toLowerCase()}`}>
-              {userRole === 'CUSTOMER' && 'CUSTOMER'}
-              {userRole === 'HOTEL_MANAGER' && 'HOTEL ADMIN'}
-              {userRole === 'RIDER' && 'RIDER AGENT'}
-            </span>
+            {user && (
+              <span className={`role-badge-tag ${userRole.toLowerCase()}`}>
+                {userRole === 'CUSTOMER' && 'CUSTOMER'}
+                {userRole === 'HOTEL_MANAGER' && 'HOTEL ADMIN'}
+                {userRole === 'RIDER' && 'RIDER AGENT'}
+              </span>
+            )}
           </Link>
 
           {/* CENTER: LOCATION & DELIVERY STATUS INDICATOR */}
@@ -67,7 +69,7 @@ const Navbar = () => {
               <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
               <Link to="/menu" className={`nav-link ${location.pathname === '/menu' ? 'active' : ''}`}>Menu</Link>
 
-              {userRole === 'CUSTOMER' && (
+              {userRole === 'CUSTOMER' && user && (
                 <Link to="/orders" className={`nav-link ${location.pathname === '/orders' ? 'active' : ''}`}>Orders</Link>
               )}
 
@@ -85,7 +87,7 @@ const Navbar = () => {
             </div>
 
             {/* Shopping Cart */}
-            {userRole === 'CUSTOMER' && (
+            {(!user || userRole === 'CUSTOMER') && (
               <button 
                 className={`cart-btn-nav ${bump ? 'bump' : ''}`}
                 onClick={() => navigate('/cart')}
@@ -97,17 +99,23 @@ const Navbar = () => {
               </button>
             )}
 
+            {/* AUTH BUTTONS / USER PROFILE */}
             <div className="auth-buttons">
               {user ? (
                 <div className="user-profile">
-                  <span className="user-name">{user.name || 'User'}</span>
-                  <button onClick={logout} className="btn-logout">Logout</button>
+                  <div className="user-avatar-pill">
+                    <span className="avatar-initial">{user.name?.charAt(0) || 'U'}</span>
+                    <span className="user-name">{user.name?.split(' ')[0] || 'User'}</span>
+                  </div>
+                  <button onClick={logout} className="btn-logout" title="Sign Out">
+                    Sign Out
+                  </button>
                 </div>
               ) : (
-                <>
-                  <Link to="/login" className="btn btn-secondary btn-sm">Login</Link>
-                  <Link to="/register" className="btn btn-primary btn-sm">Register</Link>
-                </>
+                <div className="auth-nav-group">
+                  <Link to="/login" className="nav-btn-login">Sign In</Link>
+                  <Link to="/register" className="nav-btn-register">Register</Link>
+                </div>
               )}
             </div>
 
@@ -130,10 +138,10 @@ const Navbar = () => {
           <Link to="/" className="mobile-link" onClick={toggleMobileMenu}>🏠 Home</Link>
           <Link to="/menu" className="mobile-link" onClick={toggleMobileMenu}>🍽️ Menu</Link>
 
-          {userRole === 'CUSTOMER' && (
+          {(!user || userRole === 'CUSTOMER') && (
             <>
               <Link to="/cart" className="mobile-link" onClick={toggleMobileMenu}>🛒 Cart ({count})</Link>
-              <Link to="/orders" className="mobile-link" onClick={toggleMobileMenu}>📋 My Orders</Link>
+              {user && <Link to="/orders" className="mobile-link" onClick={toggleMobileMenu}>📋 My Orders</Link>}
             </>
           )}
 
@@ -150,12 +158,12 @@ const Navbar = () => {
           {user ? (
             <div className="mobile-user-section">
               <p className="user-greeting">Signed in as <strong>{user.name}</strong> ({userRole})</p>
-              <button onClick={() => { logout(); toggleMobileMenu(); }} className="btn btn-secondary w-full">Logout</button>
+              <button onClick={() => { logout(); toggleMobileMenu(); }} className="btn btn-secondary w-full">Sign Out</button>
             </div>
           ) : (
             <div className="mobile-auth-btns">
-              <Link to="/login" className="btn btn-secondary" onClick={toggleMobileMenu}>Login</Link>
-              <Link to="/register" className="btn btn-primary" onClick={toggleMobileMenu}>Register</Link>
+              <Link to="/login" className="nav-btn-login w-full text-center" onClick={toggleMobileMenu}>Sign In</Link>
+              <Link to="/register" className="nav-btn-register w-full text-center" onClick={toggleMobileMenu}>Register</Link>
             </div>
           )}
         </div>

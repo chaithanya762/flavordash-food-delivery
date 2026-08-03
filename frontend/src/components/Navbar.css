@@ -1,4 +1,4 @@
-/* Navbar.css - Pro-Level Sticky Top Bar */
+/* Navbar.css - Master Consistency Top Bar & Auth Buttons */
 
 .navbar {
   position: fixed;
@@ -161,31 +161,127 @@
   border-radius: 8px;
 }
 
+/* =========================================
+   AUTH BUTTONS - SLEEK & NEAT LUXURY DESIGN
+   ========================================= */
+.auth-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.auth-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-btn-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245, 233, 218, 0.05);
+  border: 1px solid rgba(245, 233, 218, 0.15);
+  color: #F5E9DA;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-btn-login:hover {
+  background: rgba(245, 233, 218, 0.14);
+  border-color: rgba(245, 233, 218, 0.3);
+  color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.nav-btn-register {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #FF9933 0%, #D4AF37 100%);
+  border: none;
+  color: #FFFFFF;
+  padding: 8px 20px;
+  border-radius: 12px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 153, 51, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-btn-register:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 153, 51, 0.55);
+}
+
+/* USER PROFILE AVATAR & LOGOUT */
 .user-profile {
   display: flex;
   align-items: center;
-  gap: var(--space-8, 8px);
+  gap: 12px;
+}
+
+.user-avatar-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245, 233, 218, 0.06);
+  border: 1px solid rgba(245, 233, 218, 0.12);
+  padding: 5px 12px 5px 6px;
+  border-radius: 99px;
+}
+
+.avatar-initial {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF9933, #D4AF37);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  box-shadow: 0 2px 8px rgba(255, 153, 51, 0.4);
 }
 
 .user-name {
   font-size: 0.88rem;
   color: var(--text-primary, #F5E9DA);
   font-weight: 600;
+  font-family: var(--font-body, 'Inter', sans-serif);
 }
 
 .btn-logout {
-  background: rgba(245, 233, 218, 0.05);
-  border: 1px solid var(--border-color, rgba(245, 233, 218, 0.08));
-  color: var(--text-secondary, #94A3B8);
-  padding: 4px 10px;
-  border-radius: var(--radius-sm, 8px);
-  font-size: 0.78rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #EF4444;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: var(--font-body, 'Inter', sans-serif);
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.btn-sm {
-  padding: 6px 14px;
-  font-size: 0.85rem;
+.btn-logout:hover {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: #EF4444;
+  color: #FFFFFF;
+  transform: translateY(-1px);
 }
 
 .mobile-menu-btn {
