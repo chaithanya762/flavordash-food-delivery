@@ -17,8 +17,14 @@ export default function DriverDashboard() {
   const [cancelReason, setCancelReason] = useState('Vehicle Mechanical Failure / Flat Tyre');
   const [customReason, setCustomReason] = useState('');
 
-  // STRICT FILTERING: Only show active ready/dispatched/cooking/delivered orders for riders!
-  const activeRiderOrders = orders.filter(o => ['READY', 'DISPATCHED', 'COOKING', 'DELIVERED', 'RECEIVED'].includes(o.status));
+  // RIDER DELIVERY CREDITS STATE (+1 per completed delivery)
+  const [riderCredits, setRiderCredits] = useState(() => {
+    const saved = localStorage.getItem('rider_credits_count');
+    return saved ? parseInt(saved, 10) : 12;
+  });
+
+  // CLEANUP RULE: Filter out DELIVERED and CANCELLED orders from active dispatch queue (only keep pending active tasks)
+  const activeRiderOrders = orders.filter(o => ['READY', 'DISPATCHED', 'COOKING', 'RECEIVED'].includes(o.status));
 
   // Active targeted delivery order (No arbitrary fallback)
   const targetOrder = orders.find(o => String(o.id) === String(selectedOrderId)) || activeRiderOrders[0] || null;
@@ -31,8 +37,22 @@ export default function DriverDashboard() {
   }, []);
 
   const handleStatusChange = (orderId, newStatus) => {
-    updateOrderStatus(orderId, newStatus, riderName);
-    showToast(`Order #${orderId} status updated to ${newStatus}! 🛵`, 'success');
+    if (newStatus === 'DELIVERED') {
+      updateOrderStatus(orderId, 'DELIVERED', riderName);
+      
+      // Increment rider credit by +1 on completed delivery
+      setRiderCredits(prev => {
+        const nextCount = prev + 1;
+        localStorage.setItem('rider_credits_count', String(nextCount));
+        return nextCount;
+      });
+
+      showToast(`🎉 Delivery Completed! +1 Credit added to Rider Profile (Total Credits: ${riderCredits + 1}) 🏆`, 'success');
+      setSelectedOrderId(null);
+    } else {
+      updateOrderStatus(orderId, newStatus, riderName);
+      showToast(`Order #${orderId} status updated to ${newStatus}! 🛵`, 'success');
+    }
   };
 
   const handleConfirmRiderCancel = () => {
@@ -45,6 +65,7 @@ export default function DriverDashboard() {
     setCancelModalOrder(null);
     setCancelReason('Vehicle Mechanical Failure / Flat Tyre');
     setCustomReason('');
+    setSelectedOrderId(null);
   };
 
   return (
@@ -52,27 +73,34 @@ export default function DriverDashboard() {
       <div className="driver-header">
         <div>
           <div className="driver-profile-pill">
-            <span className="live-dot"></span> RIDER: {riderName.toUpperCase()}
+            <span className="live-dot"></span> RIDER: {riderName.toUpperCase()} | 🏆 CREDITS: {riderCredits}
           </div>
           <h1 className="page-title gradient-text">Delivery Hero Dashboard 🛵</h1>
-          <p className="page-subtitle">Real-time GPS route navigation and order delivery portal</p>
+          <p className="page-subtitle">Real-time GPS route navigation & order dispatch portal</p>
         </div>
 
-        <div className="driver-duty-toggle glass-card">
-          <span className="duty-label">DUTY STATUS</span>
-          <button 
-            className={`btn-duty ${driverStatus === 'ONLINE' ? 'online' : 'offline'}`}
-            onClick={() => setDriverStatus(driverStatus === 'ONLINE' ? 'OFFLINE' : 'ONLINE')}
-          >
-            {driverStatus === 'ONLINE' ? '🟢 On Duty (Receiving Dispatch Tasks)' : '🔴 Off Duty'}
-          </button>
+        <div className="flex gap-3 align-center flex-wrap">
+          <div className="driver-credits-box glass-card px-4 py-2 text-center">
+            <span className="text-xs text-secondary font-bold block">TOTAL CREDITS</span>
+            <span className="text-xl font-bold gradient-text">🏆 {riderCredits}</span>
+          </div>
+
+          <div className="driver-duty-toggle glass-card">
+            <span className="duty-label">DUTY STATUS</span>
+            <button 
+              className={`btn-duty ${driverStatus === 'ONLINE' ? 'online' : 'offline'}`}
+              onClick={() => setDriverStatus(driverStatus === 'ONLINE' ? 'OFFLINE' : 'ONLINE')}
+            >
+              {driverStatus === 'ONLINE' ? '🟢 On Duty (Receiving Tasks)' : '🔴 Off Duty'}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* DISPATCH ORDER QUEUE CAROUSEL / SELECTOR */}
       {activeRiderOrders.length > 0 && (
         <div className="rider-dispatch-queue mb-6">
-          <h2 className="queue-title">📦 Available Dispatch Queue ({activeRiderOrders.length} Orders)</h2>
+          <h2 className="queue-title">📦 Active Pending Dispatch Queue ({activeRiderOrders.length} Tasks)</h2>
           <div className="dispatch-chips-row">
             {activeRiderOrders.map(o => (
               <button
@@ -125,7 +153,7 @@ export default function DriverDashboard() {
           <div className="delivery-info-card glass-card">
             <div className="delivery-card-header">
               <span className="del-id">Order #{targetOrder.id}</span>
-              <span className="del-earnings">Fee: <strong>₹85</strong></span>
+              <span className="del-earnings">Reward: <strong>+1 Credit (₹85)</strong></span>
             </div>
 
             <div className="delivery-route-details">
@@ -166,40 +194,25 @@ export default function DriverDashboard() {
               )}
               {targetOrder.status === 'DISPATCHED' && (
                 <button className="btn-del-action complete" onClick={() => handleStatusChange(targetOrder.id, 'DELIVERED')}>
-                  ✅ Mark Order Delivered & Collect Payment
+                  ✅ Complete Delivery & Earn +1 Credit
                 </button>
-              )}
-              {targetOrder.status === 'DELIVERED' && (
-                <div className="delivery-complete-msg">
-                  🎉 Delivery Completed! Earning ₹85 Added to Rider Wallet.
-                </div>
               )}
 
               {/* RIDER EMERGENCY CANCEL BUTTON */}
-              {targetOrder.status !== 'CANCELLED' && targetOrder.status !== 'DELIVERED' && (
-                <button 
-                  className="btn-rider-cancel"
-                  onClick={() => setCancelModalOrder(targetOrder)}
-                >
-                  🚫 Emergency Cancel / Reject Task
-                </button>
-              )}
+              <button 
+                className="btn-rider-cancel"
+                onClick={() => setCancelModalOrder(targetOrder)}
+              >
+                🚫 Emergency Cancel / Reject Task
+              </button>
             </div>
-
-            {targetOrder.status === 'CANCELLED' && (
-              <div className="rider-cancelled-note mt-3 p-3 bg-red-900-20 rounded border-red">
-                <span className="text-red font-bold">🚫 Cancelled by {targetOrder.cancelledBy}</span>
-                <p className="text-xs text-secondary">Reason: "{targetOrder.cancellationReason}"</p>
-                <p className="text-xs text-emerald mt-1">💰 Full Refund Issued to Customer (₹{targetOrder.refundAmount})</p>
-              </div>
-            )}
           </div>
         </div>
       ) : (
         <div className="empty-rider-state glass-card text-center p-8">
           <span style={{ fontSize: '3rem', display: 'block', marginBottom: '12px' }}>🛵</span>
-          <h3>No active orders in dispatch queue</h3>
-          <p className="text-secondary mt-2">Stay online! Customer orders will appear here as soon as kitchens prepare them.</p>
+          <h3>No active tasks in dispatch queue</h3>
+          <p className="text-secondary mt-2">Delivered and cancelled tasks are automatically archived. Stay online for incoming orders!</p>
         </div>
       )}
 

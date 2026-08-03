@@ -17,10 +17,11 @@ export default function KitchenDashboard() {
   const [cancelReason, setCancelReason] = useState('Ingredients Exhausted / Item Out of Stock');
   const [customReason, setCustomReason] = useState('');
 
-  // Filter orders for kitchen desk
-  const filteredOrders = orders.filter(o => {
-    if (restaurantFilter === 'ALL') return true;
-    return o.restaurantName?.toLowerCase() === restaurantFilter.toLowerCase();
+  // CLEANUP RULE: Filter orders for kitchen desk to ONLY show active pending orders (Hide DELIVERED and CANCELLED)
+  const activeKitchenOrders = orders.filter(o => {
+    const isCurrentRes = restaurantFilter === 'ALL' || o.restaurantName?.toLowerCase() === restaurantFilter.toLowerCase();
+    const isPendingActive = !['DELIVERED', 'CANCELLED'].includes(o.status);
+    return isCurrentRes && isPendingActive;
   });
 
   const handleStatusChange = (orderId, newStatus) => {
@@ -33,7 +34,7 @@ export default function KitchenDashboard() {
     const finalReason = cancelReason === 'Other' ? customReason : cancelReason;
 
     cancelOrder(cancelModalOrder.id, 'HOTEL_MANAGER', finalReason);
-    showToast(`Order #${cancelModalOrder.id} cancelled. 💰 100% Full Refund issued to customer!`, 'info');
+    showToast(`Order #${cancelModalOrder.id} cancelled & removed from active kitchen. 💰 100% Full Refund issued!`, 'info');
     
     setCancelModalOrder(null);
     setCancelReason('Ingredients Exhausted / Item Out of Stock');
@@ -58,7 +59,7 @@ export default function KitchenDashboard() {
             <span className="live-dot"></span> KITCHEN DESK: {currentRestaurant.toUpperCase()}
           </div>
           <h1 className="page-title gradient-text">Chef Kitchen & Inventory Portal 👨‍🍳</h1>
-          <p className="page-subtitle">Manage live customer orders, kitchen cooking pipelines, and menu availability</p>
+          <p className="page-subtitle">Manage active pending customer orders and kitchen stock</p>
         </div>
 
         <div className="kitchen-analytics glass-card">
@@ -67,8 +68,8 @@ export default function KitchenDashboard() {
             <span className="stat-val gradient-text">{currentRestaurant}</span>
           </div>
           <div className="analytic-stat">
-            <span className="stat-label">ACTIVE ORDERS</span>
-            <span className="stat-val text-amber">{filteredOrders.length}</span>
+            <span className="stat-label">ACTIVE KITCHEN ORDERS</span>
+            <span className="stat-val text-amber">{activeKitchenOrders.length}</span>
           </div>
         </div>
       </div>
@@ -91,19 +92,19 @@ export default function KitchenDashboard() {
 
       {/* Main Grid: Orders Pipeline vs Stock Control */}
       <div className="kitchen-layout">
-        {/* Incoming Orders Pipeline */}
+        {/* Incoming Active Orders Pipeline */}
         <div className="kitchen-orders-section">
-          <h2>Active Kitchen Pipeline ({filteredOrders.length} Orders)</h2>
+          <h2>Active Kitchen Pipeline ({activeKitchenOrders.length} Orders)</h2>
 
-          {filteredOrders.length === 0 ? (
+          {activeKitchenOrders.length === 0 ? (
             <div className="empty-kitchen-state glass-card p-6 text-center">
-              <span>👨‍🍳</span>
-              <h3>No active orders for this kitchen</h3>
-              <p>Waiting for incoming customer orders...</p>
+              <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '8px' }}>👨‍🍳</span>
+              <h3>No pending active orders for this kitchen</h3>
+              <p className="text-secondary mt-1">Delivered and cancelled orders are automatically archived.</p>
             </div>
           ) : (
             <div className="kitchen-orders-list">
-              {filteredOrders.map(order => (
+              {activeKitchenOrders.map(order => (
                 <div key={order.id} className={`kitchen-order-card glass-card ${order.status.toLowerCase()}`}>
                   <div className="k-card-header">
                     <div>
@@ -156,29 +157,16 @@ export default function KitchenDashboard() {
                       {order.status === 'DISPATCHED' && (
                         <span className="dispatched-label">Rider En Route 🚀</span>
                       )}
-                      {order.status === 'DELIVERED' && (
-                        <span className="delivered-label">✅ Order Delivered</span>
-                      )}
 
                       {/* HOTEL MANAGER REJECT/CANCEL BUTTON */}
-                      {order.status !== 'CANCELLED' && order.status !== 'DELIVERED' && (
-                        <button 
-                          className="btn-k-cancel"
-                          onClick={() => setCancelModalOrder(order)}
-                        >
-                          🚫 Cancel Order
-                        </button>
-                      )}
+                      <button 
+                        className="btn-k-cancel"
+                        onClick={() => setCancelModalOrder(order)}
+                      >
+                        🚫 Cancel Order
+                      </button>
                     </div>
                   </div>
-
-                  {order.status === 'CANCELLED' && (
-                    <div className="k-cancelled-note mt-3 p-3 bg-red-900-20 rounded border-red">
-                      <span className="text-red font-bold">🚫 Cancelled by {order.cancelledBy}</span>
-                      <p className="text-xs text-secondary">Reason: "{order.cancellationReason}"</p>
-                      <p className="text-xs text-emerald mt-1">💰 Full Refund Issued (₹{order.refundAmount})</p>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
@@ -215,7 +203,7 @@ export default function KitchenDashboard() {
           <div className="modal-card-3d glass-god-card p-6">
             <h3 className="gradient-text mb-2">🚫 Cancel Order #{cancelModalOrder.id} (Hotel Manager)</h3>
             <p className="text-secondary text-sm mb-4">
-              Cancelling this order will automatically process a <strong className="text-emerald">100% Full Refund (₹{cancelModalOrder.totalAmount})</strong> for the customer.
+              Cancelling this order will automatically process a <strong className="text-emerald">100% Full Refund (₹{cancelModalOrder.totalAmount})</strong> for the customer and remove it from active kitchen.
             </p>
 
             <div className="form-group mb-4">
