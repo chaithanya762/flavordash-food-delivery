@@ -1,0 +1,180 @@
+.health-dashboard {
+  background: rgba(18, 14, 24, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 153, 51, 0.15); /* Saffron accent border */
+  border-radius: 16px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 80px;
+  margin-bottom: 24px;
+  animation: slideDownFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  color: #fff;
+  font-family: var(--font-body, 'Inter', sans-serif);
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.health-stats {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+.cal-ring-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cal-ring {
+  transform: rotate(-90deg);
+}
+
+.cal-ring-bg {
+  fill: transparent;
+  stroke: rgba(255, 255, 255, 0.1);
+}
+
+.cal-ring-progress {
+  fill: transparent;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
+}
+
+.cal-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.cal-value {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.cal-unit {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.protein-stat {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.stat-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #D4AF37; /* Gold accent */
+}
+
+.health-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.health-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.health-filter-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: inherit;
+}
+
+.health-filter-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Active states for chips with specific glows */
+.health-filter-chip.active {
+  color: #fff;
+}
+
+.health-filter-chip.active.green {
+  background: rgba(74, 222, 128, 0.15);
+  border-color: #4ADE80;
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.3);
+}
+
+.health-filter-chip.active.blue {
+  background: rgba(96, 165, 250, 0.15);
+  border-color: #60A5FA;
+  box-shadow: 0 0 12px rgba(96, 165, 250, 0.3);
+}
+
+.health-filter-chip.active.purple {
+  background: rgba(192, 132, 252, 0.15);
+  border-color: #C084FC;
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.3);
+}
+
+.health-filter-chip.active.emerald {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: #10B981;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+.health-filter-chip.active.amber {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: #F59E0B;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+}
+
+.chip-icon {
+  font-size: 1.125rem;
+}
+
+@media (max-width: 768px) {
+  .health-dashboard {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .health-stats {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .health-filters {
+    width: 100%;
+    padding-bottom: 4px; /* for any scrollbar space if needed */
+  }
+}

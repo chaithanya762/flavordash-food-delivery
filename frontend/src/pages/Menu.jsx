@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import FoodCard3D from '../components/FoodCard3D';
 import FoodInspectorModal from '../components/FoodInspectorModal';
+import SurpriseMe from '../components/SurpriseMe';
+import HealthDashboard from '../components/HealthDashboard';
 import { ALL_DISHES } from '../data/dishes';
 import './Menu.css';
 
@@ -23,8 +25,15 @@ export default function Menu() {
   const [vegFilter, setVegFilter] = useState('ALL');
   const [dietFilter, setDietFilter] = useState('ALL');
   const [inspectedDish, setInspectedDish] = useState(null);
+  const [healthFilter, setHealthFilter] = useState(null);
+  const [activeHealthFilterName, setActiveHealthFilterName] = useState(null);
 
-  const filteredProducts = ALL_DISHES.filter(product => {
+  const handleHealthFilter = (config) => {
+    setHealthFilter(config);
+    setActiveHealthFilterName(config ? config.filter : null);
+  };
+
+  let filteredProducts = ALL_DISHES.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase()) ||
                           product.description?.toLowerCase().includes(search.toLowerCase()) ||
                           product.restaurantName?.toLowerCase().includes(search.toLowerCase());
@@ -42,6 +51,28 @@ export default function Menu() {
     return matchesSearch && matchesCuisine && matchesVeg && matchesDiet;
   });
 
+  // Apply health filters on top
+  if (healthFilter) {
+    filteredProducts = filteredProducts.filter(product => {
+      if (healthFilter.dietTags && healthFilter.dietTags.length > 0) {
+        if (!healthFilter.dietTags.includes(product.dietTag)) return false;
+      }
+      if (healthFilter.maxCalories) {
+        const cal = parseInt(product.calories) || 999;
+        if (cal > healthFilter.maxCalories) return false;
+      }
+      if (healthFilter.maxSpice && product.spiceLevel > healthFilter.maxSpice) return false;
+      if (healthFilter.excludeCategories && healthFilter.excludeCategories.includes(product.category)) return false;
+      if (healthFilter.preferVeg && !product.isVeg) return false;
+      return true;
+    });
+
+    // Apply sorting
+    if (healthFilter.sortBy === 'protein') {
+      filteredProducts.sort((a, b) => (parseInt(b.protein) || 0) - (parseInt(a.protein) || 0));
+    }
+  }
+
   return (
     <div className="menu-3d-page container fade-in">
       <div className="menu-header-3d">
@@ -51,6 +82,12 @@ export default function Menu() {
 
         <h1 className="page-title-3d gradient-text">Explore Regional Delicacies</h1>
         <p className="page-subtitle-3d">Authentic Indian curries, rich dum biryanis, hot tandoori breads, crispy dosas, and royal sweets</p>
+
+        {/* 💪 SMART HEALTH & DIET DASHBOARD */}
+        <HealthDashboard 
+          onHealthFilter={handleHealthFilter}
+          activeFilter={activeHealthFilterName}
+        />
 
         {/* Search Bar & Veg Filters Row */}
         <div className="menu-controls-row">
@@ -134,6 +171,7 @@ export default function Menu() {
       {/* Product Count Indicator */}
       <div className="results-count-3d">
         Showing <strong>{filteredProducts.length}</strong> signature delicacies
+        {healthFilter && <span className="health-filter-active"> • {healthFilter.filter} mode active</span>}
       </div>
 
       {/* Product Grid */}
@@ -142,7 +180,7 @@ export default function Menu() {
           <span className="empty-icon">🔍</span>
           <h3>No delicacies found matching your criteria</h3>
           <p>Try resetting search or switching cuisine/dietary filters.</p>
-          <button className="btn btn-primary" onClick={() => { setSearch(''); setSelectedCuisine('ALL'); setVegFilter('ALL'); setDietFilter('ALL'); }}>
+          <button className="btn btn-primary" onClick={() => { setSearch(''); setSelectedCuisine('ALL'); setVegFilter('ALL'); setDietFilter('ALL'); setHealthFilter(null); setActiveHealthFilterName(null); }}>
             Reset All Filters
           </button>
         </div>
@@ -157,6 +195,9 @@ export default function Menu() {
           ))}
         </div>
       )}
+
+      {/* 🎁 SURPRISE ME BUTTON */}
+      <SurpriseMe dishes={ALL_DISHES} />
 
       {/* INSPECTOR MODAL */}
       {inspectedDish && (

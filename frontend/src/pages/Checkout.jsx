@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useOrders } from '../context/OrderContext';
 import { useToast } from '../context/ToastContext';
+import { useGamification } from '../context/GamificationContext';
 import './Checkout.css';
 
 export default function Checkout() {
@@ -11,6 +12,7 @@ export default function Checkout() {
   const { cart, totalPrice, clearCart } = useCart() || { cart: [], totalPrice: 0 };
   const { createOrder } = useOrders() || { createOrder: () => {} };
   const { showToast } = useToast() || { showToast: () => {} };
+  const { recordOrder } = useGamification() || { recordOrder: () => {} };
   const navigate = useNavigate();
 
   const cartList = cart || [];
@@ -69,10 +71,15 @@ export default function Checkout() {
       });
       
       showToast('Order placed successfully! 🎉 Sent to Kitchen & Rider Dispatch', 'success');
+      
+      // 🎮 Award gamification coins & update streak
+      try { recordOrder(); } catch(e) {}
+      
       clearCart();
       navigate('/orders');
     } catch (error) {
       showToast('Order placed! Redirecting to tracking... 🎉', 'success');
+      try { recordOrder(); } catch(e) {}
       clearCart();
       navigate('/orders');
     } finally {

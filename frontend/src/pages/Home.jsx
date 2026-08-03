@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ALL_DISHES } from '../data/dishes';
 import FoodCard3D from '../components/FoodCard3D';
 import FoodInspectorModal from '../components/FoodInspectorModal';
+import MoodSelector from '../components/MoodSelector';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import './Home.css';
@@ -16,14 +17,35 @@ export default function Home() {
   const [selectedHeroIndex, setSelectedHeroIndex] = useState(0);
   const [inspectedDish, setInspectedDish] = useState(null);
   const [activeCategory, setActiveCategory] = useState('All');
+  const [activeMood, setActiveMood] = useState(null);
+  const [moodConfig, setMoodConfig] = useState(null);
 
   const featuredDish = heroDishes[selectedHeroIndex] || heroDishes[0];
 
   const categories = ['All', 'Biryani', 'North Indian', 'South Indian', 'Starters', 'Desserts', 'Street Food'];
 
-  const filteredDishes = activeCategory === 'All' 
+  // Apply mood-based filtering
+  const handleMoodSelect = (config) => {
+    setMoodConfig(config);
+    setActiveMood(config ? config.mood : null);
+  };
+
+  let filteredDishes = activeCategory === 'All' 
     ? ALL_DISHES 
     : ALL_DISHES.filter(d => d.category === activeCategory);
+
+  // Apply mood filters on top of category filter
+  if (moodConfig) {
+    filteredDishes = filteredDishes.filter(d => {
+      if (moodConfig.categories && moodConfig.categories.length > 0) {
+        if (!moodConfig.categories.includes(d.category)) return false;
+      }
+      if (moodConfig.dietTag && d.dietTag !== moodConfig.dietTag) return false;
+      if (moodConfig.maxSpice && d.spiceLevel > moodConfig.maxSpice) return false;
+      if (moodConfig.minPrice && d.price < moodConfig.minPrice) return false;
+      return true;
+    });
+  }
 
   const handleOrderHero = () => {
     addToCart(featuredDish);
@@ -143,11 +165,25 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 🧠 MOOD-BASED FOOD RECOMMENDATIONS */}
+      <section className="mood-section container">
+        <MoodSelector 
+          onMoodSelect={handleMoodSelect}
+          activeMood={activeMood}
+        />
+      </section>
+
       {/* DISCOVERY SECTION */}
       <section className="menu-discovery-section container">
         <div className="section-header-3d">
-          <h2 className="gradient-text heading-lg">Curated Culinary Collections</h2>
-          <p className="text-secondary">Discover hand-crafted regional specialties, rich gravies, and authentic sweets</p>
+          <h2 className="gradient-text heading-lg">
+            {moodConfig ? `${moodConfig.message}` : 'Curated Culinary Collections'}
+          </h2>
+          <p className="text-secondary">
+            {moodConfig 
+              ? `Showing ${filteredDishes.length} dishes matched to your mood` 
+              : 'Discover hand-crafted regional specialties, rich gravies, and authentic sweets'}
+          </p>
 
           <div className="category-pills-bar">
             {categories.map((cat) => (

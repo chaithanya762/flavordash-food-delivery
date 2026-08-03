@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import BackendStatusModal from './BackendStatusModal';
+import RewardsPanel from './RewardsPanel';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -98,6 +99,9 @@ const Navbar = () => {
                 {count > 0 && <span className="cart-badge-count">{count}</span>}
               </button>
             )}
+
+            {/* 🎮 GAMIFICATION REWARDS BADGE */}
+            <RewardsPanel />
 
             {/* AUTH BUTTONS / USER PROFILE */}
             <div className="auth-buttons">
