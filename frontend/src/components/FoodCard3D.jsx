@@ -126,7 +126,11 @@ export default function FoodCard3D({ dish, onInspect }) {
               <button 
                 type="button"
                 className="btn-inspect-3d"
-                onClick={handleInspectClick}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  handleInspectClick(e);
+                }}
                 title="View Chef's Plating & Ingredients"
               >
                 🔍 Details

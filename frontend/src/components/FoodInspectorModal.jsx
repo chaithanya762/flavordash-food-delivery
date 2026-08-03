@@ -20,11 +20,17 @@ export default function FoodInspectorModal({ dish, onClose }) {
       addToCart(dish);
     }
     showToast(`Added ${quantity}x ${dish.name} to your dining order 🍽️`, 'success');
-    onClose();
+  };
+
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      e.stopPropagation();
+      onClose();
+    }
   };
 
   return (
-    <div className="inspector-backdrop fade-in" onClick={onClose}>
+    <div className="inspector-backdrop fade-in" onClick={handleBackdropClick}>
       <div className="inspector-modal-card glass-god-card" onClick={(e) => e.stopPropagation()}>
         <button className="inspector-close-btn" onClick={onClose}>✕</button>
 
