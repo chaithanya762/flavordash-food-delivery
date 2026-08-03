@@ -131,9 +131,9 @@ export default function FoodCard3D({ dish, onInspect }) {
                   e.preventDefault();
                   handleInspectClick(e);
                 }}
-                title="View Chef's Plating & Ingredients"
+                title="View Dish Details, Ingredients & Customizations"
               >
-                🔍 Details
+                Details <span className="arrow-icon">→</span>
               </button>
 
               {/* MORPHING BUTTON: If item is in cart, morph into Quantity Stepper! */}

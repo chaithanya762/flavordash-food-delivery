@@ -4,20 +4,27 @@ import { useToast } from '../context/ToastContext';
 import './FoodInspectorModal.css';
 
 export default function FoodInspectorModal({ dish, onClose }) {
-  const [activeTab, setActiveTab] = useState('plating'); // 'plating' | 'nutrition' | 'recipe'
-  const [steamActive, setSteamActive] = useState(true);
+  const [selectedSpice, setSelectedSpice] = useState(dish.spiceLevel || 3);
+  const [selectedAddon, setSelectedAddon] = useState('Standard');
   const [quantity, setQuantity] = useState(1);
+  const [steamActive, setSteamActive] = useState(true);
 
-  const { addToCart } = useCart() || { addToCart: () => {} };
+  const { addToCart, cart } = useCart() || { addToCart: () => {}, cart: [] };
   const { showToast } = useToast() || { showToast: () => {} };
 
   if (!dish) return null;
 
+  const totalCartCount = cart ? cart.reduce((sum, i) => sum + i.quantity, 0) : 0;
+
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
-      addToCart(dish);
+      addToCart({
+        ...dish,
+        customSpice: selectedSpice,
+        customAddon: selectedAddon
+      });
     }
-    showToast(`Added ${quantity}x ${dish.name} to your order 🍽️`, 'success');
+    showToast(`Added ${quantity}x ${dish.name} (${selectedAddon}) to order 🍽️`, 'success');
   };
 
   const handleBackdropClick = (e) => {
@@ -27,249 +34,212 @@ export default function FoodInspectorModal({ dish, onClose }) {
     }
   };
 
-  // Derive dynamic ingredients based on dish category
-  const getIngredientPins = () => {
+  // Ingredient list based on dish
+  const getIngredients = () => {
     if (dish.category === 'Rice & Biryani') {
-      return [
-        { icon: '✨', label: 'Kashmiri Saffron' },
-        { icon: '🌿', label: 'Aromatic Basmati' },
-        { icon: '🧈', label: 'Desi Ghee' }
-      ];
+      return ['Kashmiri Saffron', 'Long-Grain Basmati', 'Desi Ghee', 'Golden Shallots', 'Star Anise', 'Cardamom'];
     }
     if (dish.category === 'Sweets' || dish.category === 'Drinks') {
+      return ['Farm-Fresh Cream', 'Green Cardamom', 'Slivered Pistachios', 'Pure Khoya', 'Rose Water', 'Kesar'];
+    }
+    if (dish.category === 'Breads') {
+      return ['Whole Wheat Flour', 'Desi Ghee', 'Minced Garlic', 'Fresh Coriander', 'Yellow Butter'];
+    }
+    return ['Hand-Ground Spices', 'Tomato Cashew Reduction', 'Churned Butter', 'Fenugreek Leaves', 'Charcoal Smoke'];
+  };
+
+  // Recommendations
+  const getPairingRecommendations = () => {
+    if (dish.category === 'Main Dishes') {
       return [
-        { icon: '🥛', label: 'Fresh Cream' },
-        { icon: '🌱', label: 'Green Cardamom' },
-        { icon: '🌰', label: 'Slivered Pistachios' }
+        { name: 'Garlic Butter Naan', price: 79, icon: '🫓' },
+        { name: 'Desi Ghee Jeera Rice', price: 179, icon: '🍛' }
+      ];
+    }
+    if (dish.category === 'Rice & Biryani') {
+      return [
+        { name: 'Punjabi Sweet Malai Lassi', price: 129, icon: '🥤' },
+        { name: 'Royal Shahi Gulab Jamun', price: 159, icon: '🍬' }
       ];
     }
     return [
-      { icon: '🌿', label: 'Hand-Ground Spices' },
-      { icon: '✨', label: 'Rich Gravy Base' },
-      { icon: '🧈', label: 'Pure Yellow Butter' }
+      { name: 'Royal Butter Chicken', price: 389, icon: '🥘' },
+      { name: 'Kesar Pista Rasmalai', price: 199, icon: '🍮' }
     ];
   };
 
-  const pins = getIngredientPins();
+  const ingredients = getIngredients();
+  const pairings = getPairingRecommendations();
 
   return (
     <div className="inspector-backdrop fade-in" onClick={handleBackdropClick}>
-      <div className="inspector-modal-card glass-luxury-card scale-up" onClick={(e) => e.stopPropagation()}>
-        {/* Close Button */}
-        <button className="inspector-close-btn" onClick={onClose} title="Close Inspector Modal">✕</button>
+      <div className="inspector-modal-card glass-luxury-card slide-up-page" onClick={(e) => e.stopPropagation()}>
+        
+        {/* STICKY TOP BAR: BACK BUTTON + CART STATUS + CLOSE */}
+        <header className="details-sticky-topbar">
+          <button type="button" className="btn-back-details" onClick={onClose}>
+            ← Back to Menu
+          </button>
 
-        {/* TOP TAB NAVIGATION BAR */}
-        <div className="inspector-nav-tabs">
-          <button 
-            className={`tab-btn ${activeTab === 'plating' ? 'active' : ''}`}
-            onClick={() => setActiveTab('plating')}
-          >
-            🍽️ Plating & Flavor Profile
-          </button>
-          <button 
-            className={`tab-btn ${activeTab === 'nutrition' ? 'active' : ''}`}
-            onClick={() => setActiveTab('nutrition')}
-          >
-            📊 Macro Nutrition & Energy
-          </button>
-          <button 
-            className={`tab-btn ${activeTab === 'recipe' ? 'active' : ''}`}
-            onClick={() => setActiveTab('recipe')}
-          >
-            👨‍🍳 Chef's Recipe Notes
-          </button>
-        </div>
-
-        <div className="inspector-grid">
-          {/* LEFT: CLEAN HIGH-RES ARTWORK DISPLAY */}
-          <div className="inspector-clean-stage">
-            <div className="stage-controls-top">
-              <span className="ar-live-pill">
-                ✨ Signature Presentation
+          <div className="topbar-right-actions">
+            {totalCartCount > 0 && (
+              <span className="cart-pill-topbar">
+                🛒 Cart ({totalCartCount})
               </span>
+            )}
+            <button type="button" className="details-close-icon" onClick={onClose} title="Close">
+              ✕
+            </button>
+          </div>
+        </header>
 
-              <button 
-                className={`btn-steam-toggle ${steamActive ? 'active' : ''}`}
-                onClick={() => setSteamActive(!steamActive)}
-              >
-                ☁️ Steam {steamActive ? 'ON' : 'OFF'}
-              </button>
-            </div>
-
+        <div className="details-scrollable-body">
+          {/* TOP SECTION: LARGE HERO IMAGE STAGE */}
+          <div className="details-hero-stage">
             {/* Steam Overlay */}
             {steamActive && dish.steam !== false && (
-              <div className="inspector-steam-overlay">
+              <div className="details-steam-overlay">
                 <span className="steam-cloud c1">☁️</span>
                 <span className="steam-cloud c2">☁️</span>
                 <span className="steam-cloud c3">☁️</span>
               </div>
             )}
 
-            {/* Plated Dish High-Res Image */}
-            <div className="inspector-food-wrapper">
-              <img 
-                src={dish.imageUrl} 
-                alt={dish.name} 
-                className="inspector-food-img"
-              />
+            <button 
+              type="button" 
+              className={`btn-steam-overlay-toggle ${steamActive ? 'active' : ''}`}
+              onClick={() => setSteamActive(!steamActive)}
+            >
+              ☁️ Steam {steamActive ? 'ON' : 'OFF'}
+            </button>
 
-              {/* Dynamic Culinary Ingredient Pins */}
-              <div className="ingredient-pin pin-1">
-                <span className="pin-dot"></span>
-                <span className="pin-label">{pins[0].icon} {pins[0].label}</span>
-              </div>
+            <img 
+              src={dish.imageUrl} 
+              alt={dish.name} 
+              className="details-hero-img"
+            />
 
-              <div className="ingredient-pin pin-2">
-                <span className="pin-dot"></span>
-                <span className="pin-label">{pins[1].icon} {pins[1].label}</span>
-              </div>
-
-              <div className="ingredient-pin pin-3">
-                <span className="pin-dot"></span>
-                <span className="pin-label">{pins[2].icon} {pins[2].label}</span>
-              </div>
+            <div className="hero-badge-overlay">
+              <span className={`diet-tag-pill ${dish.isVeg ? 'veg' : 'nonveg'}`}>
+                {dish.isVeg ? '🟢 Veg' : '🔴 Non-Veg'}
+              </span>
+              <span className="rating-tag-pill">⭐ {dish.rating || '4.9'}</span>
+              <span className="prep-tag-pill">⏱️ {dish.prepTime || '20 min'}</span>
             </div>
-
-            {/* Contact Shadow */}
-            <div className="inspector-contact-shadow"></div>
           </div>
 
-          {/* RIGHT: DYNAMIC TAB CONTENT */}
-          <div className="inspector-details-stage">
-            <div className="inspector-meta-row">
-              <span className="res-badge">🏪 {dish.restaurantName}</span>
-              <span className="category-badge">🏷️ {dish.category}</span>
-              <span className="rating-badge">⭐ {dish.rating} Rating</span>
+          {/* MAIN CONTENT SECTION */}
+          <div className="details-content-container">
+            {/* DISH TITLE, RESTAURANT & PRICE */}
+            <div className="details-header-block">
+              <div className="res-meta-line">
+                <span className="res-badge">🏪 {dish.restaurantName}</span>
+                <span className="cat-badge">🏷️ {dish.category}</span>
+              </div>
+
+              <h1 className="details-dish-title gradient-text">{dish.name}</h1>
+
+              <div className="details-price-row">
+                <span className="currency-symbol">₹</span>
+                <span className="price-amount">{dish.price}</span>
+                {dish.highlight && (
+                  <span className="texture-highlight-chip">✨ {dish.highlight}</span>
+                )}
+              </div>
+
+              <p className="details-dish-description">{dish.description}</p>
             </div>
 
-            <h2 className="inspector-title gradient-text">{dish.name}</h2>
-            <p className="inspector-desc">{dish.description}</p>
+            {/* SECTION 1: INGREDIENTS */}
+            <div className="details-section-box">
+              <h3 className="section-heading">🥗 Authentic Ingredients</h3>
+              <div className="ingredients-flex-cluster">
+                {ingredients.map((ing, idx) => (
+                  <span key={idx} className="ingredient-chip">
+                    🌿 {ing}
+                  </span>
+                ))}
+              </div>
+            </div>
 
-            {/* TAB 1: PLATING & FLAVOR PROFILE */}
-            {activeTab === 'plating' && (
-              <div className="tab-pane slide-up">
-                {/* Culinary Texture */}
-                {(dish.texture || dish.highlight) && (
-                  <div className="inspector-texture-box">
-                    <span className="box-label">CULINARY TEXTURE & FINISH</span>
-                    <span className="box-value">✨ {dish.highlight || dish.texture}</span>
-                  </div>
-                )}
-
-                {/* Spice Meter */}
-                <div className="spice-meter-box">
-                  <span className="meter-label">SPICE & HEAT PROFILE</span>
-                  <div className="flame-rating">
-                    {[1, 2, 3, 4, 5].map((level) => (
-                      <span 
-                        key={level} 
-                        className={`flame-icon ${level <= (dish.spiceLevel || 3) ? 'active' : ''}`}
+            {/* SECTION 2: CUSTOMIZATIONS (SPICE & ACCOMPANIMENTS) */}
+            <div className="details-section-box">
+              <h3 className="section-heading">⚙️ Customizations & Spice Level</h3>
+              
+              <div className="custom-options-group">
+                <div className="custom-option-sub">
+                  <span className="custom-sub-label">Select Heat Intensity:</span>
+                  <div className="spice-selector-row">
+                    {[
+                      { level: 1, label: 'Mild Spice 🌿' },
+                      { level: 3, label: 'Medium Spice 🔥' },
+                      { level: 5, label: 'Extra Spicy 🔥🔥' }
+                    ].map(s => (
+                      <button
+                        key={s.level}
+                        type="button"
+                        className={`spice-chip-btn ${selectedSpice === s.level ? 'active' : ''}`}
+                        onClick={() => setSelectedSpice(s.level)}
                       >
-                        🔥
-                      </span>
+                        {s.label}
+                      </button>
                     ))}
-                    <span className="spice-text">({dish.spiceLevel || 3}/5 Flame Rating)</span>
                   </div>
                 </div>
 
-                {/* Quick Info Grid */}
-                <div className="nutrition-grid">
-                  <div className="nutri-pill">
-                    <span className="nutri-val">⏱️ {dish.prepTime || '20 min'}</span>
-                    <span className="nutri-key">Fresh Prep</span>
-                  </div>
-                  <div className="nutri-pill">
-                    <span className="nutri-val">💪 {dish.protein || '24g'}</span>
-                    <span className="nutri-key">Protein</span>
-                  </div>
-                  <div className="nutri-pill">
-                    <span className="nutri-val">⚡ {dish.calories || '420 kcal'}</span>
-                    <span className="nutri-key">Energy</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* TAB 2: MACRO NUTRITION & METRICS */}
-            {activeTab === 'nutrition' && (
-              <div className="tab-pane slide-up">
-                <div className="macro-progress-container">
-                  <div className="macro-bar-row">
-                    <div className="macro-info">
-                      <span>💪 Protein ({dish.protein || '26g'})</span>
-                      <span className="macro-pct">75% Daily Rec</span>
-                    </div>
-                    <div className="macro-track">
-                      <div className="macro-fill protein-fill" style={{ width: '75%' }}></div>
-                    </div>
-                  </div>
-
-                  <div className="macro-bar-row">
-                    <div className="macro-info">
-                      <span>⚡ Energy ({dish.calories || '450 kcal'})</span>
-                      <span className="macro-pct">60% Daily Rec</span>
-                    </div>
-                    <div className="macro-track">
-                      <div className="macro-fill calorie-fill" style={{ width: '60%' }}></div>
-                    </div>
-                  </div>
-
-                  <div className="macro-bar-row">
-                    <div className="macro-info">
-                      <span>🌾 Complex Carbs & Fiber</span>
-                      <span className="macro-pct">45% Daily Rec</span>
-                    </div>
-                    <div className="macro-track">
-                      <div className="macro-fill carb-fill" style={{ width: '45%' }}></div>
-                    </div>
+                <div className="custom-option-sub">
+                  <span className="custom-sub-label">Select Pairing Accompaniment:</span>
+                  <div className="addon-selector-row">
+                    {['Standard', 'Extra Mint Chutney (+₹20)', 'Fresh Raita (+₹30)'].map(addon => (
+                      <button
+                        key={addon}
+                        type="button"
+                        className={`addon-chip-btn ${selectedAddon === addon ? 'active' : ''}`}
+                        onClick={() => setSelectedAddon(addon)}
+                      >
+                        {addon}
+                      </button>
+                    ))}
                   </div>
                 </div>
-
-                <div className="diet-tags-cluster">
-                  <span className="diet-chip-badge">🌱 100% Authentic Recipe</span>
-                  <span className="diet-chip-badge">🛡️ No Artificial Preservatives</span>
-                  {dish.dietTag && <span className="diet-chip-badge highlight">🏷️ {dish.dietTag}</span>}
-                </div>
               </div>
-            )}
+            </div>
 
-            {/* TAB 3: ARTISANAL CHEF'S RECIPE NOTES */}
-            {activeTab === 'recipe' && (
-              <div className="tab-pane slide-up">
-                <div className="chef-notes-card">
-                  <div className="chef-avatar-row">
-                    <span className="chef-emoji">👨‍🍳</span>
-                    <div>
-                      <h4 className="chef-title">Master Chef's Recipe Notes</h4>
-                      <span className="chef-sub">{dish.restaurantName} Heritage Kitchen</span>
+            {/* SECTION 3: CHEF'S RECOMMENDATIONS */}
+            <div className="details-section-box">
+              <h3 className="section-heading">✨ Recommended Chef Pairings</h3>
+              <div className="pairings-grid">
+                {pairings.map((pair, idx) => (
+                  <div key={idx} className="pairing-card-item">
+                    <span className="pair-icon">{pair.icon}</span>
+                    <div className="pair-info">
+                      <span className="pair-name">{pair.name}</span>
+                      <span className="pair-price">₹{pair.price}</span>
                     </div>
                   </div>
-                  <p className="chef-quote">
-                    "Prepared fresh to order using traditional methods and hand-crushed spices to preserve authentic aromas and rich flavor."
-                  </p>
-                </div>
+                ))}
               </div>
-            )}
-
-            {/* FOOTER: PRICE, QUANTITY & ADD TO CART */}
-            <div className="inspector-footer">
-              <div className="inspector-price">
-                <span className="curr">₹</span>
-                <span className="val">{dish.price * quantity}</span>
-              </div>
-
-              <div className="quantity-stepper">
-                <button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-                <span>{quantity}</span>
-                <button type="button" onClick={() => setQuantity(quantity + 1)}>+</button>
-              </div>
-
-              <button type="button" className="btn btn-primary btn-add-inspector" onClick={handleAddToCart}>
-                🛒 Add {quantity} to Order — ₹{dish.price * quantity}
-              </button>
             </div>
           </div>
         </div>
+
+        {/* STICKY FOOTER: QUANTITY STEPPER & ADD TO CART */}
+        <footer className="details-sticky-footer">
+          <div className="footer-total-price">
+            <span className="total-label">Total Amount</span>
+            <span className="total-value">₹{dish.price * quantity}</span>
+          </div>
+
+          <div className="details-qty-stepper">
+            <button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
+            <span className="qty-count">{quantity}</span>
+            <button type="button" onClick={() => setQuantity(quantity + 1)}>+</button>
+          </div>
+
+          <button type="button" className="btn-add-to-cart-details" onClick={handleAddToCart}>
+            🛒 Add {quantity} to Cart • ₹{dish.price * quantity}
+          </button>
+        </footer>
       </div>
     </div>
   );

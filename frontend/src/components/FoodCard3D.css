@@ -254,21 +254,41 @@
 }
 
 .btn-inspect-3d {
-  background: rgba(245, 233, 218, 0.05);
-  border: 1px solid var(--border-color, rgba(245, 233, 218, 0.08));
+  background: rgba(245, 233, 218, 0.06);
+  border: 1px solid rgba(245, 233, 218, 0.15);
   color: var(--text-primary, #F5E9DA);
-  padding: 8px 12px;
-  border-radius: var(--radius-md, 16px);
+  padding: 8px 14px;
+  border-radius: 14px;
   font-family: var(--font-body, 'Inter', sans-serif);
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all var(--anim-fast, 150ms ease-out);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-inspect-3d:hover {
-  background: rgba(245, 233, 218, 0.12);
+  background: rgba(255, 153, 51, 0.18);
+  border-color: rgba(255, 153, 51, 0.4);
+  color: #FFFFFF;
   transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(255, 153, 51, 0.25);
+}
+
+.btn-inspect-3d:active {
+  transform: scale(0.96) translateY(0);
+}
+
+.btn-inspect-3d .arrow-icon {
+  font-size: 0.95rem;
+  transition: transform 0.2s ease;
+}
+
+.btn-inspect-3d:hover .arrow-icon {
+  transform: translateX(3px);
 }
 
 .btn-add-3d {
