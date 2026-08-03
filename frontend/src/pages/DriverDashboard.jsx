@@ -14,11 +14,11 @@ export default function DriverDashboard() {
   const [progress, setProgress] = useState(35);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
 
-  // Filter ready/dispatched/delivered orders for riders
-  const activeRiderOrders = orders.filter(o => ['READY', 'DISPATCHED', 'COOKING', 'DELIVERED'].includes(o.status));
+  // STRICT FILTERING: Only show active ready/dispatched/cooking/delivered orders for riders!
+  const activeRiderOrders = orders.filter(o => ['READY', 'DISPATCHED', 'COOKING', 'DELIVERED', 'RECEIVED'].includes(o.status));
 
-  // Active targeted delivery order
-  const targetOrder = orders.find(o => String(o.id) === String(selectedOrderId)) || activeRiderOrders[0] || orders[0];
+  // Active targeted delivery order (No arbitrary fallback)
+  const targetOrder = orders.find(o => String(o.id) === String(selectedOrderId)) || activeRiderOrders[0] || null;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -55,22 +55,24 @@ export default function DriverDashboard() {
       </div>
 
       {/* DISPATCH ORDER QUEUE CAROUSEL / SELECTOR */}
-      <div className="rider-dispatch-queue mb-6">
-        <h2 className="queue-title">📦 Available Dispatch Queue ({activeRiderOrders.length} Orders)</h2>
-        <div className="dispatch-chips-row">
-          {activeRiderOrders.map(o => (
-            <button
-              key={o.id}
-              className={`dispatch-chip-btn ${String(o.id) === String(targetOrder?.id) ? 'active' : ''} ${o.status.toLowerCase()}`}
-              onClick={() => setSelectedOrderId(o.id)}
-            >
-              <span>Order #{o.id}</span>
-              <span className="chip-status">[{o.status}]</span>
-              <span className="chip-res">{o.restaurantName}</span>
-            </button>
-          ))}
+      {activeRiderOrders.length > 0 && (
+        <div className="rider-dispatch-queue mb-6">
+          <h2 className="queue-title">📦 Available Dispatch Queue ({activeRiderOrders.length} Orders)</h2>
+          <div className="dispatch-chips-row">
+            {activeRiderOrders.map(o => (
+              <button
+                key={o.id}
+                className={`dispatch-chip-btn ${String(o.id) === String(targetOrder?.id) ? 'active' : ''} ${o.status.toLowerCase()}`}
+                onClick={() => setSelectedOrderId(o.id)}
+              >
+                <span>Order #{o.id}</span>
+                <span className="chip-status">[{o.status}]</span>
+                <span className="chip-res">{o.restaurantName}</span>
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {targetOrder ? (
         <div className="driver-layout">
@@ -162,9 +164,9 @@ export default function DriverDashboard() {
         </div>
       ) : (
         <div className="empty-rider-state glass-card text-center p-8">
-          <span>🛵</span>
+          <span style={{ fontSize: '3rem', display: 'block', marginBottom: '12px' }}>🛵</span>
           <h3>No active orders in dispatch queue</h3>
-          <p>Stay online! Orders will appear here as soon as kitchens prepare them.</p>
+          <p className="text-secondary mt-2">Stay online! Customer orders will appear here as soon as kitchens prepare them.</p>
         </div>
       )}
     </div>
