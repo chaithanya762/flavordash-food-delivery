@@ -18,12 +18,12 @@ export default function Cart() {
 
   const handleRemove = (productId, name) => {
     removeFromCart(productId);
-    showToast(`Removed ${name} from cart`, 'info');
+    showToast(`Removed ${name} from order`, 'info');
   };
 
   const handleClearAll = () => {
     clearCart();
-    showToast('Cart cleared', 'info');
+    showToast('Order cleared', 'info');
   };
 
   if (cartList.length === 0) {
@@ -31,9 +31,9 @@ export default function Cart() {
       <div className="cart-page-3d empty fade-in container">
         <div className="empty-cart-state-3d glass-god-card">
           <div className="empty-cart-emoji-3d">🛒</div>
-          <h2 className="gradient-text">Your 3D Culinary Cart is Empty</h2>
-          <p>Explore floating Indian delicacies and add them to your order!</p>
-          <Link to="/menu" className="btn btn-primary btn-explore-3d mt-4">🚀 Browse 3D Menu</Link>
+          <h2 className="gradient-text">Your Dining Order is Empty</h2>
+          <p>Explore our curated regional delicacies and add them to your table!</p>
+          <Link to="/menu" className="btn btn-primary btn-explore-3d mt-4">🚀 Browse Menu</Link>
         </div>
       </div>
     );
@@ -44,10 +44,10 @@ export default function Cart() {
       <div className="cart-page-header-3d">
         <div>
           <div className="experience-badge-pill">
-            <span className="sparkle">✨</span> 3D ECOSYSTEM ORDER STAGE
+            <span className="sparkle">✨</span> ORDER SUMMARY & EXPRESS DISPATCH
           </div>
-          <h1 className="page-title-3d gradient-text">Your Cart ({cartList.length} Items) 🛒</h1>
-          <p className="page-subtitle-3d">Fresh authentic dishes ready for 30-min express delivery</p>
+          <h1 className="page-title-3d gradient-text">Your Order ({cartList.length} Items) 🛒</h1>
+          <p className="page-subtitle-3d">Fresh authentic dishes prepared to order for 30-min express delivery</p>
         </div>
         
         <div className="cart-header-actions-3d">
@@ -58,7 +58,7 @@ export default function Cart() {
             👥 Group Order & UPI Split
           </button>
           <button className="btn-clear-all-3d" onClick={handleClearAll}>
-            🗑️ Clear Cart
+            🗑️ Clear Order
           </button>
         </div>
       </div>

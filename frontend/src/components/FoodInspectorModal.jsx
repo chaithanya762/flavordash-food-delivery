@@ -19,7 +19,7 @@ export default function FoodInspectorModal({ dish, onClose }) {
     for (let i = 0; i < quantity; i++) {
       addToCart(dish);
     }
-    showToast(`Added ${quantity}x ${dish.name} to your cart! 🛒`, 'success');
+    showToast(`Added ${quantity}x ${dish.name} to your dining order 🍽️`, 'success');
     onClose();
   };
 
@@ -29,11 +29,11 @@ export default function FoodInspectorModal({ dish, onClose }) {
         <button className="inspector-close-btn" onClick={onClose}>✕</button>
 
         <div className="inspector-grid">
-          {/* LEFT: 3D INTERACTIVE STAGE */}
+          {/* LEFT: CHEF'S PLATING STAGE */}
           <div className="inspector-3d-stage">
             <div className="stage-controls-top">
               <span className="ar-live-pill">
-                <span className="live-dot"></span> 3D Octane View
+                <span className="live-dot"></span> Chef's Signature Plating
               </span>
 
               <button 
@@ -44,7 +44,7 @@ export default function FoodInspectorModal({ dish, onClose }) {
               </button>
             </div>
 
-            {/* Floating Steam overlay */}
+            {/* Steam overlay */}
             {steamActive && (
               <div className="inspector-steam-overlay">
                 <span className="steam-cloud c1">☁️</span>
@@ -53,7 +53,7 @@ export default function FoodInspectorModal({ dish, onClose }) {
               </div>
             )}
 
-            {/* 3D Food Artwork with Rotation */}
+            {/* Plated Dish Artwork with Rotation */}
             <div 
               className="inspector-food-wrapper"
               style={{ transform: `rotateY(${rotation}deg)` }}
@@ -64,15 +64,15 @@ export default function FoodInspectorModal({ dish, onClose }) {
                 className="inspector-food-img"
               />
 
-              {/* Floating 3D Ingredient Pins */}
+              {/* Culinary Ingredient Pins */}
               <div className="ingredient-pin pin-1">
                 <span className="pin-dot"></span>
-                <span className="pin-label">🌿 Garam Masala</span>
+                <span className="pin-label">🌿 Hand-Ground Garam Masala</span>
               </div>
 
               <div className="ingredient-pin pin-2">
                 <span className="pin-dot"></span>
-                <span className="pin-label">✨ Saffron Essence</span>
+                <span className="pin-label">✨ Kashmiri Saffron</span>
               </div>
 
               <div className="ingredient-pin pin-3">
@@ -84,7 +84,7 @@ export default function FoodInspectorModal({ dish, onClose }) {
             {/* Contact Shadow */}
             <div className="inspector-contact-shadow"></div>
 
-            {/* Stage Orbit Buttons */}
+            {/* Orbit Buttons */}
             <div className="stage-controls-bottom">
               <button className="btn-orbit" onClick={handleRotateLeft}>↺ Rotate Left</button>
               <span className="orbit-angle-text">{rotation}°</span>
@@ -92,7 +92,7 @@ export default function FoodInspectorModal({ dish, onClose }) {
             </div>
           </div>
 
-          {/* RIGHT: DETAILS & CULINARY METRICS */}
+          {/* RIGHT: CULINARY METRICS */}
           <div className="inspector-details-stage">
             <div className="inspector-meta-row">
               <span className="res-badge">🏪 {dish.restaurantName}</span>
@@ -102,7 +102,7 @@ export default function FoodInspectorModal({ dish, onClose }) {
             <h2 className="inspector-title gradient-text">{dish.name}</h2>
             <p className="inspector-desc">{dish.description}</p>
 
-            {/* Texture & Highlight */}
+            {/* Texture */}
             {dish.texture && (
               <div className="inspector-texture-box">
                 <span className="box-label">CULINARY TEXTURE</span>
@@ -110,9 +110,9 @@ export default function FoodInspectorModal({ dish, onClose }) {
               </div>
             )}
 
-            {/* Spice Flame Meter */}
+            {/* Spice Rating */}
             <div className="spice-meter-box">
-              <span className="meter-label">SPICE LEVEL</span>
+              <span className="meter-label">SPICE PROFILE</span>
               <div className="flame-rating">
                 {[1, 2, 3, 4, 5].map((level) => (
                   <span 
@@ -122,7 +122,7 @@ export default function FoodInspectorModal({ dish, onClose }) {
                     🔥
                   </span>
                 ))}
-                <span className="spice-text">({dish.spiceLevel || 3}/5 Flame)</span>
+                <span className="spice-text">({dish.spiceLevel || 3}/5 Spice Rating)</span>
               </div>
             </div>
 
@@ -130,7 +130,7 @@ export default function FoodInspectorModal({ dish, onClose }) {
             <div className="nutrition-grid">
               <div className="nutri-pill">
                 <span className="nutri-val">⏱️ {dish.prepTime || '20 min'}</span>
-                <span className="nutri-key">Prep Time</span>
+                <span className="nutri-key">Fresh Prep</span>
               </div>
               <div className="nutri-pill">
                 <span className="nutri-val">💪 {dish.protein || '25g'}</span>
@@ -156,7 +156,7 @@ export default function FoodInspectorModal({ dish, onClose }) {
               </div>
 
               <button className="btn btn-primary btn-add-inspector" onClick={handleAddToCart}>
-                🛒 Add {quantity} to Cart
+                🛒 Add {quantity} to Order
               </button>
             </div>
           </div>

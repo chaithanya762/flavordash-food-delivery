@@ -20,7 +20,7 @@ const DIET_TAGS = ['ALL', 'High Protein', 'Keto', 'Jain Friendly', 'Low Calorie'
 export default function Menu() {
   const [search, setSearch] = useState('');
   const [selectedCuisine, setSelectedCuisine] = useState('ALL');
-  const [vegFilter, setVegFilter] = useState('ALL'); // ALL, VEG, NON_VEG
+  const [vegFilter, setVegFilter] = useState('ALL');
   const [dietFilter, setDietFilter] = useState('ALL');
   const [inspectedDish, setInspectedDish] = useState(null);
 
@@ -46,11 +46,11 @@ export default function Menu() {
     <div className="menu-3d-page container fade-in">
       <div className="menu-header-3d">
         <div className="experience-badge-pill">
-          <span className="sparkle">✨</span> OCTANE 3D CULINARY LIBRARY
+          <span className="sparkle">✨</span> ARTISANAL CULINARY LIBRARY
         </div>
 
-        <h1 className="page-title-3d gradient-text">Explore Floating 3D Delicacies</h1>
-        <p className="page-subtitle-3d">Tilt cards to inspect steam physics, charred embers, syrup reflections, and AI macros</p>
+        <h1 className="page-title-3d gradient-text">Explore Regional Delicacies</h1>
+        <p className="page-subtitle-3d">Hand-crafted Indian specialties, rich slow-cooked curries, crispy dosas, and royal sweets</p>
 
         {/* Search Bar & Veg Filters Row */}
         <div className="menu-controls-row">
@@ -90,9 +90,9 @@ export default function Menu() {
           </div>
         </div>
 
-        {/* AI Diet & Macro Filter Row */}
+        {/* Dietary Filters */}
         <div className="diet-filter-row-3d">
-          <span className="diet-label-3d">🧠 AI Macro Filters:</span>
+          <span className="diet-label-3d">🧠 Dietary Filters:</span>
           {DIET_TAGS.map(diet => (
             <button
               key={diet}
@@ -126,15 +126,15 @@ export default function Menu() {
 
       {/* Product Count Indicator */}
       <div className="results-count-3d">
-        Showing <strong>{filteredProducts.length}</strong> interactive 3D dishes
+        Showing <strong>{filteredProducts.length}</strong> signature dishes
       </div>
 
       {/* Product Grid */}
       {filteredProducts.length === 0 ? (
         <div className="empty-results-3d glass-card">
           <span className="empty-icon">🔍</span>
-          <h3>No 3D delicacies found matching your criteria</h3>
-          <p>Try resetting search or switching cuisine/macro filters.</p>
+          <h3>No delicacies found matching your criteria</h3>
+          <p>Try resetting search or switching cuisine/dietary filters.</p>
           <button className="btn btn-primary" onClick={() => { setSearch(''); setSelectedCuisine('ALL'); setVegFilter('ALL'); setDietFilter('ALL'); }}>
             Reset All Filters
           </button>
@@ -151,7 +151,7 @@ export default function Menu() {
         </div>
       )}
 
-      {/* 3D INSPECTOR MODAL */}
+      {/* INSPECTOR MODAL */}
       {inspectedDish && (
         <FoodInspectorModal 
           dish={inspectedDish} 

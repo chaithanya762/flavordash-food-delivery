@@ -21,7 +21,8 @@ import Register from './pages/Register';
 function App() {
   return (
     <div className="app-container">
-      {/* GLOBAL 4-LAYER DEPTH ENGINE & VOLUMETRIC ATMOSPHERE */}
+      {/* TACTILE GRAIN OVERLAY & ATMOSPHERE */}
+      <div className="grain-overlay"></div>
       <BackgroundAtmosphere />
 
       <Navbar />

@@ -7,6 +7,7 @@ export default function FoodCard3D({ dish, onInspect }) {
   const cardRef = useRef(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
   const { addToCart } = useCart() || { addToCart: () => {} };
   const { showToast } = useToast() || { showToast: () => {} };
 
@@ -19,8 +20,8 @@ export default function FoodCard3D({ dish, onInspect }) {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((centerY - y) / centerY) * 12; // Max 12deg tilt
-    const rotateY = ((x - centerX) / centerX) * 12;
+    const rotateX = ((centerY - y) / centerY) * 8; // Gentle tilt
+    const rotateY = ((x - centerX) / centerX) * 8;
 
     setTilt({ x: rotateX, y: rotateY });
   };
@@ -37,32 +38,33 @@ export default function FoodCard3D({ dish, onInspect }) {
   const handleAddToCart = (e) => {
     e.stopPropagation();
     addToCart(dish);
-    showToast(`Added ${dish.name} to your cart! 🛒`, 'success');
+    setIsAdded(true);
+    showToast(`Added ${dish.name} to your dining order 🍽️`, 'success');
+    setTimeout(() => setIsAdded(false), 800);
   };
 
   return (
     <div 
-      className={`food-card-3d-wrapper ${isHovered ? 'hovered' : ''}`}
+      className={`food-card-3d-wrapper ${isHovered ? 'hovered' : ''} ${isAdded ? 'added-pulse' : ''}`}
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={() => onInspect && onInspect(dish)}
       style={{
-        transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale3d(${isHovered ? 1.05 : 1}, ${isHovered ? 1.05 : 1}, 1)`
+        transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale3d(${isHovered ? 1.03 : 1}, ${isHovered ? 1.03 : 1}, 1)`
       }}
     >
-      {/* CARD BASE - LAYER 4 GLASS PANEL */}
       <div className="food-card-glass-body">
-        {/* Glowing Rim Border Accent */}
+        {/* Subtle Accent Rim */}
         <div 
           className="glow-rim-accent"
-          style={{ background: dish.accentColor || '#ff6b35' }}
+          style={{ background: dish.accentColor || '#FF9933' }}
         ></div>
 
-        {/* 3D FLOATING FOOD CONTAINER (LAYER 3) */}
+        {/* PLATED DISH STAGE */}
         <div className="food-3d-object-stage">
-          {/* Steam Vapor Wisps */}
+          {/* Steam Overlay */}
           {dish.steam !== false && (
             <div className="steam-vapor-overlay">
               <span className="steam-particle s1">☁️</span>
@@ -71,10 +73,10 @@ export default function FoodCard3D({ dish, onInspect }) {
             </div>
           )}
 
-          {/* Contact Shadow */}
+          {/* Table Contact Shadow */}
           <div className="food-contact-shadow"></div>
 
-          {/* 3D Floating Artwork */}
+          {/* Dish Plating Image */}
           <img 
             src={dish.imageUrl} 
             alt={dish.name} 
@@ -82,18 +84,18 @@ export default function FoodCard3D({ dish, onInspect }) {
             loading="lazy"
           />
 
-          {/* AR / 3D Tag */}
+          {/* Signature Plating Badge */}
           <span className="ar-badge-pill">
-            <span className="ar-pulse-dot"></span> 3D Octane
+            <span className="ar-pulse-dot"></span> Signature Plating
           </span>
 
           {/* Diet Tag */}
           <span className={`diet-tag-pill ${dish.isVeg ? 'veg' : 'nonveg'}`}>
-            {dish.isVeg ? '🟢 Veg' : '🔴 Non-Veg'}
+            {dish.isVeg ? '🟢 Vegetarian' : '🔴 Non-Veg'}
           </span>
         </div>
 
-        {/* 3D CARD CONTENT LAYER */}
+        {/* CARD INFO */}
         <div className="food-card-info-stage">
           <div className="food-restaurant-meta">
             <span className="res-name">🏪 {dish.restaurantName}</span>
@@ -104,14 +106,14 @@ export default function FoodCard3D({ dish, onInspect }) {
           
           <p className="food-desc-3d">{dish.description}</p>
 
-          {/* Culinary Texture Highlight */}
+          {/* Culinary Texture */}
           {dish.texture && (
             <div className="texture-highlight-tag">
               <span className="sparkle-icon">✨</span> {dish.texture}
             </div>
           )}
 
-          {/* Price & Action Buttons */}
+          {/* Price & Actions */}
           <div className="food-card-footer-3d">
             <div className="price-tag-3d">
               <span className="currency">₹</span>
@@ -125,17 +127,17 @@ export default function FoodCard3D({ dish, onInspect }) {
                   e.stopPropagation();
                   onInspect && onInspect(dish);
                 }}
-                title="Inspect in 3D Depth"
+                title="View Culinary Details"
               >
-                🔍 Inspect
+                🔍 Details
               </button>
 
               <button 
-                className="btn-add-3d"
+                className={`btn-add-3d ${isAdded ? 'added' : ''}`}
                 onClick={handleAddToCart}
-                title="Add to Cart"
+                title="Add to Order"
               >
-                🛒 Add
+                {isAdded ? '✓ Added' : '🛒 Add'}
               </button>
             </div>
           </div>

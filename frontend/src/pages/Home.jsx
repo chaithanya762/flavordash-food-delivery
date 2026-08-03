@@ -12,7 +12,6 @@ export default function Home() {
   const { addToCart } = useCart() || { addToCart: () => {} };
   const { showToast } = useToast() || { showToast: () => {} };
 
-  // Filter 3D Hero dishes
   const heroDishes = ALL_DISHES.slice(0, 6);
   const [selectedHeroIndex, setSelectedHeroIndex] = useState(0);
   const [inspectedDish, setInspectedDish] = useState(null);
@@ -28,31 +27,28 @@ export default function Home() {
 
   const handleOrderHero = () => {
     addToCart(featuredDish);
-    showToast(`Added ${featuredDish.name} to your cart! 🍽️`, 'success');
+    showToast(`Added ${featuredDish.name} to your dining order 🍽️`, 'success');
   };
 
   return (
     <div className="home-3d-ecosystem fade-in">
-      {/* =========================================
-          HERO STAGE: CONTINUOUS 3D FOOD WORLD
-          ========================================= */}
+      {/* HERO STAGE */}
       <section className="hero-3d-stage">
-        {/* Volumetric Spotlight Backdrop */}
         <div className="stage-light-spotlight"></div>
 
         <div className="hero-stage-container container">
-          {/* LEFT: MINIMAL TEXT & GLOWING GLASS CTA */}
+          {/* LEFT: EDITORIAL TEXT & CTA */}
           <div className="hero-content-left">
             <div className="experience-badge-pill">
-              <span className="sparkle">✨</span> 3D CINEMATIC FOOD ECOSYSTEM
+              <span className="sparkle">✨</span> ARTISANAL CULINARY SELECTION
             </div>
 
             <h1 className="hero-headline-3d gradient-text">
-              Taste The Future of Culinary Art
+              Taste The Art of Fine Indian Dining
             </h1>
 
             <p className="hero-subtext-3d">
-              Step into an immersive, living food world. Explore 3D floating Indian delicacies, steam physics, and instant doorstep delivery.
+              Step into a living culinary showcase. Experience freshly prepared delicacies, traditional slow-cooked aromas, and express doorstep delivery.
             </p>
 
             {/* Glowing Glass CTA Group */}
@@ -68,11 +64,11 @@ export default function Home() {
                 className="btn btn-secondary btn-hero-explore-3d"
                 onClick={() => navigate('/menu')}
               >
-                🚀 Explore Full 3D Menu
+                🚀 Explore Full Menu
               </button>
             </div>
 
-            {/* Culinary Specs Pill Bar */}
+            {/* Specs Bar */}
             <div className="culinary-specs-bar">
               <div className="spec-item">
                 <span className="spec-icon">🔥</span>
@@ -92,24 +88,22 @@ export default function Home() {
                 <span className="spec-icon">⭐</span>
                 <div>
                   <span className="spec-val">{featuredDish.rating} / 5</span>
-                  <span className="spec-lbl">Octane Rating</span>
+                  <span className="spec-lbl">Diner Rating</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* RIGHT: 3D ORBIT STAGE (CENTERPIECE + ORBITING DISHES) */}
+          {/* RIGHT: CENTERPIECE DISH & ORBIT RING */}
           <div className="hero-3d-centerpiece-stage">
-            {/* Centerpiece Spotlight Glow */}
             <div className="centerpiece-halo-ring"></div>
 
-            {/* Central Floating Featured 3D Dish (Layer 3) */}
+            {/* Central Plated Dish */}
             <div 
               className="central-featured-dish-container"
               onClick={() => setInspectedDish(featuredDish)}
-              title="Click to Inspect in 3D"
+              title="Click to view details"
             >
-              {/* Steam Vapor Wisps */}
               {featuredDish.steam !== false && (
                 <div className="hero-steam-overlay">
                   <span className="steam-cloud s1">☁️</span>
@@ -118,30 +112,27 @@ export default function Home() {
                 </div>
               )}
 
-              {/* 3D Artwork */}
               <img 
                 src={featuredDish.imageUrl} 
                 alt={featuredDish.name}
                 className="central-dish-img-3d"
               />
 
-              {/* Contact Shadow */}
               <div className="central-dish-shadow"></div>
 
-              {/* Floating Highlight Label */}
               <div className="central-highlight-badge">
                 <span className="sparkle">✨</span> {featuredDish.highlight || featuredDish.texture}
               </div>
             </div>
 
-            {/* ORBITING 3D DISHES SELECTOR RING */}
+            {/* Orbit Selector Ring */}
             <div className="orbiting-dishes-ring">
               {heroDishes.map((dish, idx) => (
                 <div 
                   key={dish.id}
                   className={`orbit-node ${idx === selectedHeroIndex ? 'active' : ''}`}
                   onClick={() => setSelectedHeroIndex(idx)}
-                  title={`Switch Spotlight to ${dish.name}`}
+                  title={`Feature ${dish.name}`}
                 >
                   <img src={dish.imageUrl} alt={dish.name} className="orbit-thumb" />
                   <span className="orbit-name-tooltip">{dish.name.split(' ')[0]}</span>
@@ -152,15 +143,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =========================================
-          DISCOVERY SECTION: FLOATING CATEGORIES & 3D GRID
-          ========================================= */}
+      {/* DISCOVERY SECTION */}
       <section className="menu-discovery-section container">
         <div className="section-header-3d">
-          <h2 className="gradient-text heading-lg">Interactive 3D Menu Grid</h2>
-          <p className="text-secondary">Hover and tilt to explore textures, steam, and ingredient depths</p>
+          <h2 className="gradient-text heading-lg">Curated Culinary Collections</h2>
+          <p className="text-secondary">Discover hand-crafted regional specialties, rich gravies, and authentic sweets</p>
 
-          {/* Floating Category Filter Pills */}
           <div className="category-pills-bar">
             {categories.map((cat) => (
               <button 
@@ -180,7 +168,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 3D FOOD CARDS GRID */}
+        {/* DISHES GRID */}
         <div className="grid grid-cols-3 gap-8 mt-8">
           {filteredDishes.map((dish) => (
             <FoodCard3D 
@@ -192,7 +180,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3D INSPECTOR MODAL */}
+      {/* INSPECTOR MODAL */}
       {inspectedDish && (
         <FoodInspectorModal 
           dish={inspectedDish} 
