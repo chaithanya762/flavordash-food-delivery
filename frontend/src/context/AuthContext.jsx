@@ -6,8 +6,8 @@ const AuthContext = createContext();
 // Complete pre-seeded mock database accounts for ALL Restaurants in menu & Riders & Customers
 export const INITIAL_MOCK_USERS = [
   // CUSTOMERS
-  { id: 1, name: 'Alex Johnson', email: 'alex@example.com', role: 'CUSTOMER', phone: '+91 98765 43210', address: '742 Evergreen Terrace, Sector 4, New Delhi' },
-  { id: 2, name: 'Priya Sharma', email: 'customer@flavordash.com', role: 'CUSTOMER', phone: '+91 91234 56789', address: 'Connaught Place, Block B, New Delhi' },
+  { id: 1, name: 'Chaithanya Gowda', email: 'chaithanyagowda762@gmail.com', role: 'CUSTOMER', phone: '+91 9591791336', address: 'JP Nagar, Mahadevapura, Mysore' },
+  { id: 2, name: 'Priya Sharma', email: 'customer@flavordash.com', role: 'CUSTOMER', phone: '+91 91234 56789', address: 'JP Nagar, Mahadevapura, Mysore' },
 
   // HOTEL MANAGERS (ALL 18 MENU RESTAURANTS)
   { id: 101, name: 'Chef Rajat (Punjab Rasoi)', email: 'chef@rasoi.in', role: 'HOTEL_MANAGER', restaurantName: 'Punjab Rasoi', phone: '+91 98111 22233', address: 'Punjab Rasoi, Sector 18, Noida' },
