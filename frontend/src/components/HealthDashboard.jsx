@@ -51,7 +51,7 @@ const filterOptions = [
   },
   { 
     id: 'lowcal', 
-    label: 'Low Calorie', 
+    label: 'Low Calorie (<350 kcal)', 
     icon: '⚡', 
     config: { filter: 'Low Calorie', maxCalories: 350 }, 
     color: 'amber' 
@@ -90,10 +90,14 @@ export default function HealthDashboard({ onHealthFilter, activeFilter }) {
     }
   };
 
+  const handleResetKcal = () => {
+    onHealthFilter(null);
+  };
+
   return (
     <div className="health-dashboard">
       <div className="health-stats">
-        <div className="cal-ring-container">
+        <div className="cal-ring-container" title={`Current Cart: ${totalCalories} / ${dailyGoal} kcal`}>
           <svg className="cal-ring" width="50" height="50">
             <circle
               className="cal-ring-bg"
@@ -121,20 +125,32 @@ export default function HealthDashboard({ onHealthFilter, activeFilter }) {
         </div>
       </div>
 
-      <div className="health-filters">
-        {filterOptions.map(opt => {
-          const isActive = activeFilter === opt.config.filter;
-          return (
-            <button
-              key={opt.id}
-              className={`health-filter-chip ${isActive ? 'active' : ''} ${opt.color}`}
-              onClick={() => handleFilterClick(opt)}
-            >
-              <span className="chip-icon">{opt.icon}</span>
-              <span className="chip-label">{opt.label}</span>
-            </button>
-          );
-        })}
+      <div className="health-filters-wrapper">
+        <div className="health-filters">
+          {filterOptions.map(opt => {
+            const isActive = activeFilter === opt.config.filter;
+            return (
+              <button
+                key={opt.id}
+                className={`health-filter-chip ${isActive ? 'active' : ''} ${opt.color}`}
+                onClick={() => handleFilterClick(opt)}
+              >
+                <span className="chip-icon">{opt.icon}</span>
+                <span className="chip-label">{opt.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {activeFilter && (
+          <button 
+            className="health-reset-btn" 
+            onClick={handleResetKcal}
+            title="Reset Calorie & Health Filter"
+          >
+            <span className="reset-icon">🔄</span> Reset Kcal Scale
+          </button>
+        )}
       </div>
     </div>
   );

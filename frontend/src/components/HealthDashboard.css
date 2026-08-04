@@ -88,7 +88,7 @@
   color: #D4AF37; /* Gold accent */
 }
 
-.health-filters {
+.health-filters-wrapper {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -96,85 +96,85 @@
   scrollbar-width: none;
 }
 
-.health-filters::-webkit-scrollbar {
+.health-filters-wrapper::-webkit-scrollbar {
   display: none;
 }
 
-.health-filter-chip {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 999px;
-  padding: 8px 16px;
+.health-filters {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #fff;
-  font-size: 0.875rem;
-  font-weight: 500;
+  gap: 10px;
+}
+
+.health-reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #EF4444;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: inherit;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
 }
 
-.health-filter-chip:hover {
-  background: rgba(255, 255, 255, 0.1);
+.health-reset-btn:hover {
+  background: rgba(239, 68, 68, 0.28);
+  border-color: #EF4444;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
 }
 
-/* Active states for chips with specific glows */
-.health-filter-chip.active {
-  color: #fff;
+.health-reset-btn .reset-icon {
+  font-size: 0.85rem;
+  transition: transform 0.3s ease;
 }
 
-.health-filter-chip.active.green {
-  background: rgba(74, 222, 128, 0.15);
-  border-color: #4ADE80;
-  box-shadow: 0 0 12px rgba(74, 222, 128, 0.3);
-}
-
-.health-filter-chip.active.blue {
-  background: rgba(96, 165, 250, 0.15);
-  border-color: #60A5FA;
-  box-shadow: 0 0 12px rgba(96, 165, 250, 0.3);
-}
-
-.health-filter-chip.active.purple {
-  background: rgba(192, 132, 252, 0.15);
-  border-color: #C084FC;
-  box-shadow: 0 0 12px rgba(192, 132, 252, 0.3);
-}
-
-.health-filter-chip.active.emerald {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: #10B981;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
-}
-
-.health-filter-chip.active.amber {
-  background: rgba(245, 158, 11, 0.15);
-  border-color: #F59E0B;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
-}
-
-.chip-icon {
-  font-size: 1.125rem;
+.health-reset-btn:hover .reset-icon {
+  transform: rotate(-180deg);
 }
 
 @media (max-width: 768px) {
   .health-dashboard {
     flex-direction: column;
     align-items: stretch;
-    padding: 16px;
-    gap: 16px;
+    padding: 12px 14px;
+    gap: 12px;
+    width: 100%;
+    border-radius: 14px;
   }
   
   .health-stats {
     width: 100%;
-    justify-content: flex-start;
+    justify-content: space-between;
+    gap: 12px;
   }
 
-  .health-filters {
+  .protein-stat {
+    padding-left: 12px;
+  }
+
+  .health-filters-wrapper {
     width: 100%;
-    padding-bottom: 4px; /* for any scrollbar space if needed */
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .health-filter-chip {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+  }
+
+  .health-reset-btn {
+    padding: 5px 10px;
+    font-size: 0.75rem;
   }
 }
+
