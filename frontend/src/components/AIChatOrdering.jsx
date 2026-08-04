@@ -6,21 +6,28 @@ import { useToast } from '../context/ToastContext';
 
 const DYNAMIC_PROMPTS = [
   '🌶️ Spicy starters under ₹250',
-  '💪 High protein gym meals',
-  '🍛 Dum Biryani & Raita pairings',
+  '💪 High protein gym dinner',
+  '🍛 Dum Biryani & Lassi combo',
   '🥑 Low Calorie & Keto options',
-  '🍬 Royal Sweet Cravings',
-  '⚡ Express 15-min delivery'
+  '🍷 Reserve a Table for 4',
+  '🍬 Royal Sweets & Desserts'
+];
+
+const AI_MODES = [
+  { id: 'chef', label: '👨‍🍳 Smart Chef', desc: 'Personalized food recommendations' },
+  { id: 'health', label: '💪 Fitness & Kcal', desc: 'Calorie & protein optimized meals' },
+  { id: 'party', label: '🎉 Party Combo', desc: 'Multi-person feast combinations' }
 ];
 
 export const AIChatOrdering = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [currentMode, setCurrentMode] = useState('chef');
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: 'bot',
       type: 'text',
-      content: 'Namaste! 🙏 I\'m Chef AI, your FlavorDash Culinary Assistant 👨‍🍳. What are you in the mood for today? Try: "spicy paneer under ₹350" or "protein rich dinner"!'
+      content: 'Namaste! 🙏 I\'m Chef AI, your FlavorDash Master Culinary Guide 👨‍🍳. What are you craving today? Ask me for "high protein chicken", "spicy paneer under ₹350", or "reserve table at Punjab Rasoi"!'
     }
   ]);
   const [inputValue, setInputValue] = useState('');
@@ -42,10 +49,69 @@ export const AIChatOrdering = () => {
 
   const toggleChat = () => setIsOpen(prev => !prev);
 
-  // Advanced AI Parsing Engine with Context Memory
+  const clearChat = () => {
+    setMessages([
+      {
+        id: Date.now(),
+        sender: 'bot',
+        type: 'text',
+        content: `Chat history cleared 🧹. I am in ${AI_MODES.find(m => m.id === currentMode)?.label} mode. How may I assist your culinary choices?`
+      }
+    ]);
+    setContextFilter({});
+    showToast('Chef AI chat reset', 'info');
+  };
+
+  // Real Speech Recognition + Fallback
+  const handleVoiceInput = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      setIsListening(true);
+      recognition.start();
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInputValue(transcript);
+        setIsListening(false);
+        handleSend(transcript);
+      };
+
+      recognition.onerror = () => {
+        setIsListening(false);
+        // fallback
+        setInputValue("Show me high protein biryani under 400");
+      };
+
+      recognition.onend = () => setIsListening(false);
+    } else {
+      setIsListening(true);
+      setTimeout(() => {
+        setIsListening(false);
+        const voiceSample = "Show me high protein chicken under 400";
+        setInputValue(voiceSample);
+      }, 1200);
+    }
+  };
+
+  // Advanced AI Parsing Engine
   const parseMessage = (text) => {
     const lowerText = text.toLowerCase();
     let newContext = { ...contextFilter };
+
+    // Check for Reservation trigger
+    if (lowerText.includes('table') || lowerText.includes('reserve') || lowerText.includes('booking') || lowerText.includes('hotel')) {
+      return {
+        found: true,
+        type: 'reservation',
+        reasoning: "🍷 Table Reservation Assistant: I can help you secure a VIP dining table at our finest partner restaurants (*Punjab Rasoi*, *Haveli North Indian*, *Kashmiri Zaika*)!",
+        actionType: 'RESERVE_TABLE'
+      };
+    }
 
     // 1. Budget extraction
     const priceMatch = lowerText.match(/(?:under|below|less than|within|budget of|rs\.?|₹) ?(\d+)/i);
@@ -62,14 +128,14 @@ export const AIChatOrdering = () => {
       newContext.spice = 'mild';
     }
 
-    // 3. Dietary preferences
-    if (lowerText.includes('non-veg') || lowerText.includes('chicken') || lowerText.includes('mutton') || lowerText.includes('fish')) {
+    // 3. Dietary preferences & Mode influence
+    if (lowerText.includes('non-veg') || lowerText.includes('chicken') || lowerText.includes('mutton')) {
       newContext.isVeg = false;
-    } else if (lowerText.includes('pure veg') || lowerText.includes('vegetarian') || lowerText.includes('veg ') || lowerText.includes('paneer')) {
+    } else if (lowerText.includes('pure veg') || lowerText.includes('vegetarian') || lowerText.includes('paneer')) {
       newContext.isVeg = true;
     }
 
-    if (lowerText.includes('protein') || lowerText.includes('gym') || lowerText.includes('muscle')) {
+    if (currentMode === 'health' || lowerText.includes('protein') || lowerText.includes('gym') || lowerText.includes('muscle')) {
       newContext.diet = 'High Protein';
     } else if (lowerText.includes('keto') || lowerText.includes('low carb')) {
       newContext.diet = 'Keto';
@@ -88,7 +154,7 @@ export const AIChatOrdering = () => {
       newContext.category = 'Sweets';
     } else if (lowerText.includes('bread') || lowerText.includes('naan') || lowerText.includes('roti') || lowerText.includes('paratha')) {
       newContext.category = 'Breads';
-    } else if (lowerText.includes('starter') || lowerText.includes('tikka') || lowerText.includes('kabab') || lowerText.includes('street')) {
+    } else if (lowerText.includes('starter') || lowerText.includes('tikka') || lowerText.includes('street') || lowerText.includes('lassi')) {
       newContext.category = 'Street Food';
     }
 
@@ -106,7 +172,6 @@ export const AIChatOrdering = () => {
       return true;
     });
 
-    // Fallback search if strict filter returns few items
     if (results.length === 0) {
       results = ALL_DISHES.filter(d => 
         d.name.toLowerCase().includes(lowerText) || 
@@ -116,15 +181,14 @@ export const AIChatOrdering = () => {
     }
 
     if (results.length === 0) {
-      // Top 3 rated dishes as smart fallback
       return {
         found: false,
-        reasoning: "I couldn't find an exact match for that specific combination, but here are our 3 highest-rated crowd favorites you'll love:",
+        type: 'dishes',
+        reasoning: "I couldn't find an exact match, but here are our 3 highest-rated crowd favorites you'll love:",
         dishes: [...ALL_DISHES].sort((a, b) => b.rating - a.rating).slice(0, 3)
       };
     }
 
-    // Build intelligent AI reasoning message based on context
     let reasoning = 'Here are my top culinary recommendations for you:';
     if (newContext.diet === 'High Protein') {
       reasoning = '💪 High-protein powerhouses loaded with nutrition & flavor:';
@@ -133,11 +197,12 @@ export const AIChatOrdering = () => {
     } else if (newContext.spice === 'high') {
       reasoning = '🌶️ Fiery & spiced specialties to satisfy your craving:';
     } else if (newContext.isVeg) {
-      reasoning = '🟢 Pure vegetarian masterworks prepared with fresh cottage cheese & veggies:';
+      reasoning = '🟢 Pure vegetarian masterworks prepared with fresh ingredients:';
     }
 
     return {
       found: true,
+      type: 'dishes',
       reasoning,
       dishes: results.slice(0, 3)
     };
@@ -163,50 +228,33 @@ export const AIChatOrdering = () => {
         content: aiResult.reasoning
       };
 
-      const botResultsMsg = {
-        id: Date.now() + 2,
-        sender: 'bot',
-        type: 'results',
-        dishes: aiResult.dishes
-      };
-
-      setMessages(prev => [...prev, botResponseMsg, botResultsMsg]);
-    }, 700);
-  };
-
-  // Simulate Voice Dictation
-  const handleVoiceInput = () => {
-    setIsListening(true);
-    setTimeout(() => {
-      setIsListening(false);
-      const voiceSample = "Show me high protein chicken under 400";
-      setInputValue(voiceSample);
-    }, 1500);
+      if (aiResult.type === 'reservation') {
+        const botActionMsg = {
+          id: Date.now() + 2,
+          sender: 'bot',
+          type: 'reservation_action'
+        };
+        setMessages(prev => [...prev, botResponseMsg, botActionMsg]);
+      } else {
+        const botResultsMsg = {
+          id: Date.now() + 2,
+          sender: 'bot',
+          type: 'results',
+          dishes: aiResult.dishes
+        };
+        setMessages(prev => [...prev, botResponseMsg, botResultsMsg]);
+      }
+    }, 600);
   };
 
   const handleAddToCart = (dish) => {
     addToCart(dish);
     showToast(`Added ${dish.name} to cart 🍽️`, 'success');
-    
-    // AI Smart Pairing Suggestion
-    setTimeout(() => {
-      let pairingMessage = `Added ${dish.name}! 😋`;
-      if (dish.category === 'Rice & Biryani') {
-        pairingMessage += ` 💡 *Chef tip:* Would you like to add Garlic Naan or Gulab Jamun to complete your feast?`;
-      } else if (dish.category === 'Main Dishes') {
-        pairingMessage += ` 💡 *Chef tip:* Pairs perfectly with hot Butter Naan or Jeera Rice!`;
-      }
+  };
 
-      setMessages(prev => [
-        ...prev,
-        {
-          id: Date.now(),
-          sender: 'bot',
-          type: 'text',
-          content: pairingMessage
-        }
-      ]);
-    }, 400);
+  const handleAddAllCombo = (dishes) => {
+    dishes.forEach(d => addToCart(d));
+    showToast(`Added entire combo (${dishes.length} items) to cart! 🛍️`, 'success');
   };
 
   return (
@@ -226,10 +274,30 @@ export const AIChatOrdering = () => {
               <div className="bot-avatar-glow">👨‍🍳</div>
               <div>
                 <h3>Chef AI ✨</h3>
-                <span className="online-status">🟢 Active • Smart Assistant</span>
+                <span className="online-status">🟢 Active • Master Culinary AI</span>
               </div>
             </div>
-            <button className="close-btn" onClick={toggleChat} aria-label="Close Chat">✕</button>
+            <div className="header-actions">
+              <button className="icon-header-btn" onClick={clearChat} title="Clear Chat History">🧹</button>
+              <button className="close-btn" onClick={toggleChat} aria-label="Close Chat">✕</button>
+            </div>
+          </div>
+
+          {/* AI MODE SWITCHER BAR */}
+          <div className="ai-mode-bar">
+            {AI_MODES.map(mode => (
+              <button 
+                key={mode.id}
+                className={`ai-mode-chip ${currentMode === mode.id ? 'active' : ''}`}
+                onClick={() => {
+                  setCurrentMode(mode.id);
+                  showToast(`Switched to ${mode.label}`, 'info');
+                }}
+                title={mode.desc}
+              >
+                {mode.label}
+              </button>
+            ))}
           </div>
 
           {/* MESSAGES BODY */}
@@ -241,13 +309,31 @@ export const AIChatOrdering = () => {
                     {msg.content}
                   </div>
                 )}
+
+                {msg.type === 'reservation_action' && (
+                  <div className="reservation-action-card glass-card">
+                    <h4>🍷 Book Table at Partner Hotels</h4>
+                    <p>Select date, time slot, & guests with instant SMS confirmation!</p>
+                    <button 
+                      className="btn-reserve-chat"
+                      onClick={() => {
+                        toggleChat();
+                        // Trigger table modal if available or inform user
+                        window.dispatchEvent(new CustomEvent('OPEN_TABLE_RESERVATION'));
+                      }}
+                    >
+                      📅 Open Table Booking Form
+                    </button>
+                  </div>
+                )}
+
                 {msg.type === 'results' && (
                   <div className="message-results">
                     {msg.dishes.map(dish => (
                       <div key={dish.id} className="chat-dish-card glass-card">
                         <div className="chat-dish-img-wrapper">
                           <img 
-                            src={dish.imageUrl || dish.imageUrl || '/images/butter-chicken.jpg'} 
+                            src={dish.imageUrl || '/images/butter-chicken.jpg'} 
                             alt={dish.name} 
                             className="chat-dish-img" 
                           />
@@ -271,12 +357,18 @@ export const AIChatOrdering = () => {
                           <div className="chat-dish-action-row">
                             <span className="chat-price">₹{dish.price}</span>
                             <button className="chat-add-btn" onClick={() => handleAddToCart(dish)}>
-                              + Add to Cart 🛒
+                              + Add 🛒
                             </button>
                           </div>
                         </div>
                       </div>
                     ))}
+
+                    {msg.dishes.length > 1 && (
+                      <button className="combo-add-all-btn" onClick={() => handleAddAllCombo(msg.dishes)}>
+                        🛍️ Add Entire Combo to Cart (₹{msg.dishes.reduce((a, c) => a + c.price, 0)})
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
@@ -310,7 +402,7 @@ export const AIChatOrdering = () => {
               <button 
                 className={`mic-btn ${isListening ? 'listening' : ''}`}
                 onClick={handleVoiceInput}
-                title="Voice Search"
+                title="Voice Search (Click & Speak)"
               >
                 {isListening ? '🎙️...' : '🎙️'}
               </button>
