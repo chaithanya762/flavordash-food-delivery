@@ -1,8 +1,8 @@
-/* Menu.css - Master Consistency Menu Page */
+/* Menu.css - Master Mobile & Desktop Responsive Menu Page */
 
 .menu-3d-page {
   padding-top: var(--space-32, 32px);
-  padding-bottom: var(--space-48, 48px);
+  padding-bottom: var(--space-48, 64px);
 }
 
 .menu-header-3d {
@@ -12,19 +12,22 @@
   text-align: center;
   gap: var(--space-12, 12px);
   margin-bottom: var(--space-32, 32px);
+  width: 100%;
 }
 
 .page-title-3d {
   font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
-  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-size: clamp(2rem, 4vw, 3.2rem);
   font-weight: 700;
   color: var(--text-headline, #FFF9F0);
+  line-height: 1.2;
 }
 
 .page-subtitle-3d {
   color: var(--text-secondary, #94A3B8);
   font-size: 1rem;
   max-width: 600px;
+  line-height: 1.55;
 }
 
 .menu-controls-row {
@@ -42,6 +45,7 @@
   gap: var(--space-12, 12px);
   background: var(--bg-card, rgba(26, 26, 29, 0.75));
   backdrop-filter: var(--backdrop-blur, blur(25px));
+  -webkit-backdrop-filter: var(--backdrop-blur, blur(25px));
   border: 1px solid var(--border-color, rgba(245, 233, 218, 0.08));
   padding: 12px 18px;
   border-radius: var(--radius-md, 16px);
@@ -79,6 +83,7 @@
   align-items: center;
   background: var(--bg-card, rgba(26, 26, 29, 0.75));
   backdrop-filter: var(--backdrop-blur, blur(25px));
+  -webkit-backdrop-filter: var(--backdrop-blur, blur(25px));
   border: 1px solid var(--border-color, rgba(245, 233, 218, 0.08));
   padding: 4px;
   border-radius: var(--radius-md, 16px);
@@ -95,6 +100,7 @@
   font-size: 0.85rem;
   cursor: pointer;
   transition: all var(--anim-fast, 150ms ease-out);
+  white-space: nowrap;
 }
 
 .veg-toggle-btn.active {
@@ -123,6 +129,7 @@
   flex-wrap: wrap;
   justify-content: center;
   margin-top: var(--space-8, 8px);
+  width: 100%;
 }
 
 .diet-label-3d {
@@ -132,6 +139,7 @@
   color: var(--gold-accent, #D4AF37);
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 
 .diet-chip-3d {
@@ -145,6 +153,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all var(--anim-fast, 150ms ease-out);
+  white-space: nowrap;
 }
 
 .diet-chip-3d:hover, .diet-chip-3d.active {
@@ -153,7 +162,7 @@
   color: #FFFFFF;
 }
 
-/* CATEGORY SCROLL */
+/* CATEGORY SCROLL BAR */
 .category-scroll-container-3d {
   width: 100%;
   margin-top: var(--space-12, 12px);
@@ -177,6 +186,7 @@
   font-size: 0.88rem;
   cursor: pointer;
   transition: all var(--anim-fast, 150ms ease-out);
+  white-space: nowrap;
 }
 
 .category-pill-3d:hover, .category-pill-3d.active {
@@ -190,7 +200,7 @@
   text-align: center;
   font-size: 0.9rem;
   color: var(--text-secondary, #94A3B8);
-  margin-bottom: var(--space-32, 32px);
+  margin-bottom: var(--space-24, 24px);
 }
 
 .empty-results-3d {
@@ -203,44 +213,97 @@
   border-radius: var(--radius-md, 16px);
 }
 
+/* DISHES GRID SYSTEM */
+.dishes-grid-3d {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  width: 100%;
+}
+
+/* =========================================
+   MOBILE & TABLET RESPONSIVE BREAKPOINTS
+   ========================================= */
+@media (max-width: 1024px) {
+  .dishes-grid-3d {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
 @media (max-width: 768px) {
+  .menu-3d-page {
+    padding-top: 16px;
+    padding-bottom: 90px;
+  }
+
+  .menu-header-3d {
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
   .page-title-3d {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
+  }
+
+  .page-subtitle-3d {
+    font-size: 0.88rem;
   }
   
   .menu-controls-row {
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .search-box-3d {
+    padding: 10px 14px;
+    border-radius: 14px;
+  }
+
+  .search-input-3d {
+    font-size: 0.9rem;
   }
 
   .veg-toggle-group-3d {
     justify-content: space-around;
     width: 100%;
+    border-radius: 14px;
+    padding: 3px;
   }
 
   .veg-toggle-btn {
     flex: 1;
     text-align: center;
-    padding: 8px 6px;
-    font-size: 0.8rem;
+    padding: 8px 4px;
+    font-size: 0.78rem;
+    border-radius: 10px;
   }
 
   .category-scroll-container-3d {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 8px;
+    padding-bottom: 6px;
     width: 100%;
+    scrollbar-width: none;
+  }
+
+  .category-scroll-container-3d::-webkit-scrollbar {
+    display: none;
   }
 
   .category-pills-3d {
     flex-wrap: nowrap;
     justify-content: flex-start;
     width: max-content;
+    gap: 8px;
+    padding: 0 4px;
   }
 
   .category-pill-3d {
-    padding: 6px 14px;
-    font-size: 0.82rem;
+    padding: 7px 14px;
+    font-size: 0.8rem;
+    border-radius: 999px;
   }
 
   .diet-filter-row-3d {
@@ -249,11 +312,34 @@
     -webkit-overflow-scrolling: touch;
     flex-wrap: nowrap;
     width: 100%;
+    gap: 8px;
     padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .diet-filter-row-3d::-webkit-scrollbar {
+    display: none;
   }
 
   .diet-chip-3d {
     flex-shrink: 0;
+    padding: 5px 12px;
+    font-size: 0.75rem;
+  }
+
+  .dishes-grid-3d {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 
+@media (max-width: 480px) {
+  .page-title-3d {
+    font-size: 1.55rem;
+  }
+
+  .results-count-3d {
+    font-size: 0.82rem;
+    margin-bottom: 16px;
+  }
+}
