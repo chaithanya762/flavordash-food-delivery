@@ -1,24 +1,26 @@
 .health-dashboard {
-  background: rgba(18, 14, 24, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 153, 51, 0.15); /* Saffron accent border */
-  border-radius: 16px;
-  padding: 12px 20px;
+  background: rgba(18, 14, 24, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 153, 51, 0.25);
+  border-radius: 20px;
+  padding: 14px 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  min-height: 80px;
+  gap: 24px;
+  min-height: 84px;
   margin-bottom: 24px;
   animation: slideDownFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   color: #fff;
   font-family: var(--font-body, 'Inter', sans-serif);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 153, 51, 0.04);
 }
 
 @keyframes slideDownFade {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-16px);
   }
   to {
     opacity: 1;
@@ -29,7 +31,7 @@
 .health-stats {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   flex-shrink: 0;
 }
 
@@ -60,40 +62,48 @@
 }
 
 .cal-value {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #FFF9F0;
+  line-height: 1.1;
 }
 
 .cal-unit {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
 }
 
 .protein-stat {
   display: flex;
   flex-direction: column;
-  padding-left: 20px;
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 18px;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .stat-label {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .stat-value {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #D4AF37; /* Gold accent */
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #D4AF37;
+  line-height: 1.1;
 }
 
+/* HEALTH FILTERS WRAPPER & GLOW CHIPS */
 .health-filters-wrapper {
   display: flex;
   align-items: center;
   gap: 12px;
   overflow-x: auto;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .health-filters-wrapper::-webkit-scrollbar {
@@ -106,14 +116,80 @@
   gap: 10px;
 }
 
+.health-filter-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #FFF9F0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: inherit;
+  backdrop-filter: blur(10px);
+}
+
+.health-filter-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+/* Glowing Neon Active States for Health Chips */
+.health-filter-chip.active {
+  color: #FFFFFF;
+  font-weight: 700;
+  transform: translateY(-2px);
+}
+
+.health-filter-chip.active.green {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.25) 0%, rgba(34, 197, 94, 0.15) 100%);
+  border-color: #4ADE80;
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.4), inset 0 0 10px rgba(74, 222, 128, 0.2);
+}
+
+.health-filter-chip.active.blue {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.25) 0%, rgba(59, 130, 246, 0.15) 100%);
+  border-color: #60A5FA;
+  box-shadow: 0 0 20px rgba(96, 165, 250, 0.4), inset 0 0 10px rgba(96, 165, 250, 0.2);
+}
+
+.health-filter-chip.active.purple {
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.25) 0%, rgba(168, 85, 247, 0.15) 100%);
+  border-color: #C084FC;
+  box-shadow: 0 0 20px rgba(192, 132, 252, 0.4), inset 0 0 10px rgba(192, 132, 252, 0.2);
+}
+
+.health-filter-chip.active.emerald {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.15) 100%);
+  border-color: #10B981;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4), inset 0 0 10px rgba(16, 185, 129, 0.2);
+}
+
+.health-filter-chip.active.amber {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(217, 119, 6, 0.15) 100%);
+  border-color: #F59E0B;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4), inset 0 0 10px rgba(245, 158, 11, 0.2);
+}
+
+.chip-icon {
+  font-size: 1.1rem;
+}
+
+/* RESET KCAL BUTTON */
 .health-reset-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.4);
   color: #EF4444;
-  padding: 7px 14px;
+  padding: 8px 16px;
   border-radius: 999px;
   font-size: 0.8rem;
   font-weight: 700;
@@ -121,15 +197,15 @@
   white-space: nowrap;
   transition: all 0.25s ease;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.2);
 }
 
 .health-reset-btn:hover {
-  background: rgba(239, 68, 68, 0.28);
+  background: rgba(239, 68, 68, 0.3);
   border-color: #EF4444;
   color: #FFFFFF;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
 }
 
 .health-reset-btn .reset-icon {
@@ -141,6 +217,7 @@
   transform: rotate(-180deg);
 }
 
+/* MOBILE RESPONSIVE BREAKPOINTS */
 @media (max-width: 768px) {
   .health-dashboard {
     flex-direction: column;
@@ -148,7 +225,7 @@
     padding: 12px 14px;
     gap: 12px;
     width: 100%;
-    border-radius: 14px;
+    border-radius: 16px;
   }
   
   .health-stats {
@@ -173,8 +250,7 @@
   }
 
   .health-reset-btn {
-    padding: 5px 10px;
+    padding: 6px 12px;
     font-size: 0.75rem;
   }
 }
-
