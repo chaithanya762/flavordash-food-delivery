@@ -61,7 +61,7 @@ const Navbar = () => {
           {/* CENTER: LOCATION & DELIVERY STATUS INDICATOR */}
           <div className="nav-location-pill">
             <span className="loc-pin">📍</span>
-            <span className="loc-text">JP Nagar, Mahadevapura, Mysore</span>
+            <span className="loc-text">Mysore</span>
             <span className="loc-dot">•</span>
             <span className="delivery-eta">⚡ 25 min</span>
           </div>
